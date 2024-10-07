@@ -4,6 +4,8 @@ using Microsoft.UI.Windowing;
 using Windows.Graphics;
 #endif
 
+using TravelJournalApp.Views;
+
 namespace TravelJournalApp
 {
     public partial class App : Application
@@ -29,7 +31,7 @@ namespace TravelJournalApp
             });
 
 
-            MainPage = new AppShell();
+            MainPage = new StartPage();
         }
     }
 }
