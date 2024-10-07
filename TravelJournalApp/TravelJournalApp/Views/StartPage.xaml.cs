@@ -50,6 +50,7 @@ public partial class StartPage : ContentPage
         double imgWidth = imgTest.WidthRequest;
         double imgHeight = imgTest.HeightRequest;
 
+        parentAnimation.Add(0, 0.4, new Animation(v => imgIcon.Opacity = v, 0, 1, Easing.CubicIn));
         // First phase: Move the airplane image to the right, horizontally
         parentAnimation.Add(0.1, 1, new Animation(v =>
         {

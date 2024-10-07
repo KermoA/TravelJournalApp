@@ -58,6 +58,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\camping.png" />
 	  <None Remove="Resources\Images\flying_airplane.png" />
 	</ItemGroup>
 

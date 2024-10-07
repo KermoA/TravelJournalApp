@@ -14,7 +14,18 @@
     </ContentPage.Background>
 
     <Grid IgnoreSafeArea="{OnPlatform Android=False, iOS=True}">
-
+        <Grid>
+            <!-- StartPage Image initially placed in the bottom-right corner -->
+            <Image 
+        x:Name="imgIcon"
+        Opacity="0"
+        Source="camping.png"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        WidthRequest="96"
+        HeightRequest="96"
+        Scale="4"/>
+        </Grid>
         <Grid>
             <!-- StartPage Image initially placed in the bottom-right corner -->
             <Image 
@@ -30,6 +41,8 @@
         Scale="2"
         Rotation="11"/>
         </Grid>
+
+
 
     </Grid>
 
