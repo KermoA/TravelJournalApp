@@ -11,9 +11,12 @@ namespace TravelJournalApp
 				.UseMauiApp<App>()
 				.ConfigureFonts(fonts =>
 				{
-					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-				});
+                    fonts.AddFont("Roboto-Bold.ttf.ttf", "RobotoBold");
+                    fonts.AddFont("Roboto-Light.ttf.ttf", "RobotoLight");
+                    fonts.AddFont("Roboto-Medium.ttf.ttf", "RobotMedium");
+                    fonts.AddFont("Roboto-Regular.ttf", "RobotRegular");
+
+                });
 
 #if DEBUG
 			builder.Logging.AddDebug();
