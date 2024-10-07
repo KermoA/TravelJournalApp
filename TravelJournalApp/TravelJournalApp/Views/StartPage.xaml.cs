@@ -1,32 +1,16 @@
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DeviceDisplay = Microsoft.Maui.Devices.DeviceDisplay; // Add this for DeviceDisplay
 
 namespace TravelJournalApp.Views;
 
 public partial class StartPage : ContentPage
 {
     int count = 0;
+
     public StartPage()
-	{
-		InitializeComponent();
-	}
-
-    //protected override async void OnAppearing()
-    //{
-    //    base.OnAppearing();
-    //    if (this.AnimationIsRunning("TransitionAnimation"))
-    //    {
-    //        return;
-    //    }
-
-    //    var parentAnimation = new Animation();
-
-    //    //StartPageAnimation
-    //    parentAnimation.Add(0, 0.2, new Animation(v => imgTest.Opacity = v, 0, 1, Easing.CubicIn));
-    //    parentAnimation.Commit(this, "TransitionAnimation", 16, 3000, null, null);
-
-    //    // Call TravelMain without parameters
-    //    await TravelMain();
-    //}
+    {
+        InitializeComponent();
+    }
 
     protected override async void OnAppearing()
     {
@@ -39,7 +23,10 @@ public partial class StartPage : ContentPage
 
         var parentAnimation = new Animation();
 
-        // Get screen width and height dynamically
+        //// Get screen width and height dynamically
+        //double screenWidth = DeviceDisplay.MainDisplayInfo.Width;
+        //double screenHeight = DeviceDisplay.MainDisplayInfo.Height;
+
         double screenWidth = 540;
         double screenHeight = 1000;
 
@@ -47,7 +34,6 @@ public partial class StartPage : ContentPage
         double imgWidth = imgAirplane.WidthRequest;
         double imgHeight = imgAirplane.HeightRequest;
 
-        // ??
         parentAnimation.Add(0, 0.4, new Animation(v => imgIcon.Opacity = v, 0, 1, Easing.CubicIn));
         parentAnimation.Add(0.1, 1, new Animation(v =>
         {
@@ -63,10 +49,9 @@ public partial class StartPage : ContentPage
         {
             // Moving to right
             imgTrain.TranslationX = 4 * v - 1000;
-
-
         }, 0, screenWidth, Easing.Linear));
-        parentAnimation.Commit(this, "TransitionAnimation", 10, 4000, null , null);
+
+        parentAnimation.Commit(this, "TransitionAnimation", 10, 4000, null, null);
 
         await TravelMain();
     }
