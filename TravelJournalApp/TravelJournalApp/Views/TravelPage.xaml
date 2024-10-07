@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TravelJournalApp.Views.TravelPage"
+             Title="Travel Page">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
+            <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid IgnoreSafeArea="{OnPlatform Android=False, iOS=True}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="30,30" Spacing="50" HorizontalOptions="Center">
+                <ListView x:Name="TravelListView" SeparatorVisibility="Default">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell TextColor="Black" DetailColor="Black" Text="{Binding TravelName}" Detail="{Binding Description}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button 
+        Grid.Row="1"
+        HorizontalOptions="Center"
+        Margin="0,12,0,50"
+        Text="Add Travel"
+        Clicked="Add_Travel_Clicked"
+        VerticalOptions="End" />
+    </Grid>
+</ContentPage>

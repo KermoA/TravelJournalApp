@@ -1,8 +1,8 @@
 namespace TravelJournalApp.Views;
 
-public partial class Details : ContentPage
+public partial class DetailsTravelPage : ContentPage
 {
-	public Details()
+	public DetailsTravelPage()
 	{
 		InitializeComponent();
 	}

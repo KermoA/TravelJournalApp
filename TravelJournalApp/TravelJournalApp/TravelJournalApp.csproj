@@ -79,28 +79,40 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\AddTravelPage.xaml.cs">
+	    <DependentUpon>AddTravelPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DeleteTravelPage.xaml.cs">
+	    <DependentUpon>DeleteTravelPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\TravelPage.xaml.cs">
+	    <DependentUpon>TravelPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\StartPage.xaml.cs">
 	    <DependentUpon>StartPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\UpdateTravelPage.xaml.cs">
+	    <DependentUpon>UpdateTravelPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\Add.xaml">
+	  <MauiXaml Update="Views\AddTravelPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Delete.xaml">
+	  <MauiXaml Update="Views\DeleteTravelPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Details.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Main.xaml">
+	  <MauiXaml Update="Views\TravelPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\StartPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Update.xaml">
+	  <MauiXaml Update="Views\UpdateTravelPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
