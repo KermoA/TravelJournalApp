@@ -3,6 +3,8 @@ using Microsoft.Maui.Controls;
 using TravelJournalApp.Models;
 using System.Threading.Tasks;
 using Data;
+using Microsoft.Maui.Graphics;
+using Microsoft.Maui;
 
 namespace TravelJournalApp.Views
 {
@@ -40,16 +42,38 @@ namespace TravelJournalApp.Views
             if (result)
             {
                 StatusLabel.Text = "Travel saved successfully!";
-                TravelNameEntry.Text = string.Empty; // Tühjenda sisendväljad
+                StatusLabel.TextColor = Color.FromArgb("#00FF00");
+                TravelNameEntry.Text = string.Empty;
                 DescriptionEditor.Text = string.Empty;
 
-                // Tagasi TravelPage-le
-                await Navigation.PopAsync(); // Tagasi eelmisele lehele
+                activityIndicator.IsRunning = true; // Näita edenemist
+                activityIndicator.IsVisible = true;
+
+                await Task.Delay(2000);
+
+                activityIndicator.IsRunning = false; // Peida edenemisindikaator
+                activityIndicator.IsVisible = false;
+
+                await Navigation.PopAsync();
             }
             else
             {
                 StatusLabel.Text = "Failed to save travel.";
+                StatusLabel.TextColor = Color.FromArgb("#FF0000");
+
+                activityIndicator.IsRunning = true;
+                activityIndicator.IsVisible = true;
+
+                await Task.Delay(2000);
+
+                activityIndicator.IsRunning = false;
+                activityIndicator.IsVisible = false;
             }
+
+        }
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
         }
     }
 }
