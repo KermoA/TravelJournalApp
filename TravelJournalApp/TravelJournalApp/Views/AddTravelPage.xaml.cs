@@ -20,12 +20,12 @@ namespace TravelJournalApp.Views
 
         private async void OnSaveTravelClicked(object sender, EventArgs e)
         {
-            var travelName = TravelNameEntry.Text;
+            var title = TitleEntry.Text;
             var description = DescriptionEditor.Text;
 
-            if (string.IsNullOrWhiteSpace(travelName))
+            if (string.IsNullOrWhiteSpace(title))
             {
-                StatusLabel.Text = "Travel name is required.";
+                StatusLabel.Text = "Title is required.";
                 return;
             }
 
@@ -33,7 +33,7 @@ namespace TravelJournalApp.Views
             var travelJournal = new TravelJournal
             {
                 Id = Guid.NewGuid(), // Uus ID
-                TravelName = travelName,
+                Title = title,
                 Description = description
             };
 
@@ -43,7 +43,7 @@ namespace TravelJournalApp.Views
             {
                 StatusLabel.Text = "Travel saved successfully!";
                 StatusLabel.TextColor = Color.FromArgb("#00FF00");
-                TravelNameEntry.Text = string.Empty;
+                TitleEntry.Text = string.Empty;
                 DescriptionEditor.Text = string.Empty;
 
                 activityIndicator.IsRunning = true; // Näita edenemist

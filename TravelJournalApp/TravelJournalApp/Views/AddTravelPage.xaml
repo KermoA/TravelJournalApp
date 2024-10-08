@@ -11,7 +11,7 @@
     </ContentPage.Background>
     <VerticalStackLayout Padding="20">
         <Label Text="Travel Name" />
-        <Entry x:Name="TravelNameEntry" Placeholder="Enter travel name" />
+        <Entry x:Name="TitleEntry" Placeholder="Enter title" />
 
         <Label Text="Description" />
         <Editor x:Name="DescriptionEditor" Placeholder="Enter description" />

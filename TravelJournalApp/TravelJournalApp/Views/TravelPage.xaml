@@ -21,7 +21,7 @@
                 <ListView x:Name="TravelListView" SeparatorVisibility="Default">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextCell TextColor="Black" DetailColor="Black" Text="{Binding TravelName}" Detail="{Binding Description}"/>
+                            <TextCell TextColor="Black" DetailColor="Black" Text="{Binding Title}" Detail="{Binding Description}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
