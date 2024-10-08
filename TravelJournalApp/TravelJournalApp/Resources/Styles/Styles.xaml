@@ -10,10 +10,11 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ButtonTextColor}, Dark={StaticResource ButtonTextColor}}" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ButtonBackground}, Dark={StaticResource ButtonBackground}}" />
         <Setter Property="FontFamily" Value="RobotRegular"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="18"/>
         <Setter Property="BorderWidth" Value="0"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Padding" Value="14,10"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="Margin" Value="2,20"/>
+        <Setter Property="Padding" Value="20,10"/>
     </Style>
 
     <Style TargetType="NavigationPage">
@@ -22,6 +23,37 @@
         <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource ButtonBackground}, Dark={StaticResource ButtonTextColor}}" />
     </Style>
 
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColor}, Dark={StaticResource TextColor}}" />
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontFamily" Value="RobotRegular"/>
+        <Setter Property="Padding" Value="0,8"/>
+    </Style>
+
+    <Style TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontFamily" Value="RobotRegular"/>
+    </Style>
+
+    <Style TargetType="Editor">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontFamily" Value="RobotRegular"/>
+        <Setter Property="AutoSize" Value="TextChanges"/>
+        <Setter Property="MinimumHeightRequest" Value="150"/>
+    </Style>
+
+    <!--<Style TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackground}"/>
+        <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontFamily" Value="RobotRegular"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="Margin" Value="10,20,10,20"/>
+    </Style>-->
 
 
     <!--<Style TargetType="ActivityIndicator">

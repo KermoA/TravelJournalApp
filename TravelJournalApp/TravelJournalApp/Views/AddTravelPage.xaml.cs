@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Data;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui;
-using TravelJournalApp.Models;
 
 namespace TravelJournalApp.Views
 {
@@ -13,15 +12,37 @@ namespace TravelJournalApp.Views
     {
         private readonly DatabaseContext _databaseContext;
         private TravelJournal travelJournal;
+        private string tempImagePath; // To store the temporary image path
+        private string newFilePath;
 
         public AddTravelPage()
         {
             InitializeComponent();
-            _databaseContext = new DatabaseContext(); // Andmebaasi konteksti loomine
-            travelJournal = new TravelJournal();  // Initsialiseeri travelJournal siin
+            _databaseContext = new DatabaseContext();
+            travelJournal = new TravelJournal();
         }
 
-        private async void OnSaveTravelClicked(object sender, EventArgs e)
+        private async void OnPickPhotoClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var photo = await MediaPicker.PickPhotoAsync();
+                if (photo != null)
+                {
+                    // Store the temporary image path
+                    tempImagePath = photo.FullPath;
+
+                    // Display a preview of the original photo
+                    PreviewImage.Source = ImageSource.FromFile(tempImagePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusLabel.Text = $"Foto valimisel tekkis viga: {ex.Message}";
+            }
+        }
+
+        private async void SaveTravelClicked(object sender, EventArgs e)
         {
             var title = TitleEntry.Text;
             var description = DescriptionEditor.Text;
@@ -32,17 +53,29 @@ namespace TravelJournalApp.Views
                 return;
             }
 
-            // Uue reisi objekti loomine
+            // Kontrollime, kas ajutine pildi tee on olemas
+            if (!string.IsNullOrEmpty(tempImagePath))
+            {
+                newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
+
+                // Kopeerime pildi sihtkohta ainult siis, kui pilt on valitud
+                File.Copy(tempImagePath, newFilePath, true);
+
+                // M‰‰rame kopeeritud faili teekonna
+                travelJournal.ImageFileId = newFilePath;
+            }
+
             travelJournal = new TravelJournal
             {
-                Id = Guid.NewGuid(), // Uus ID
+                Id = Guid.NewGuid(),
                 Title = title,
                 Description = description,
-                ImageFileId = travelJournal.ImageFileId
+                ImageFileId = newFilePath // Siin m‰‰rame kopeeritud faili tee
             };
 
-            // Andmete lisamine andmebaasi
+            // Salvestame andmebaasi
             bool result = await _databaseContext.AddItemAsync(travelJournal);
+
             if (result)
             {
                 StatusLabel.Text = "Travel saved successfully!";
@@ -50,12 +83,12 @@ namespace TravelJournalApp.Views
                 TitleEntry.Text = string.Empty;
                 DescriptionEditor.Text = string.Empty;
 
-                activityIndicator.IsRunning = true; // N‰ita edenemist
+                activityIndicator.IsRunning = true;
                 activityIndicator.IsVisible = true;
 
                 await Task.Delay(2000);
 
-                activityIndicator.IsRunning = false; // Peida edenemisindikaator
+                activityIndicator.IsRunning = false;
                 activityIndicator.IsVisible = false;
 
                 await Navigation.PopAsync();
@@ -73,40 +106,11 @@ namespace TravelJournalApp.Views
                 activityIndicator.IsRunning = false;
                 activityIndicator.IsVisible = false;
             }
-
         }
+
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
-        }
-        private async void OnPickPhotoClicked(object sender, EventArgs e)
-        {
-            try
-            {
-                var photo = await MediaPicker.PickPhotoAsync();
-                if (photo != null)
-                {
-                    // Salvesta foto faili tee
-                    travelJournal.ImageFileId = photo.FullPath;
-
-                    // Loo uus failinimi rakenduse kaustas
-                    string newFilePath = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
-
-                    // Kopeeri fail uude asukohta
-                    File.Copy(photo.FullPath, newFilePath);
-
-                    // Salvesta uue faili tee
-                    travelJournal.ImageFileId = newFilePath;
-
-                    // Kuva valitud foto eelvaadet
-                    PreviewImage.Source = ImageSource.FromFile(newFilePath); // Kasuta uut faili teed
-                }
-            }
-            catch (Exception ex)
-            {
-                // K‰sitle erindeid (nt. juurdep‰‰suıiguste puudumine)
-                StatusLabel.Text = $"Foto valimisel tekkis viga: {ex.Message}";
-            }
         }
     }
 }

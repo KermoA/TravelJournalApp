@@ -14,24 +14,21 @@
         <Entry x:Name="TitleEntry" Placeholder="Enter title" />
 
         <Label Text="Description" />
-        <Editor x:Name="DescriptionEditor" Placeholder="Enter description" />
+        <Editor x:Name="DescriptionEditor" Placeholder="Enter description"/>
         <HorizontalStackLayout HorizontalOptions="Center">
 
-            <Button Text="Back"
-                    Clicked="OnBackButtonClicked" 
-                    HorizontalOptions="Center"
-                    Margin="10,20,10,20"/>
+            <Button 
+                    Text="Back"
+                    Clicked="OnBackButtonClicked"/>
 
-            <Button Text="Choose from picture" 
-                    Clicked="OnPickPhotoClicked" 
-                    HorizontalOptions="Center"
-                    Margin="10,20,10,20"/>
+            <Button 
+                    Text="Choose from picture" 
+                    Clicked="OnPickPhotoClicked"/>
 
-            <Button Text="Save Travel"
-                    Clicked="OnSaveTravelClicked" 
-                    HorizontalOptions="Center"
-                    Margin="10,20,10,20"/>
-            
+            <Button 
+                    Text="Save Travel"
+                    Clicked="SaveTravelClicked"/>
+
         </HorizontalStackLayout>
 
         <Image x:Name="PreviewImage" />

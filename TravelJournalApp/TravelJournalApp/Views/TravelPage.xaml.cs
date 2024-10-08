@@ -16,10 +16,9 @@ namespace TravelJournalApp.Views
             InitializeComponent();
             _databaseContext = new DatabaseContext(); // Andmebaasi konteksti loomine
             LoadTravelEntries(); // Lae reisiandmed
+            // Sündmus kirje valimiseks
+            TravelListView.ItemTapped += OnItemTapped;
         }
-
-
-
 
 
         private async void LoadTravelEntries()
@@ -31,6 +30,21 @@ namespace TravelJournalApp.Views
         private async void Add_Travel_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new AddTravelPage());
+        }
+
+        // Sündmus, mis avab DetailsPage
+        private async void OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item != null)
+            {
+                var selectedTravel = e.Item as TravelJournal;
+
+                // Avame DetailsPage ja edastame valitud reisi objektina
+                await Navigation.PushAsync(new DetailsPage(selectedTravel));
+
+                // Eemaldame valiku, et kasutaja näeks valitud kirjet uuesti
+                TravelListView.SelectedItem = null;
+            }
         }
 
         protected override void OnAppearing()
