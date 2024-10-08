@@ -16,6 +16,12 @@
         <Setter Property="Padding" Value="14,10"/>
     </Style>
 
+    <Style TargetType="NavigationPage">
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource ButtonBackground}}" />
+        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource ButtonBackground}, Dark={StaticResource ButtonTextColor}}" />
+        <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource ButtonBackground}, Dark={StaticResource ButtonTextColor}}" />
+    </Style>
+
 
 
     <!--<Style TargetType="ActivityIndicator">
