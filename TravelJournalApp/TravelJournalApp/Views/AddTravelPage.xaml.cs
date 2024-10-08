@@ -5,17 +5,20 @@ using System.Threading.Tasks;
 using Data;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui;
+using TravelJournalApp.Models;
 
 namespace TravelJournalApp.Views
 {
     public partial class AddTravelPage : ContentPage
     {
         private readonly DatabaseContext _databaseContext;
+        private TravelJournal travelJournal;
 
         public AddTravelPage()
         {
             InitializeComponent();
             _databaseContext = new DatabaseContext(); // Andmebaasi konteksti loomine
+            travelJournal = new TravelJournal();  // Initsialiseeri travelJournal siin
         }
 
         private async void OnSaveTravelClicked(object sender, EventArgs e)
@@ -30,11 +33,12 @@ namespace TravelJournalApp.Views
             }
 
             // Uue reisi objekti loomine
-            var travelJournal = new TravelJournal
+            travelJournal = new TravelJournal
             {
                 Id = Guid.NewGuid(), // Uus ID
                 Title = title,
-                Description = description
+                Description = description,
+                ImageFileId = travelJournal.ImageFileId
             };
 
             // Andmete lisamine andmebaasi
@@ -74,6 +78,35 @@ namespace TravelJournalApp.Views
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
+        }
+        private async void OnPickPhotoClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var photo = await MediaPicker.PickPhotoAsync();
+                if (photo != null)
+                {
+                    // Salvesta foto faili tee
+                    travelJournal.ImageFileId = photo.FullPath;
+
+                    // Loo uus failinimi rakenduse kaustas
+                    string newFilePath = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
+
+                    // Kopeeri fail uude asukohta
+                    File.Copy(photo.FullPath, newFilePath);
+
+                    // Salvesta uue faili tee
+                    travelJournal.ImageFileId = newFilePath;
+
+                    // Kuva valitud foto eelvaadet
+                    PreviewImage.Source = ImageSource.FromFile(newFilePath); // Kasuta uut faili teed
+                }
+            }
+            catch (Exception ex)
+            {
+                // K‰sitle erindeid (nt. juurdep‰‰suıiguste puudumine)
+                StatusLabel.Text = $"Foto valimisel tekkis viga: {ex.Message}";
+            }
         }
     }
 }

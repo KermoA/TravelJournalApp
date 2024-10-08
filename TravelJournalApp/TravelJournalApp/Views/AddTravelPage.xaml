@@ -16,17 +16,25 @@
         <Label Text="Description" />
         <Editor x:Name="DescriptionEditor" Placeholder="Enter description" />
         <HorizontalStackLayout HorizontalOptions="Center">
+
             <Button Text="Back"
-            Clicked="OnBackButtonClicked" 
-            HorizontalOptions="Center"
-            Margin="20,20,20,20"/>
+                    Clicked="OnBackButtonClicked" 
+                    HorizontalOptions="Center"
+                    Margin="10,20,10,20"/>
+
+            <Button Text="Choose from picture" 
+                    Clicked="OnPickPhotoClicked" 
+                    HorizontalOptions="Center"
+                    Margin="10,20,10,20"/>
 
             <Button Text="Save Travel"
-            Clicked="OnSaveTravelClicked" 
-            HorizontalOptions="Center"
-            Margin="20,20,20,20"/>
+                    Clicked="OnSaveTravelClicked" 
+                    HorizontalOptions="Center"
+                    Margin="10,20,10,20"/>
+            
         </HorizontalStackLayout>
 
+        <Image x:Name="PreviewImage" />
 
         <Label x:Name="StatusLabel" 
        HorizontalOptions="Center"
