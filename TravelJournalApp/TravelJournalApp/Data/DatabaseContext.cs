@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.IO;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace Data
 {
@@ -14,6 +15,13 @@ namespace Data
 
         //android jaoks
         private static string DbPath => Path.Combine(FileSystem.AppDataDirectory, DbName);
+
+        //näitab faili db asukohta, view-> output
+        public DatabaseContext()
+        {
+            // Log the DbPath to the Visual Studio Output window
+            Debug.WriteLine($"Database path: {DbPath}");
+        }
 
         private SQLiteAsyncConnection _connection;
         private SQLiteAsyncConnection Database =>
