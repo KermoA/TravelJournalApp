@@ -9,8 +9,11 @@ namespace Data
 {
     public class DatabaseContext : IAsyncDisposable
     {
-        private const string DbName = "TJAdb";
-        private static string DbPath => Path.Combine(".", DbName);
+        private const string DbName = "TJAdb.db";
+        //private static string DbPath => Path.Combine(".", DbName);
+
+        //android jaoks
+        private static string DbPath => Path.Combine(FileSystem.AppDataDirectory, DbName);
 
         private SQLiteAsyncConnection _connection;
         private SQLiteAsyncConnection Database =>
