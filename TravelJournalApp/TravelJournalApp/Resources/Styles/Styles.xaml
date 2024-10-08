@@ -7,8 +7,8 @@
     <!--Kirjutame uue stiili koodi-->
 
     <Style TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ButtonTextColor}, Dark={StaticResource ButtonTextColor}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ButtonBackground}, Dark={StaticResource ButtonBackground}}" />
         <Setter Property="FontFamily" Value="RobotRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
