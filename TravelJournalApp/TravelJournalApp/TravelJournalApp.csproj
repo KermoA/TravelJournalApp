@@ -41,7 +41,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg"  />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" BaseSize="128,128" />
@@ -85,6 +85,9 @@
 	  <Compile Update="Views\DeleteTravelPage.xaml.cs">
 	    <DependentUpon>DeleteTravelPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\DetailsPage.xaml.cs">
+	    <DependentUpon>DetailsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\TravelPage.xaml.cs">
 	    <DependentUpon>TravelPage.xaml</DependentUpon>
 	  </Compile>
@@ -103,7 +106,7 @@
 	  <MauiXaml Update="Views\DeleteTravelPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Details.xaml">
+	  <MauiXaml Update="Views\DetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TravelPage.xaml">
