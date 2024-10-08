@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls;
 using TravelJournalApp.Models;
 using Data;
 
+
 namespace TravelJournalApp.Views
 {
     public partial class TravelPage : ContentPage
@@ -16,6 +17,10 @@ namespace TravelJournalApp.Views
             _databaseContext = new DatabaseContext(); // Andmebaasi konteksti loomine
             LoadTravelEntries(); // Lae reisiandmed
         }
+
+
+
+
 
         private async void LoadTravelEntries()
         {
