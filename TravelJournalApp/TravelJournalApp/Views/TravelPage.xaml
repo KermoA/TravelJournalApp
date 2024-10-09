@@ -24,6 +24,7 @@
 
                                     <!-- Pealkirja ja kirjelduse kuvamine -->
                                     <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Row="1">
+                                        <Label Text="{Binding LastUpdatedAt, StringFormat='{0:yyyy-MM-dd HH:mm:ss}'}" FontSize="12"/>
                                         <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="20"  />
                                         <Label Text="{Binding Description}" FontSize="16" />
                                     </StackLayout>

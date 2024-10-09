@@ -70,6 +70,8 @@ namespace TravelJournalApp.Views
                 Id = Guid.NewGuid(),
                 Title = title,
                 Description = description,
+                CreatedAt = DateTime.Now,
+                LastUpdatedAt = DateTime.Now,
                 ImageFileId = newFilePath // Siin m‰‰rame kopeeritud faili tee
             };
 
