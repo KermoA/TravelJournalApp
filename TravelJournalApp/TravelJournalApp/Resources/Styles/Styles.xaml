@@ -27,7 +27,7 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColor}, Dark={StaticResource TextColor}}" />
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontFamily" Value="RobotRegular"/>
-        <Setter Property="Padding" Value="0,8"/>
+        <Setter Property="Padding" Value="0,15,0,8"/>
     </Style>
 
     <Style TargetType="Entry">
@@ -45,6 +45,25 @@
         <Setter Property="AutoSize" Value="TextChanges"/>
         <Setter Property="MinimumHeightRequest" Value="150"/>
     </Style>
+
+    <Style TargetType="Image">
+        <Setter Property="Aspect" Value="AspectFill"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+
+    <Style TargetType="Frame">
+        <Setter Property="CornerRadius" Value="40"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+    </Style>
+
+    <!--<Style TargetType="">
+        <Setter Property="" Value=""/>
+        <Setter Property="" Value=""/>
+        <Setter Property="" Value=""/>
+    </Style>-->
 
     <!--<Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackground}"/>

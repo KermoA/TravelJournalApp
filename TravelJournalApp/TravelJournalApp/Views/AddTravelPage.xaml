@@ -3,52 +3,56 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TravelJournalApp.Views.AddTravelPage"
              Title="Add Travel">
+    
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
             <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
         </LinearGradientBrush>
     </ContentPage.Background>
-    <VerticalStackLayout Padding="20">
-        <Label Text="Travel Name" />
-        <Entry x:Name="TitleEntry" Placeholder="Enter title" />
 
-        <Label Text="Description" />
-        <Editor x:Name="DescriptionEditor" Placeholder="Enter description"/>
-        <HorizontalStackLayout HorizontalOptions="Center">
+    <Grid RowDefinitions="Auto,*">
+        <ScrollView Grid.Row="1"
+                    HorizontalScrollBarVisibility="Never"
+                    VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="20,20,20,250">
+                <Label Text="Travel Name" />
+                <Entry x:Name="TitleEntry" Placeholder="Enter title" />
 
-            <Button 
-                    Text="Back"
-                    Clicked="OnBackButtonClicked"/>
+                <Label Text="Description" />
+                <Editor x:Name="DescriptionEditor" Placeholder="Enter description"/>
 
-            <Button 
-                    Text="Choose from picture" 
-                    Clicked="OnPickPhotoClicked"/>
+                <ScrollView x:Name="MyScrollView" Orientation="Vertical">
+                    <Grid ColumnDefinitions="*, *, *">
+                        <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
+                        <Button Text="Choose from picture" Clicked="OnPickPhotoClicked" Grid.Column="1"/>
+                        <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
+                    </Grid>
+                </ScrollView>
 
-            <Button 
-                    Text="Save Travel"
-                    Clicked="SaveTravelClicked"/>
+                <Frame>
+                    <Image x:Name="PreviewImage" />
+                </Frame>
 
-        </HorizontalStackLayout>
 
-        <Image x:Name="PreviewImage" />
+                <Label x:Name="StatusLabel" 
+                       HorizontalOptions="Center"
+                       FontSize="Medium"
+                       Margin="0,10,0,0">
+                    <Label.Triggers>
+                        <!-- Roheline tekst, kui reis on edukalt salvestatud -->
+                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
+                            <Setter Property="TextColor" Value="Green" />
+                        </DataTrigger>
+                        <!-- Punane tekst, kui salvestamine ebaõnnestub -->
+                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Failed to save travel.">
+                            <Setter Property="TextColor" Value="Red" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False"/>
 
-        <Label x:Name="StatusLabel" 
-       HorizontalOptions="Center"
-       FontSize="Medium"
-       Margin="0,10,0,0">
-            <Label.Triggers>
-                <!-- Roheline tekst, kui reis on edukalt salvestatud -->
-                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
-                    <Setter Property="TextColor" Value="Green" />
-                </DataTrigger>
-                <!-- Punane tekst, kui salvestamine ebaõnnestub -->
-                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Failed to save travel.">
-                    <Setter Property="TextColor" Value="Red" />
-                </DataTrigger>
-            </Label.Triggers>
-        </Label>
-        <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False"/>
-
-    </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

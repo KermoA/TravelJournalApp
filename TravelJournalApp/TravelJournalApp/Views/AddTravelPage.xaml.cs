@@ -108,6 +108,11 @@ namespace TravelJournalApp.Views
             }
         }
 
+        private async void DescriptionEditor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            await MyScrollView.ScrollToAsync(DescriptionEditor, ScrollToPosition.End, true);
+        }
+
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PopAsync();

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TravelJournalApp.Views.DetailsPage">
 
-    <StackLayout Padding="10">
+    <StackLayout>
         <!-- Pealkirja kuvamine -->
         <Label x:Name="TitleLabel" FontAttributes="Bold" FontSize="24" HorizontalOptions="Center" />
 
@@ -14,6 +14,7 @@
         <Label x:Name="DescriptionLabel" FontSize="18" Padding="10,0,0,0" />
         
         <Button Text="Back"
+                Margin="35,25"
                 Clicked="OnBackButtonClicked"/>
     </StackLayout>
 
