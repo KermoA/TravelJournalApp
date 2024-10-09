@@ -15,7 +15,7 @@
         <ScrollView Grid.Row="1"
                     HorizontalScrollBarVisibility="Never"
                     VerticalScrollBarVisibility="Never">
-            <VerticalStackLayout Padding="20,20,20,250">
+            <VerticalStackLayout Padding="20,20,20,300">
                 <Label Text="Travel Name:" />
                 <Entry x:Name="TitleEntry" Placeholder="Enter title" />
                 <Label Text="Location:" />
@@ -31,15 +31,10 @@
                     </Grid>
                 </ScrollView>
 
-                <Frame>
-                    <Image x:Name="PreviewImage" />
-                </Frame>
-
-
                 <Label x:Name="StatusLabel" 
                        HorizontalOptions="Center"
                        FontSize="Medium"
-                       Margin="0,10,0,0">
+                       Margin="0,0,0,0">
                     <Label.Triggers>
                         <!-- Roheline tekst, kui reis on edukalt salvestatud -->
                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
@@ -52,6 +47,10 @@
                     </Label.Triggers>
                 </Label>
                 <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False"/>
+                
+                <Frame>
+                    <Image Style="{StaticResource PageImageStyle}" x:Name="PreviewImage" />
+                </Frame>
 
             </VerticalStackLayout>
         </ScrollView>
