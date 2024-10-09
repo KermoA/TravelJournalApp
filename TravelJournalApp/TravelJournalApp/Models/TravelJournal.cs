@@ -12,8 +12,10 @@ namespace TravelJournalApp.Models
 
         public string ImageFileId {  get; set; }
         public string Location { get; set; }
+        public  DateTime TravelDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
+
 
     }
 }

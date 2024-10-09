@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TravelJournalApp.Views.AddTravelPage"
              Title="Add Travel">
-    
+
+    <!-- Background with Gradient -->
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
@@ -16,41 +17,54 @@
                     HorizontalScrollBarVisibility="Never"
                     VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="20,20,20,300">
+
+                <!-- Travel Name Entry -->
                 <Label Text="Travel Name:" />
                 <Entry x:Name="TitleEntry" Placeholder="Enter title" />
+
+                <!-- Location Entry -->
                 <Label Text="Location:" />
                 <Entry x:Name="LocationEntry" Placeholder="Enter location" />
-                <Label Text="Description:" />
-                <Editor x:Name="DescriptionEditor" Placeholder="Enter description"/>
 
+                <!-- Description Editor -->
+                <Label Text="Description:" />
+                <Editor x:Name="DescriptionEditor" Placeholder="Enter description" />
+
+                <!-- Buttons for Back, Choose Images, and Save -->
                 <ScrollView x:Name="MyScrollView" Orientation="Vertical">
                     <Grid ColumnDefinitions="*, *, *">
                         <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
-                        <Button Text="Choose from picture" Clicked="OnPickPhotoClicked" Grid.Column="1"/>
+                        <Button Text="Choose Images" Clicked="OnPickPhotosClicked" Grid.Column="1"/>
                         <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
                     </Grid>
                 </ScrollView>
 
-                <Label x:Name="StatusLabel" 
+                <!-- Status Label for Feedback -->
+                <Label x:Name="StatusLabel"
                        HorizontalOptions="Center"
                        FontSize="Medium"
                        Margin="0,0,0,0">
                     <Label.Triggers>
-                        <!-- Roheline tekst, kui reis on edukalt salvestatud -->
                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
                             <Setter Property="TextColor" Value="Green" />
                         </DataTrigger>
-                        <!-- Punane tekst, kui salvestamine ebaõnnestub -->
                         <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Failed to save travel.">
                             <Setter Property="TextColor" Value="Red" />
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
-                <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False"/>
-                
-                <Frame>
-                    <Image Style="{StaticResource PageImageStyle}" x:Name="PreviewImage" />
-                </Frame>
+
+                <!-- Activity Indicator -->
+                <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False" />
+
+                <!-- CollectionView for Image Previews -->
+                <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding imagePreviews}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding .}" Aspect="AspectFit"  />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
             </VerticalStackLayout>
         </ScrollView>

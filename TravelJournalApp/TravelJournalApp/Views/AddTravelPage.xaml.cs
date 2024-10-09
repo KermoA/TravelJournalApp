@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using Data;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace TravelJournalApp.Views
 {
@@ -12,33 +16,51 @@ namespace TravelJournalApp.Views
     {
         private readonly DatabaseContext _databaseContext;
         private TravelJournal travelJournal;
-        private string tempImagePath; // To store the temporary image path
-        private string newFilePath;
+        private TravelJournalImage travelJournalImage;
+        private List<string> selectedTempImagePaths = new List<string>(); // Initialize the temporary images path list
+        private List<string> selectedImagePaths = new List<string>(); // To store selected image paths
+        private ObservableCollection<ImageSource> imagePreviews = new ObservableCollection<ImageSource>();
 
         public AddTravelPage()
         {
             InitializeComponent();
+            BindingContext = this;
             _databaseContext = new DatabaseContext();
             travelJournal = new TravelJournal();
+            travelJournalImage = new TravelJournalImage();
         }
 
-        private async void OnPickPhotoClicked(object sender, EventArgs e)
+        private async void OnPickPhotosClicked(object sender, EventArgs e)
         {
             try
             {
-                var photo = await MediaPicker.PickPhotoAsync();
-                if (photo != null)
+                var pickResult = await FilePicker.PickMultipleAsync(new PickOptions
                 {
-                    // Store the temporary image path
-                    tempImagePath = photo.FullPath;
+                    FileTypes = FilePickerFileType.Images,
+                    PickerTitle = "Select Images"
+                });
 
-                    // Display a preview of the original photo
-                    PreviewImage.Source = ImageSource.FromFile(tempImagePath);
+                if (pickResult != null)
+                {
+                    imagePreviews.Clear();
+                    selectedImagePaths.Clear(); // Clear previous selections
+                    selectedTempImagePaths.Clear(); // Clear previous temp selections
+
+                    foreach (var image in pickResult)
+                    {
+                        // Store the temporary image path
+                        selectedTempImagePaths.Add(image.FullPath);
+
+                        // Display previews of the selected images (using CollectionView or ListView bound to `imagePreviews`)
+                        imagePreviews.Add(ImageSource.FromFile(image.FullPath));
+                    }
+                    // Update UI (BindingContext or ItemSource in your UI for previews)
+                    ImagesCollectionView.ItemsSource = imagePreviews;
                 }
             }
             catch (Exception ex)
             {
-                StatusLabel.Text = $"Foto valimisel tekkis viga: {ex.Message}";
+                StatusLabel.Text = $"Error picking images: {ex.Message}";
             }
         }
 
@@ -48,23 +70,34 @@ namespace TravelJournalApp.Views
             var description = DescriptionEditor.Text;
             var location = LocationEntry.Text;
 
-
             if (string.IsNullOrWhiteSpace(title))
             {
                 StatusLabel.Text = "Title is required.";
                 return;
             }
 
-            // Kontrollime, kas ajutine pildi tee on olemas
-            if (!string.IsNullOrEmpty(tempImagePath))
+            // Check if temporary image paths are available
+            if (selectedTempImagePaths.Any())
             {
-                newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
+                foreach (var tempImagePath in selectedTempImagePaths)
+                {
+                    var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
 
-                // Kopeerime pildi sihtkohta ainult siis, kui pilt on valitud
-                File.Copy(tempImagePath, newFilePath, true);
+                    try
+                    {
+                        // Copy the image to the target directory
+                        File.Copy(tempImagePath, newFilePath, true);
+                        selectedImagePaths.Add(newFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        StatusLabel.Text = $"Error copying images: {ex.Message}";
+                        return;
+                    }
+                }
 
-                // M‰‰rame kopeeritud faili teekonna
-                travelJournal.ImageFileId = newFilePath;
+                // Assign the first copied image to the travel journal image
+                travelJournalImage.ImagePath = selectedImagePaths.FirstOrDefault();
             }
 
             travelJournal = new TravelJournal
@@ -74,19 +107,51 @@ namespace TravelJournalApp.Views
                 Description = description,
                 CreatedAt = DateTime.Now,
                 LastUpdatedAt = DateTime.Now,
-                Location = location,
-                ImageFileId = newFilePath // Siin m‰‰rame kopeeritud faili tee
+                Location = location
             };
 
-            // Salvestame andmebaasi
-            bool result = await _databaseContext.AddItemAsync(travelJournal);
+            //// Save the journal entry in the database
+            //bool result = await _databaseContext.AddItemAsync(travelJournal);
+            //bool result2 = true; // Initialize result2 to true for image save results
 
-            if (result)
+            //foreach (var imagePath in selectedImagePaths)
+            //{
+            //    var travelJournalImage = new TravelJournalImage
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        TravelJournalId = travelJournal.Id.Value,
+            //        ImagePath = imagePath
+            //    };
+            //    result2 = result2 && await _databaseContext.AddItemAsync(travelJournalImage); // Save images one by one
+            //}
+
+            bool result = await _databaseContext.AddItemAsync(travelJournal);
+            bool result2 = true;
+
+            foreach (var tempImagePath in selectedTempImagePaths)
+            {
+                // Move this inside the loop:
+                var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
+
+                var travelJournalImage = new TravelJournalImage
+                {
+                    Id = Guid.NewGuid(),
+                    TravelJournalId = travelJournal.Id.Value, // No need for .Value, travelJournal.Id is not nullable
+                    ImagePath = newFilePath // Make sure to use the newFilePath after copying
+                };
+
+                result2 = result2 && await _databaseContext.AddItemAsync(travelJournalImage);
+            }
+
+            if (result && result2)
             {
                 StatusLabel.Text = "Travel saved successfully!";
                 StatusLabel.TextColor = Color.FromArgb("#00FF00");
                 TitleEntry.Text = string.Empty;
                 DescriptionEditor.Text = string.Empty;
+                selectedTempImagePaths.Clear();
+                selectedImagePaths.Clear();
+                imagePreviews.Clear(); // Clear the previews
 
                 activityIndicator.IsRunning = true;
                 activityIndicator.IsVisible = true;
