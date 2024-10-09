@@ -46,6 +46,8 @@ namespace TravelJournalApp.Views
         {
             var title = TitleEntry.Text;
             var description = DescriptionEditor.Text;
+            var location = LocationEntry.Text;
+
 
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -72,6 +74,7 @@ namespace TravelJournalApp.Views
                 Description = description,
                 CreatedAt = DateTime.Now,
                 LastUpdatedAt = DateTime.Now,
+                Location = location,
                 ImageFileId = newFilePath // Siin m‰‰rame kopeeritud faili tee
             };
 

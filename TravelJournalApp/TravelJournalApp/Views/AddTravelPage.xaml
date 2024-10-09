@@ -16,10 +16,11 @@
                     HorizontalScrollBarVisibility="Never"
                     VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="20,20,20,250">
-                <Label Text="Travel Name" />
+                <Label Text="Travel Name:" />
                 <Entry x:Name="TitleEntry" Placeholder="Enter title" />
-
-                <Label Text="Description" />
+                <Label Text="Location:" />
+                <Entry x:Name="LocationEntry" Placeholder="Enter location" />
+                <Label Text="Description:" />
                 <Editor x:Name="DescriptionEditor" Placeholder="Enter description"/>
 
                 <ScrollView x:Name="MyScrollView" Orientation="Vertical">
