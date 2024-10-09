@@ -16,34 +16,35 @@
                         <ViewCell>
                             <StackLayout Orientation="Vertical" Padding="25">
                                 <Grid RowDefinitions="Auto, Auto, *">
-                                    <!-- First Row: Image Display -->
-                                    <Frame Grid.Row="0">
-                                        <!-- Pildi kuvamine -->
-                                        <Image Source="{Binding ImageFileId}" />
-                                    </Frame>
-
-                                    <!-- Second Row: Last Updated and Location Labels -->
-                                    <Grid Grid.Row="1">
+                                    
+                                    <!-- First Row:Last Updated and Location Labels -->
+                                    <Grid Grid.Row="0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <!-- Takes remaining space -->
                                             <ColumnDefinition Width="Auto" />
                                             <!-- Width of the Location label -->
                                         </Grid.ColumnDefinitions>
-
-                                        <Label Text="{Binding LastUpdatedAt, StringFormat='{0:yyyy-MM-dd HH:mm:ss}'}" 
-                                               HorizontalOptions="Start" 
-                                               FontSize="12"
-                                               HorizontalTextAlignment="Start"
-                                               Grid.Column="0" />
                                         <!-- Left column -->
-
                                         <Label Text="{Binding Location}" 
-                                               FontSize="12"
-                                               HorizontalTextAlignment="End"
-                                               Grid.Column="1" />
+                                               HorizontalOptions="Start"
+                                               FontSize="14"
+                                               HorizontalTextAlignment="Start"
+                                               Grid.Column="0"
+                                               Margin="30,0,10,0"/>
                                         <!-- Right column -->
+                                        <Label Text="{Binding LastUpdatedAt, StringFormat='{0:yyyy-MM-dd HH:mm:ss}'}" 
+                                               FontSize="14"
+                                               HorizontalTextAlignment="End"
+                                               Grid.Column="1"
+                                               Margin="10,0,15,0"/>
                                     </Grid>
+
+                                    <!-- Second Row: Image Display  -->
+                                    <Frame Grid.Row="1">
+                                        <!-- Pildi kuvamine -->
+                                        <Image Style="{StaticResource PageImageStyle}" Source="{Binding ImageFileId}" />
+                                    </Frame>
 
                                     <!-- Third Row: Title and Description Display -->
                                     <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Row="2">
