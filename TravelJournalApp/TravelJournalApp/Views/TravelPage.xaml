@@ -28,14 +28,11 @@
                             <StackLayout Orientation="Vertical" Padding="25">
                                 <StackLayout Orientation="Vertical">
                                     <Frame>
-
-                                        <!--, Converter={StaticResource ImageSourceConverter}-->
                                         <Image x:Name="HeroImage"
                                                Source="{Binding Images[0].ImagePath}"
                                                Aspect="AspectFill"
                                                HeightRequest="500"
-                                               IsVisible="{Binding SelectedTravel.Images.Count, Converter={StaticResource CountToBoolConverter}}" />
-
+                                               IsVisible="{Binding Images.Count, Converter={StaticResource CountToBoolConverter}}" />
                                     </Frame>
                                     <Grid Padding="0,10"></Grid>
                                     <CollectionView x:Name="ImagesCollectionView"

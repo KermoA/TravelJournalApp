@@ -14,8 +14,7 @@ namespace ListViewModel
         private readonly DatabaseContext _databaseContext;
         public ObservableCollection<TravelJournalViewModel> Travels { get; set; }
         private bool isRefreshing;
-        private TravelJournalViewModel? _selectedTravel;
-        private TravelJournalViewModel _travels;
+        private TravelJournalViewModel travels;
 
         public TravelJournalListViewModel()
         {
@@ -25,58 +24,15 @@ namespace ListViewModel
             LoadTravelEntries();
         }
 
-        public TravelJournalViewModel? SelectedTravel
-        {
-            get => _selectedTravel;
-            set
-            {
-                if (_selectedTravel != value)
-                {
-                    _selectedTravel = value;
-                    OnPropertyChanged(nameof(SelectedTravel));
-                    OnPropertyChanged(nameof(Images)); // Tagasta piltide muutused
-                }
-            }
-        }
-
-        public IEnumerable<TravelJournalImage> Images
-        {
-            get => SelectedTravel?.Images ?? new List<TravelJournalImage>();
-        }
-
-        public string HeroImageSource
-        {
-            get
-            {
-                if (SelectedTravel != null && SelectedTravel.Images.Count > 0)
-                {
-                    return SelectedTravel.Images[0].ImagePath;
-                }
-                return "camping.png"; // Vaikimisi pilt, kui pole valitud
-            }
-        }
-
-        public bool IsRefreshing
-        {
-            get => isRefreshing;
-            set
-            {
-                if (isRefreshing != value)
-                {
-                    isRefreshing = value;
-                    OnPropertyChanged(nameof(IsRefreshing));
-                }
-            }
-        }
-
-
         private async Task LoadTravelEntries()
         {
             try
             {
                 var travels = await _databaseContext.GetAllAsync<TravelJournal>();
-                _selectedTravel = _travels;
-                if (travels.Count() > 0)
+                 var selectedTravel = travels;
+
+                Console.WriteLine($"travels.Count(): {travels.Count()}");
+                if (travels != null)
                 {
                     Console.WriteLine("Data is loaded");
                     foreach (var travel in travels)
@@ -103,6 +59,19 @@ namespace ListViewModel
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading travel entries: {ex.Message}");
+            }
+        }
+
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                if (isRefreshing != value)
+                {
+                    isRefreshing = value;
+                    OnPropertyChanged(nameof(IsRefreshing));
+                }
             }
         }
 
