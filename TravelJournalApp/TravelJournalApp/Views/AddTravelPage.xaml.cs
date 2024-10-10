@@ -1,13 +1,9 @@
-using System;
-using Microsoft.Maui.Controls;
-using TravelJournalApp.Models;
-using System.Threading.Tasks;
 using Data;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Model;
+using ModelImage;
+using ViewModel;
+using ListViewModel;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 
 namespace TravelJournalApp.Views
@@ -110,21 +106,6 @@ namespace TravelJournalApp.Views
                 Location = location
             };
 
-            //// Save the journal entry in the database
-            //bool result = await _databaseContext.AddItemAsync(travelJournal);
-            //bool result2 = true; // Initialize result2 to true for image save results
-
-            //foreach (var imagePath in selectedImagePaths)
-            //{
-            //    var travelJournalImage = new TravelJournalImage
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        TravelJournalId = travelJournal.Id.Value,
-            //        ImagePath = imagePath
-            //    };
-            //    result2 = result2 && await _databaseContext.AddItemAsync(travelJournalImage); // Save images one by one
-            //}
-
             bool result = await _databaseContext.AddItemAsync(travelJournal);
             bool result2 = true;
 
@@ -136,7 +117,7 @@ namespace TravelJournalApp.Views
                 var travelJournalImage = new TravelJournalImage
                 {
                     Id = Guid.NewGuid(),
-                    TravelJournalId = travelJournal.Id.Value, // No need for .Value, travelJournal.Id is not nullable
+                    TravelJournalId = travelJournal.Id, // No need for .Value, travelJournal.Id is not nullable
                     ImagePath = newFilePath // Make sure to use the newFilePath after copying
                 };
 

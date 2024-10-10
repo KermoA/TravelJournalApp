@@ -1,5 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TravelJournalApp.Converters"
              x:Class="TravelJournalApp.Views.TravelPage">
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -7,59 +9,54 @@
             <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
         </LinearGradientBrush>
     </ContentPage.Background>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:ImageSourceConverter x:Key="ImageSourceConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <!-- ListView reisiandmete kuvamiseks -->
-            <ListView x:Name="TravelListView" HasUnevenRows="True">
+            <ListView x:Name="TravelListView" 
+                      ItemsSource="{Binding Travels}"
+                      IsPullToRefreshEnabled="True"
+                      IsRefreshing="{Binding IsRefreshing}"
+                      RefreshCommand="{Binding RefreshCommand}"
+                      SelectedItem="{Binding SelectedTravel}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Orientation="Vertical" Padding="25">
-                                <Grid RowDefinitions="Auto, Auto, *">
-                                    
-                                    <!-- First Row:Last Updated and Location Labels -->
-                                    <Grid Grid.Row="0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <!-- Takes remaining space -->
-                                            <ColumnDefinition Width="Auto" />
-                                            <!-- Width of the Location label -->
-                                        </Grid.ColumnDefinitions>
-                                        <!-- Left column -->
-                                        <Label Text="{Binding Location}" 
-                                               HorizontalOptions="Start"
-                                               FontSize="14"
-                                               HorizontalTextAlignment="Start"
-                                               Grid.Column="0"
-                                               Margin="30,0,10,0"/>
-                                        <!-- Right column -->
-                                        <Label Text="{Binding LastUpdatedAt, StringFormat='{0:yyyy-MM-dd HH:mm:ss}'}" 
-                                               FontSize="14"
-                                               HorizontalTextAlignment="End"
-                                               Grid.Column="1"
-                                               Margin="10,0,15,0"/>
-                                    </Grid>
+                                <StackLayout Orientation="Vertical">
+                                    <Frame>
 
-                                    <!-- Second Row: Image Display  -->
-                                    <Frame Grid.Row="1">
-                                        <!-- Pildi kuvamine -->
-                                        <Image Style="{StaticResource PageImageStyle}" Source="{Binding ImageFileId}" />
+                                        <!--, Converter={StaticResource ImageSourceConverter}-->
+                                        <Image x:Name="HeroImage"
+                                               Source="{Binding Images[0].ImagePath}"
+                                               Aspect="AspectFill"
+                                               HeightRequest="500"
+                                               IsVisible="{Binding SelectedTravel.Images.Count, Converter={StaticResource CountToBoolConverter}}" />
+
                                     </Frame>
-
-                                    <!-- Third Row: Title and Description Display -->
-                                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Row="2">
-                                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="20" />
-                                        <Label Text="{Binding Description}" FontSize="16" />
-                                    </StackLayout>
-                                </Grid>
+                                    <Grid Padding="0,10"></Grid>
+                                    <CollectionView x:Name="ImagesCollectionView"
+                                                    ItemsSource="{Binding Images}"
+                                                    ItemsLayout="HorizontalList"
+                                                    MaximumHeightRequest="140"
+                                                    HorizontalOptions="Center">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding ImagePath}" Aspect="Fill"/>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </StackLayout>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            
-            <!-- Nupp reisi lisamiseks -->
-            <Button Text="Add New Travel" Clicked="Add_Travel_Clicked" Margin="35,25" />
+
+            <Button Style="{StaticResource DefaultMenuButtonStyle}" Text="Add New Travel" Clicked="Add_Travel_Clicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

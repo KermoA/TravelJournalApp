@@ -1,9 +1,16 @@
-namespace TravelJournalApp.Views;
+using Data;
+using Model;
+using ModelImage;
+using ViewModel;
+using ListViewModel;
 
-public partial class DeleteTravelPage : ContentPage
+namespace TravelJournalApp.Views
 {
-	public DeleteTravelPage()
-	{
-		InitializeComponent();
-	}
+    public partial class DeleteTravelPage : ContentPage
+    {
+        public DeleteTravelPage()
+        {
+            InitializeComponent();
+        }
+    }
 }

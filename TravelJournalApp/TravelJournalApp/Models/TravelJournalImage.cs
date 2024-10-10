@@ -1,9 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SQLite;
+using Data;
+using Model;
+using ModelImage;
+using ViewModel;
+using ListViewModel;
 
-namespace TravelJournalApp.Models
+namespace ModelImage
 {
+    [Table("TravelJournalImage")]
     public class TravelJournalImage
     {
         public Guid Id { get; set; }
@@ -11,5 +15,3 @@ namespace TravelJournalApp.Models
         public string ImagePath { get; set; }
     }
 }
-
-
