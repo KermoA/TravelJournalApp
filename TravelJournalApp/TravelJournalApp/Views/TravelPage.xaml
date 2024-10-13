@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:TravelJournalApp.Converters"
+             xmlns:local="clr-namespace:TravelJournalApp.Models"
              x:Class="TravelJournalApp.Views.TravelPage">
+    
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
             <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
         </LinearGradientBrush>
     </ContentPage.Background>
+
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:ImageSourceConverter x:Key="ImageSourceConverter" />
-        </ResourceDictionary>
+        <local:ImageSelectorConverter x:Key="ImageSelectorConverter" />
     </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout>
             <ListView x:Name="TravelListView" 
                       ItemsSource="{Binding Travels}"
                       IsPullToRefreshEnabled="True"
                       IsRefreshing="{Binding IsRefreshing}"
-                      RefreshCommand="{Binding RefreshCommand}"
-                      SelectedItem="{Binding SelectedTravel}">
+                      RefreshCommand="{Binding RefreshCommand}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Orientation="Vertical" Padding="35">
-                                <StackLayout Orientation="Vertical">
-                                    <Frame>
-                                        <Image x:Name="HeroImage"
-                                               Source="{Binding Images[0].ImagePath}"
-                                               Aspect="AspectFill"
-                                               HeightRequest="600"
-                                               IsVisible="{Binding Images.Count, Converter={StaticResource CountToBoolConverter}}" />
-                                    </Frame>
-                                    <Grid Padding="0,10"></Grid>
+                                <!--HeroImageSource-->
+                                <Image x:Name="HeroImage"
+                                       Aspect="AspectFill"
+                                       HeightRequest="600"
+                                       IsVisible="True" >
+                                    <Image.Source>
+                                        <MultiBinding Converter="{StaticResource ImageSelectorConverter}">
+                                            <Binding Path="TravelImages" Mode="TwoWay"/>
+                                            <Binding Path="SelectedImageIndex" Mode="TwoWay"/>
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                    <Button Text="Back" Command="{Binding PreviousImageCommand}" />
+                                    <Button Text="Next" Command="{Binding NextImageCommand}"/>
+                                </StackLayout>
+                                <Grid Padding="0,10"></Grid>
                                     <CollectionView x:Name="ImagesCollectionView"
-                                                    ItemsSource="{Binding Images}"
+                                                    ItemsSource="{Binding TravelImages}"
                                                     ItemsLayout="HorizontalList"
                                                     MaximumHeightRequest="150"
                                                     HorizontalOptions="Center">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
-                                                <Image Source="{Binding ImagePath}" Aspect="Fill"/>
+                                                <Image Source="{Binding FilePath}" Aspect="Fill"/>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
-                                </StackLayout>
+
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

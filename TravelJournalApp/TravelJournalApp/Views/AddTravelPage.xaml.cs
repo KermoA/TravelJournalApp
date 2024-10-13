@@ -1,10 +1,5 @@
-using Data;
-using Model;
-using ModelImage;
-using ViewModel;
-using ListViewModel;
-using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using TravelJournalApp.Data;
 
 namespace TravelJournalApp.Views
 {
@@ -12,7 +7,7 @@ namespace TravelJournalApp.Views
     {
         private readonly DatabaseContext _databaseContext;
         private TravelJournal travelJournal;
-        private TravelJournalImage travelJournalImage;
+        private ImageDatabase travelJournalImage;
         private List<string> selectedTempImagePaths = new List<string>(); // Initialize the temporary images path list
         private List<string> selectedImagePaths = new List<string>(); // To store selected image paths
         private ObservableCollection<ImageSource> imagePreviews = new ObservableCollection<ImageSource>();
@@ -23,7 +18,7 @@ namespace TravelJournalApp.Views
             BindingContext = this;
             _databaseContext = new DatabaseContext();
             travelJournal = new TravelJournal();
-            travelJournalImage = new TravelJournalImage();
+            travelJournalImage = new ImageDatabase();
         }
 
         private async void OnPickPhotosClicked(object sender, EventArgs e)
@@ -62,6 +57,7 @@ namespace TravelJournalApp.Views
 
         private async void SaveTravelClicked(object sender, EventArgs e)
         {
+            int indexImages = 0;
             var title = TitleEntry.Text;
             var description = DescriptionEditor.Text;
             var location = LocationEntry.Text;
@@ -93,7 +89,7 @@ namespace TravelJournalApp.Views
                 }
 
                 // Assign the first copied image to the travel journal image
-                travelJournalImage.ImagePath = selectedImagePaths.FirstOrDefault();
+                travelJournalImage.FilePath = selectedImagePaths.FirstOrDefault();
             }
 
             travelJournal = new TravelJournal
@@ -103,7 +99,7 @@ namespace TravelJournalApp.Views
                 Description = description,
                 CreatedAt = DateTime.Now,
                 LastUpdatedAt = DateTime.Now,
-                Location = location
+                Location = location,
             };
 
             bool result = await _databaseContext.AddItemAsync(travelJournal);
@@ -114,11 +110,12 @@ namespace TravelJournalApp.Views
                 // Move this inside the loop:
                 var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
 
-                var travelJournalImage = new TravelJournalImage
+                var travelJournalImage = new ImageDatabase
                 {
                     Id = Guid.NewGuid(),
                     TravelJournalId = travelJournal.Id, // No need for .Value, travelJournal.Id is not nullable
-                    ImagePath = newFilePath // Make sure to use the newFilePath after copying
+                    FilePath = newFilePath,// Make sure to use the newFilePath after copying
+                    ImageIndex = indexImages++
                 };
 
                 result2 = result2 && await _databaseContext.AddItemAsync(travelJournalImage);
@@ -130,6 +127,7 @@ namespace TravelJournalApp.Views
                 StatusLabel.TextColor = Color.FromArgb("#00FF00");
                 TitleEntry.Text = string.Empty;
                 DescriptionEditor.Text = string.Empty;
+                LocationEntry.Text = string.Empty;
                 selectedTempImagePaths.Clear();
                 selectedImagePaths.Clear();
                 imagePreviews.Clear(); // Clear the previews
