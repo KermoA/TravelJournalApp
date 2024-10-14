@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using TravelJournalApp.Data;
+using TravelJournalApp.Views;
 
 namespace TravelJournalApp.Models
 {
@@ -17,6 +19,21 @@ namespace TravelJournalApp.Models
 
         private int _selectedImageIndex;
         private TravelViewModel _selectedTravel;
+
+        // TravelViewModel.cs
+        // TravelViewModel.cs
+        public ICommand NavigateToBigHeroCommand => new Command(() =>
+        {
+            // Leia TravelPage objekt
+            var travelPage = (TravelPage)Application.Current.MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is TravelPage);
+
+            // Leia ListViewModel objekt
+            var listViewModel = (ListViewModel)travelPage.BindingContext;
+
+            // Uuenda SelectedTravel omadust
+            listViewModel.SelectedTravel = this;
+            listViewModel.OnPropertyChanged(nameof(listViewModel.SelectedTravel));
+        });
         public TravelViewModel SelectedTravel
         {
             get => _selectedTravel;

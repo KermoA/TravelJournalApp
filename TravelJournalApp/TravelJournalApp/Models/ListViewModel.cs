@@ -65,7 +65,7 @@ namespace TravelJournalApp.Models
                         Travels.Add(viewModel);
 
                         SelectedTravel = Travels.First();  // Preselect the first travel item
-                        
+
                     }
                 }
             }
@@ -74,6 +74,8 @@ namespace TravelJournalApp.Models
                 Debug.WriteLine($"Error loading travel entries: {ex.Message}");
             }
         }
+
+        // Käsk detailvaatele navigeerimiseks
 
         // IsRefreshing property for pull-to-refresh functionality
         public bool IsRefreshing
@@ -102,7 +104,7 @@ namespace TravelJournalApp.Models
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

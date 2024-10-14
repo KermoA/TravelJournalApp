@@ -31,7 +31,11 @@
                                 <Image x:Name="ListHeroImage"
                                        Aspect="AspectFill"
                                        HeightRequest="100"
-                                       Source="{Binding HeroImageSource}" />
+                                       Source="{Binding HeroImageSource}">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding NavigateToBigHeroCommand}" CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
                             </Grid>
                         </StackLayout>
                     </DataTemplate>
