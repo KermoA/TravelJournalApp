@@ -105,7 +105,7 @@ namespace TravelJournalApp.Models
         {
             Debug.WriteLine($"Navigate to details");
             // Navigeeri detailvaatele ja edasta valitud reisi objekt parameetrina
-            await Navigation.PushAsync(new TravelDetailPage(travel));
+            await Application.Current.MainPage.Navigation.PushAsync(new TravelDetailPage(travel));
         });
 
         // INotifyPropertyChanged implementation

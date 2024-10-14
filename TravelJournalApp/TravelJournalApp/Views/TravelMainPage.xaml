@@ -18,7 +18,7 @@
                    HeightRequest="300"
                    Source="{Binding SelectedTravel.HeroImageSource}" >
                 <Image.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" CommandParameter="{Binding .}" />
+                    <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" CommandParameter="{Binding SelectedTravel}" />
                 </Image.GestureRecognizers>
             </Image>
 
