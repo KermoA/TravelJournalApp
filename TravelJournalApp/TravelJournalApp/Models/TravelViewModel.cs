@@ -25,7 +25,7 @@ namespace TravelJournalApp.Models
         public ICommand NavigateToBigHeroCommand => new Command(() =>
         {
             // Leia TravelPage objekt
-            var travelPage = (TravelPage)Application.Current.MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is TravelPage);
+            var travelPage = (TravelMainPage)Application.Current.MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is TravelMainPage);
 
             // Leia ListViewModel objekt
             var listViewModel = (ListViewModel)travelPage.BindingContext;
@@ -34,6 +34,8 @@ namespace TravelJournalApp.Models
             listViewModel.SelectedTravel = this;
             listViewModel.OnPropertyChanged(nameof(listViewModel.SelectedTravel));
         });
+
+
         public TravelViewModel SelectedTravel
         {
             get => _selectedTravel;

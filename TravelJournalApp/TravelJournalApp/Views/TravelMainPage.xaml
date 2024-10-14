@@ -1,7 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TravelJournalApp.Models"
-             x:Class="TravelJournalApp.Views.TravelPage">
+             x:Class="TravelJournalApp.Views.TravelMainPage">
 
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -16,7 +16,11 @@
                    Margin="15,15"
                    Aspect="AspectFill"
                    HeightRequest="300"
-                   Source="{Binding SelectedTravel.HeroImageSource}" />
+                   Source="{Binding SelectedTravel.HeroImageSource}" >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" CommandParameter="{Binding .}" />
+                </Image.GestureRecognizers>
+            </Image>
 
             <CollectionView x:Name="TravelsListView" 
                             ItemsSource="{Binding Travels}"

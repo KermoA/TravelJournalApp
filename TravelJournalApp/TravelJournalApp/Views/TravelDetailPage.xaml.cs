@@ -1,12 +1,14 @@
 using TravelJournalApp.Data;
+using TravelJournalApp.Models;
 
 namespace TravelJournalApp.Views;
 
-public partial class DetailsPage : ContentPage
+public partial class TravelDetailPage : ContentPage
 {
-    public DetailsPage(TravelJournalTable selectedTravel)
+    public TravelDetailPage(TravelViewModel travelViewModel)
     {
         InitializeComponent();
+        BindingContext = travelViewModel;
     }
     private async void OnBackButtonClicked(object sender, EventArgs e)
     {

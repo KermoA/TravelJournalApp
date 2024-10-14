@@ -90,6 +90,7 @@ namespace TravelJournalApp.Models
                 }
             }
         }
+
         // Refresh command to reload travel entries
         public ICommand RefreshCommand => new Command(async () => await RefreshDataAsync());
 
@@ -100,7 +101,12 @@ namespace TravelJournalApp.Models
             await LoadTravelEntries();
             IsRefreshing = false;
         }
-
+        public ICommand NavigateToDetailsCommand => new Command<TravelViewModel>(async (travel) =>
+        {
+            Debug.WriteLine($"Navigate to details");
+            // Navigeeri detailvaatele ja edasta valitud reisi objekt parameetrina
+            await Navigation.PushAsync(new TravelDetailPage(travel));
+        });
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;

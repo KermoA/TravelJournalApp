@@ -3,7 +3,7 @@ using TravelJournalApp.Data;
 
 namespace TravelJournalApp.Views
 {
-    public partial class AddTravelPage : ContentPage
+    public partial class TravelAddPage : ContentPage
     {
         private readonly DatabaseContext _databaseContext;
         private TravelJournalTable travelJournal;
@@ -12,7 +12,7 @@ namespace TravelJournalApp.Views
         private List<string> selectedImagePaths = new List<string>(); // To store selected image paths
         public ObservableCollection<ImageSource> imagePreviews {  get; set; }
 
-        public AddTravelPage()
+        public TravelAddPage()
         {
             InitializeComponent();
             BindingContext = this;
