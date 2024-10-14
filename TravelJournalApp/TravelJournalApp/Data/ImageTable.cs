@@ -2,8 +2,8 @@
 
 namespace TravelJournalApp.Data
 {
-    [Table("ImageDatabase")]
-    public class ImageDatabase
+    [Table("ImageTable")]
+    public class ImageTable
     {
         public Guid Id { get; set; }
         public Guid TravelJournalId { get; set; } // Foreign key

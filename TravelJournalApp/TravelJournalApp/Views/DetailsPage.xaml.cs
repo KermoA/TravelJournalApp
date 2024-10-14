@@ -4,7 +4,7 @@ namespace TravelJournalApp.Views;
 
 public partial class DetailsPage : ContentPage
 {
-    public DetailsPage(TravelJournal selectedTravel)
+    public DetailsPage(TravelJournalTable selectedTravel)
     {
         InitializeComponent();
     }

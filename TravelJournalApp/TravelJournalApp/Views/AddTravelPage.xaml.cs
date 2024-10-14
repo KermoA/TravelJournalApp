@@ -6,19 +6,20 @@ namespace TravelJournalApp.Views
     public partial class AddTravelPage : ContentPage
     {
         private readonly DatabaseContext _databaseContext;
-        private TravelJournal travelJournal;
-        private ImageDatabase travelJournalImage;
+        private TravelJournalTable travelJournal;
+        private ImageTable travelJournalImage;
         private List<string> selectedTempImagePaths = new List<string>(); // Initialize the temporary images path list
         private List<string> selectedImagePaths = new List<string>(); // To store selected image paths
-        private ObservableCollection<ImageSource> imagePreviews = new ObservableCollection<ImageSource>();
+        public ObservableCollection<ImageSource> imagePreviews {  get; set; }
 
         public AddTravelPage()
         {
             InitializeComponent();
             BindingContext = this;
             _databaseContext = new DatabaseContext();
-            travelJournal = new TravelJournal();
-            travelJournalImage = new ImageDatabase();
+            travelJournal = new TravelJournalTable();
+            travelJournalImage = new ImageTable();
+            imagePreviews = new ObservableCollection<ImageSource>();
         }
 
         private async void OnPickPhotosClicked(object sender, EventArgs e)
@@ -92,7 +93,7 @@ namespace TravelJournalApp.Views
                 travelJournalImage.FilePath = selectedImagePaths.FirstOrDefault();
             }
 
-            travelJournal = new TravelJournal
+            travelJournal = new TravelJournalTable
             {
                 Id = Guid.NewGuid(),
                 Title = title,
@@ -110,7 +111,7 @@ namespace TravelJournalApp.Views
                 // Move this inside the loop:
                 var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
 
-                var travelJournalImage = new ImageDatabase
+                var travelJournalImage = new ImageTable
                 {
                     Id = Guid.NewGuid(),
                     TravelJournalId = travelJournal.Id, // No need for .Value, travelJournal.Id is not nullable

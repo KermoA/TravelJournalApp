@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.InkML;
 using System.Diagnostics;
 using TravelJournalApp.Models;
 
@@ -12,7 +13,7 @@ namespace TravelJournalApp.Views
             InitializeComponent();
 
             // ViewModel-i sidumine
-            BindingContext = new ListViewModel(); 
+            BindingContext = new ListViewModel();
         }
 
         protected override void OnAppearing()
@@ -26,5 +27,6 @@ namespace TravelJournalApp.Views
         {
             await Navigation.PushAsync(new AddTravelPage());
         }
+
     }
 }

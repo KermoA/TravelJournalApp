@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TravelJournalApp.Models"
@@ -11,77 +10,37 @@
         </LinearGradientBrush>
     </ContentPage.Background>
 
-    <ContentPage.Resources>
-        <local:ImageSelectorConverter x:Key="ImageSelectorConverter"/>
-    </ContentPage.Resources>
-
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="TravelListView" 
-                      ItemsSource="{Binding Travels}"
-                      IsPullToRefreshEnabled="True"
-                      IsRefreshing="{Binding IsRefreshing}"
-                      RefreshCommand="{Binding RefreshCommand}">
-                <ListView.ItemTemplate>
+            <Image x:Name="BigHeroImage"
+                   Margin="15,15"
+                   Aspect="AspectFill"
+                   HeightRequest="300"
+                   Source="{Binding SelectedTravel.HeroImageSource}" />
+
+            <CollectionView x:Name="TravelsListView" 
+                            ItemsSource="{Binding Travels}"
+                            ItemsLayout="HorizontalList"
+                            HorizontalOptions="Center"
+                            SelectedItem="{Binding SelectedTravel, Mode=TwoWay}">
+
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Vertical" Padding="35">
-                                <Grid>
-
-                                    <Image x:Name="HeroImage"
-                                           Aspect="AspectFill"
-                                           HeightRequest="600"
-                                           IsVisible="True" 
-                                       >
-                                        <Image.Source ZIndex="1">
-                                            <MultiBinding Converter="{StaticResource ImageSelectorConverter}">
-                                                <Binding Path="TravelImages" Mode="TwoWay"/>
-                                                <Binding Path="SelectedImageIndex" Mode="TwoWay"/>
-                                            </MultiBinding>
-                                        </Image.Source>
-                                    </Image>
-                                    <Grid ColumnDefinitions="*,*,*">
-                                        <Grid Grid.Column="0">
-                                            <Button 
-                                            Text="Back" Command="{Binding PreviousImageCommand}"
-                                            Style="{StaticResource BackNextButtonStyle}"/>
-                                        </Grid>
-                                        <Grid Grid.Column="1">
-                                            <Button 
-                                            Text="Edit" Command="{Binding DetialImageCommand}"
-                                                Style="{StaticResource BackNextButtonStyle}"/>
-                                        </Grid>
-                                        <Grid Grid.Column="3">
-                                            <Button 
-                                            Text="Next" Command="{Binding NextImageCommand}"
-                                                Style="{StaticResource BackNextButtonStyle}"/>
-                                        </Grid>
-                                        
-                                        
-                                    </Grid>
-                                </Grid>
-                                <!--HeroImageSource-->
-
-                                <Grid Padding="0,10"></Grid>
-                                    <CollectionView x:Name="ImagesCollectionView"
-                                                    ItemsSource="{Binding TravelImages}"
-                                                    ItemsLayout="HorizontalList"
-                                                    MaximumHeightRequest="150"
-                                                    HorizontalOptions="Center">
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Image Source="{Binding FilePath}" Aspect="Fill"/>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
-
-                            </StackLayout>
-                        </ViewCell>
+                        <StackLayout Orientation="Horizontal" Padding="10">
+                            <Grid>
+                                <Image x:Name="ListHeroImage"
+                                       Aspect="AspectFill"
+                                       HeightRequest="100"
+                                       Source="{Binding HeroImageSource}" />
+                            </Grid>
+                        </StackLayout>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-            <Button Style="{StaticResource DefaultMenuButtonStyle}" Text="Add New Travel" Clicked="Add_Travel_Clicked" />
+            <Button Style="{StaticResource DefaultMenuButtonStyle}"
+                    Text="Add New Travel"
+                    Clicked="Add_Travel_Clicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
