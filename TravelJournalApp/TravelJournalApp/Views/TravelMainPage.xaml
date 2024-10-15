@@ -1,0 +1,74 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TravelJournalApp.Models"
+             x:Class="TravelJournalApp.Views.TravelMainPage">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
+            <GradientStop Color="{StaticResource YellowBG}" Offset="0.6" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,*" Margin="25,25">
+                <Label Text="{Binding SelectedTravel.Title}" 
+                       Grid.Column="0"
+                       FontSize="Large" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Start"
+                       VerticalOptions="End"/>
+
+                <Label Text="{Binding SelectedTravel.TravelDate, StringFormat='{0:dd.MM.yyyy}'}" 
+                       Grid.Column="1"
+                       FontSize="Small" 
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"
+                       TranslationY="5"/>
+
+                <Image x:Name="BigHeroImage"
+                       Grid.Row="1"
+                       Grid.ColumnSpan="2" 
+                       Aspect="AspectFill"
+                       HeightRequest="500"
+                       Source="{Binding SelectedTravel.HeroImageSource}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
+                                                CommandParameter="{Binding SelectedTravel}" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+
+
+            <CollectionView x:Name="TravelsListView" 
+                            ItemsSource="{Binding Travels}"
+                            ItemsLayout="HorizontalList"
+                            HorizontalOptions="Center"
+                            SelectedItem="{Binding SelectedTravel, Mode=TwoWay}"
+                            Margin="25,0">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
+                            <Grid>
+                                <Image x:Name="ListHeroImage"
+                                       Aspect="AspectFill"
+                                       HeightRequest="125"
+                                       Source="{Binding HeroImageSource}">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding NavigateToBigHeroCommand}" CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Grid>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Style="{StaticResource DefaultMenuButtonStyle}"
+                    Text="Add New Travel"
+                    Clicked="Add_Travel_Clicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

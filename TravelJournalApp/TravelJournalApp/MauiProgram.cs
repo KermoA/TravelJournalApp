@@ -9,7 +9,7 @@ namespace TravelJournalApp
 			var builder = MauiApp.CreateBuilder();
 			builder
 				.UseMauiApp<App>()
-				.ConfigureFonts(fonts =>
+                .ConfigureFonts(fonts =>
 				{
                     fonts.AddFont("Roboto-Bold.ttf.ttf", "RobotoBold");
                     fonts.AddFont("Roboto-Light.ttf.ttf", "RobotoLight");

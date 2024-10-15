@@ -1,12 +1,10 @@
 ﻿using SQLite;
-using System;
 using System.Linq.Expressions;
-using System.IO;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System.Xml.Linq;
 using System.Diagnostics;
+using TravelJournalApp.Data;
+using System.Collections.Generic;
 
-namespace Data
+namespace TravelJournalApp.Data
 {
     public class DatabaseContext : IAsyncDisposable
     {
@@ -23,9 +21,9 @@ namespace Data
             Debug.WriteLine($"Database path: {DbPath}");
         }
 
-        private SQLiteAsyncConnection _connection;
+        private SQLiteAsyncConnection _connectionString;
         private SQLiteAsyncConnection Database =>
-            (_connection ??= new SQLiteAsyncConnection(DbPath,
+            (_connectionString ??= new SQLiteAsyncConnection(DbPath,
                 SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache));
 
         public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new()
@@ -79,13 +77,23 @@ namespace Data
             return await Database.DeleteAsync<TTable>(primaryKey) > 0;
         }
 
-        public async ValueTask DisposeAsync() => await _connection.CloseAsync();
+        public async ValueTask DisposeAsync() => await _connectionString.CloseAsync();
 
         public async Task<IEnumerable<TTable>> GetFilteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new()
         {
             var table = await GetTableAsync<TTable>();
             return await table.Where(predicate).ToListAsync();
         }
+
+        //public async Task<string> GetImagePathForTravel(Guid travelId)
+        //{
+        //    string query = "SELECT ImagePath FROM ImageDatabase WHERE TravelJournalId = ? LIMIT 1";
+
+        //    // Kasuta asünkroonset ühendust ja päringut
+        //    var result = await Database.ExecuteScalarAsync<string>(query, travelId);
+
+        //    return result; // Tagasta tulemus või null, kui tulemust ei leitud
+        //}
 
     }
 }
