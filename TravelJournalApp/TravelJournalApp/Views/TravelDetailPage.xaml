@@ -12,75 +12,137 @@
         </LinearGradientBrush>
     </ContentPage.Background>
 
-    <ScrollView>
-        <!-- Wrap the StackLayout in a ScrollView -->
-        <StackLayout>
-            <!-- Pealkirja kuvamine -->
-            <Grid HorizontalOptions="Fill" Margin="0,0" RowSpacing="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-                <Label Text="{Binding Title}" 
+        <ScrollView Grid.Row="0">
+            <StackLayout>
+                <Grid HorizontalOptions="Fill" Margin="0,0" RowSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="{Binding Location}" 
+                           Grid.Column="0"
+                           Margin="15,5"
+                           FontSize="Large" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Start"
+                           VerticalOptions="End"/>
+
+                    <Label Text="{Binding TravelDates}" 
+                           Grid.Column="1"
+                           Margin="15,5"
+                           FontSize="Small" 
+                           HorizontalOptions="End"
+                           VerticalOptions="Center"
+                           TranslationY="5"/>
+                </Grid>
+
+                <Image x:Name="BigHeroImage"
+                       Grid.Row="1"
+                       Grid.ColumnSpan="2" 
+                       Aspect="AspectFill"
+                       HeightRequest="250"
+                       Margin="15,0"
+                       Source="{Binding HeroImageSource}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
+                                              CommandParameter="{Binding SelectedTravel}" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Label Text="{Binding Description}" 
                        Grid.Column="0"
-                       FontSize="Large" 
-                       FontAttributes="Bold" 
-                       HorizontalOptions="Start"
-                       VerticalOptions="End"/>
-
-                <Label Text="{Binding TravelDate, StringFormat='{0:dd.MM.yyyy}'}" 
-                       Grid.Column="1"
+                       Margin="15,0"
                        FontSize="Small" 
-                       HorizontalOptions="End"
-                       VerticalOptions="Center"
-                       TranslationY="5"/>
-            </Grid>
+                       FontAttributes="None"
+                       HorizontalTextAlignment="Start"
+                       VerticalTextAlignment="End"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="End" />
 
-            <Label x:Name="TitleLabel" FontAttributes="Bold" FontSize="24" HorizontalOptions="Center" />
-
-            <Image x:Name="BigHeroImage"
-                   Grid.Row="1"
-                   Grid.ColumnSpan="2" 
-                   Aspect="AspectFill"
-                   HeightRequest="250"
-                   Margin="10,0"
-                   Source="{Binding HeroImageSource}">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
-                                          CommandParameter="{Binding SelectedTravel}" />
-                </Image.GestureRecognizers>
-            </Image>
-
-            <Label Text="{Binding Description}" 
-                   Grid.Column="0"
-                   FontSize="Small" 
-                   FontAttributes="None" 
-                   HorizontalOptions="Start"
-                   VerticalOptions="End"/>
-
-            <Grid HorizontalOptions="Fill" Margin="0,0" RowSpacing="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Button Text="Edit"
-                        Grid.Column="0"
-                        Margin="15,0,5,0"
-                        Clicked="OnEditButtonClicked"/>
-                <Button Text="Delete"
-                        Grid.Column="1"
-                        Margin="5,0,15,0"
-                        BackgroundColor="Red"
-                        TextColor="White"
-                        Clicked="OnDeleteButtonClicked"/>
-            </Grid>
-
+                <CarouselView ItemsSource="{Binding TravelImages}" 
+                              HeightRequest="100" 
+                              Margin="15,0">
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding FilePath}" 
+                                   Aspect="AspectFill" 
+                                   HeightRequest="100" 
+                                   Margin="10,0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnImageTapped" 
+                                                          CommandParameter="{Binding FilePath}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+            </StackLayout>
+        </ScrollView>
+        <StackLayout Grid.Row="1" 
+                     Orientation="Horizontal" 
+                     Padding="15" 
+                     Spacing="10">
             <Button Text="Back"
-                    Margin="15"
+                    BackgroundColor="#D3D3D3"
+                    TextColor="#333333"
+                    HorizontalOptions="FillAndExpand" 
                     Clicked="OnBackButtonClicked"/>
+            <Button Text="Edit"
+                    BackgroundColor="#ADD8E6"
+                    TextColor="#00008B"
+                    HorizontalOptions="FillAndExpand" 
+                    Clicked="OnEditButtonClicked"/>
+            <Button Text="Delete" 
+                    BackgroundColor="#FF6347" 
+                    TextColor="#FFFFFF" 
+                    HorizontalOptions="FillAndExpand" 
+                    Clicked="OnDeleteButtonClicked"/>
         </StackLayout>
-    </ScrollView>
-    <!-- End of ScrollView -->
+
+        <Grid x:Name="ZoomOverlay" 
+              BackgroundColor="Black" 
+              Opacity="0.8" 
+              IsVisible="False" 
+              VerticalOptions="FillAndExpand" 
+              HorizontalOptions="FillAndExpand">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnOverlayTapped" />
+            </Grid.GestureRecognizers>
+            <Image x:Name="ZoomedImage" 
+                   Aspect="AspectFill" 
+                   HorizontalOptions="FillAndExpand" 
+                   VerticalOptions="Center"
+                   HeightRequest="300"
+                   WidthRequest="-1" />
+
+            <Button Text="◄" 
+            HorizontalOptions="Start" 
+            VerticalOptions="Center" 
+            BackgroundColor="Transparent" 
+            TextColor="White" 
+            Clicked="OnPreviousImageClicked" 
+            WidthRequest="100" 
+            HeightRequest="250" 
+            FontSize="Large" 
+            Opacity="0.7"/>
+
+            <Button Text="►" 
+            HorizontalOptions="End" 
+            VerticalOptions="Center" 
+            BackgroundColor="Transparent" 
+            TextColor="White" 
+            Clicked="OnNextImageClicked" 
+            WidthRequest="100" 
+            HeightRequest="250" 
+            FontSize="Large" 
+            Opacity="0.7"/>
+        </Grid>
+    </Grid>
 </ContentPage>

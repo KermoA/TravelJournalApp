@@ -95,7 +95,9 @@ namespace TravelJournalApp.Models
             }
         }
 
-        
+
+
+
         // This property provides the source for the HeroImage backup
         //public string HeroImageSource
         //{
@@ -124,6 +126,7 @@ namespace TravelJournalApp.Models
         //    }
         //}
 
+        public string TravelDates => $"{TravelStartDate:dd.MM.yyyy} - {TravelEndDate:dd.MM.yyyy}";
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
