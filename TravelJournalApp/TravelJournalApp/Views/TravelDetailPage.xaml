@@ -12,7 +12,14 @@
 
         <!-- Kirjelduse kuvamine -->
         <Label x:Name="DescriptionLabel" FontSize="18" Padding="10,0,0,0" />
-        
+
+
+        <Button Text="Edit"
+                Margin="35,25"
+                Clicked="OnEditButtonClicked"/>
+        <Button Text="Delete"
+                Margin="35,25"
+                Clicked="OnDeleteButtonClicked"/>
         <Button Text="Back"
                 Margin="35,25"
                 Clicked="OnBackButtonClicked"/>

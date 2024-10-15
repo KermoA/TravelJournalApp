@@ -14,4 +14,14 @@ public partial class TravelDetailPage : ContentPage
     {
         await Navigation.PopAsync();
     }
+    private async void OnEditButtonClicked(object sender, EventArgs e)
+    {
+        var travel = (TravelViewModel)BindingContext;
+        await Navigation.PushAsync(new TravelUpdatePage(travel));
+    }
+    private async void OnDeleteButtonClicked(object sender, EventArgs e)
+    {
+        var travel = (TravelViewModel)BindingContext;
+        await Navigation.PushAsync(new TravelDeletePage(travel));
+    }
 }

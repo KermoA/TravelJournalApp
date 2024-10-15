@@ -8,5 +8,9 @@
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+
+        <Button Text="Back"
+                Margin="35,25"
+                Clicked="OnBackButtonClicked"/>
     </VerticalStackLayout>
 </ContentPage>
