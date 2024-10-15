@@ -95,7 +95,7 @@
                                 <AdaptiveTrigger MinWindowWidth="0" />
                             </VisualState.StateTriggers>
                             <VisualState.Setters>
-                                <Setter Property="ItemsLayout" Value="VerticalList" />
+                                <Setter Property="ItemsLayout" Value="HorizontalList" />
                                 <Setter Property="HorizontalOptions" Value="Start" />
                             </VisualState.Setters>
                         </VisualState>
