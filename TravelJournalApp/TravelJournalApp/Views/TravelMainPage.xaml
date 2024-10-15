@@ -12,7 +12,7 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,*" Margin="25,25">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto" RowDefinitions="Auto,*" Margin="25,10">
                 <!-- VisualStateManager is applied here, inside Grid -->
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="WindowSizeStates">
@@ -45,14 +45,30 @@
                        HorizontalOptions="Start"
                        VerticalOptions="End"/>
 
-                <Label Text="{Binding SelectedTravel.TravelDate, StringFormat='{0:dd.MM.yyyy}'}" 
+                <Label Text="{Binding SelectedTravel.TravelStartDate, StringFormat='{0:dd.MM.yyyy}'}" 
                        Grid.Column="1"
                        FontSize="Small" 
                        HorizontalOptions="End"
                        VerticalOptions="Center"
                        TranslationY="5"/>
+                <Label Text="-"
+                       Grid.Column="2"
+                       FontSize="Small" 
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        TranslationY="4"
+                        Margin="2,0"/>
+                <Label Text="{Binding SelectedTravel.TravelEndDate, StringFormat='{0:dd.MM.yyyy}'}" 
+                       Grid.Column="3"
+                       FontSize="Small" 
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"
+                       TranslationY="5"/>
 
-                <Image x:Name="BigHeroImage"
+
+            </Grid>
+            <Grid Margin="25,0">
+                    <Image x:Name="BigHeroImage"
                        Grid.Row="1"
                        Grid.ColumnSpan="2" 
                        Aspect="AspectFill"
@@ -94,19 +110,31 @@
                         </VisualState>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
-
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
-                            <Grid>
+                            <Grid RowDefinitions="Auto,*" VerticalOptions="Center">
+
+                                <!-- Title Label in the first column -->
+                                <Label Text="{Binding Title}" 
+                                       FontSize="Small" 
+                                       FontAttributes="None" 
+                                       HorizontalOptions="Start"
+                                       VerticalOptions="Center"
+                                       Grid.Row="0"/>
+
+                                <!-- Image in the second column -->
                                 <Image x:Name="ListHeroImage"
                                        Aspect="AspectFill"
                                        HeightRequest="125"
-                                       Source="{Binding HeroImageSource}">
+                                       WidthRequest="125"
+                                       Source="{Binding HeroImageSource}"
+                                       Grid.Row="1">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding NavigateToBigHeroCommand}" CommandParameter="{Binding .}" />
                                     </Image.GestureRecognizers>
                                 </Image>
+
                             </Grid>
                         </StackLayout>
                     </DataTemplate>

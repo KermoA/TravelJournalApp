@@ -62,7 +62,8 @@ namespace TravelJournalApp.Models
                             Location = travel.Location,
                             CreatedAt = travel.CreatedAt,
                             LastUpdatedAt = travel.LastUpdatedAt,
-                            TravelDate = travel.TravelDate,
+                            TravelStartDate = travel.TravelStartDate,
+                            TravelEndDate = travel.TravelEndDate,
                             TravelImages = new ObservableCollection<ImageTable>(images),
                             
                         };

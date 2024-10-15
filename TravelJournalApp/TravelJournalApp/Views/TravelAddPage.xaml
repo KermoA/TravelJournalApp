@@ -21,19 +21,39 @@
                 <!-- Travel Name Entry -->
                 <Label Text="Travel Name:" />
                 <Entry x:Name="TitleEntry" Placeholder="Enter title" />
-                
-                <Grid ColumnDefinitions="Auto,Auto">
-                    <Label Text="Travel Date:" 
-                           Grid.Column="0" 
-                           VerticalOptions="Center" />
+                <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
 
-                    <DatePicker x:Name="DateEntry" 
-                                Grid.Column="1"
-                                Format="dd.MM.yyyy" 
-                                Date="{Binding TravelDate}"
-                                VerticalOptions="End"
-                                TranslationY="8"/>
+                    <!-- Travel Start Date Section -->
+                    <Grid ColumnDefinitions="Auto,Auto" Grid.Column="0" HorizontalOptions="Start">
+                        <Label Text="Travel Start Date:" 
+                                   Grid.Column="0" 
+                                   VerticalOptions="Center" />
+
+                        <DatePicker x:Name="DateStartEntry" 
+                                    Grid.Column="1"
+                                    Format="dd.MM.yyyy" 
+                                    Date="{Binding TravelStartDate}"
+                                    VerticalOptions="End"
+                                    TranslationY="8"/>
+                    </Grid>
+
+                    <!-- Travel End Date Section -->
+                    <Grid ColumnDefinitions="Auto,Auto" Grid.Column="1" HorizontalOptions="End">
+                        <Label Text="Travel End Date:" 
+                               Grid.Column="0" 
+                               VerticalOptions="Center" />
+
+                        <DatePicker x:Name="DateEndEntry" 
+                    Grid.Column="1"
+                    Format="dd.MM.yyyy" 
+                    Date="{Binding TravelEndDate}"
+                    VerticalOptions="End"
+                    TranslationY="8"/>
+                    </Grid>
+
                 </Grid>
+
+
 
 
                 <!-- Location Entry -->
