@@ -11,7 +11,8 @@ namespace TravelJournalApp.Data
         public string Description { get; set; }
         public string Location { get; set; }
         public int HeroIndex { get; set; }
-        public DateTime TravelDate { get; set; }
+        public DateTime TravelStartDate { get; set; }
+        public DateTime TravelEndDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
     }
