@@ -62,6 +62,7 @@ namespace TravelJournalApp.Views
             var title = TitleEntry.Text;
             var description = DescriptionEditor.Text;
             var location = LocationEntry.Text;
+            var date = DateEntry.Date;
 
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -101,6 +102,7 @@ namespace TravelJournalApp.Views
                 CreatedAt = DateTime.Now,
                 LastUpdatedAt = DateTime.Now,
                 Location = location,
+                TravelDate = date
             };
 
             bool result = await _databaseContext.AddItemAsync(travelJournal);

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -15,13 +16,25 @@ namespace TravelJournalApp.Models
         public string Location { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
+        public DateTime TravelDate { get; set; }
         public ObservableCollection<ImageTable> TravelImages { get; set; } = new ObservableCollection<ImageTable>();
 
         private int _selectedImageIndex;
         private TravelViewModel _selectedTravel;
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
 
-        // TravelViewModel.cs
-        // TravelViewModel.cs
+                }
+            }
+        }
         public ICommand NavigateToBigHeroCommand => new Command(() =>
         {
             // Leia TravelPage objekt
@@ -80,6 +93,35 @@ namespace TravelJournalApp.Models
                 }
             }
         }
+
+        
+        // This property provides the source for the HeroImage backup
+        //public string HeroImageSource
+        //{
+        //    get
+        //    {
+        //        if (TravelImages != null && TravelImages.Count > 0)
+        //        {
+        //            // Leia esimene valitud pilt
+        //            var selectedImage = TravelImages.FirstOrDefault(img => img.IsSelected);
+
+        //            if (selectedImage != null)
+        //            {
+        //                return selectedImage.FilePath;
+        //            }
+        //            else
+        //            {
+        //                // Kui ühtegi pilti pole valitud, tagasta esimene pilt
+        //                return TravelImages[0].FilePath;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // Kui pilte pole, tagasta vaikepilt
+        //            return "default_image.png";
+        //        }
+        //    }
+        //}
 
 
         // INotifyPropertyChanged implementation

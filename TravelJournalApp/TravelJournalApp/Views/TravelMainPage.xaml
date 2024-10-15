@@ -12,29 +12,49 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Image x:Name="BigHeroImage"
-                   Margin="15,15"
-                   Aspect="AspectFill"
-                   HeightRequest="300"
-                   Source="{Binding SelectedTravel.HeroImageSource}" >
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" CommandParameter="{Binding SelectedTravel}" />
-                </Image.GestureRecognizers>
-            </Image>
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,*" Margin="25,25">
+                <Label Text="{Binding SelectedTravel.Title}" 
+                       Grid.Column="0"
+                       FontSize="Large" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Start"
+                       VerticalOptions="End"/>
+
+                <Label Text="{Binding SelectedTravel.TravelDate, StringFormat='{0:dd.MM.yyyy}'}" 
+                       Grid.Column="1"
+                       FontSize="Small" 
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"
+                       TranslationY="5"/>
+
+                <Image x:Name="BigHeroImage"
+                       Grid.Row="1"
+                       Grid.ColumnSpan="2" 
+                       Aspect="AspectFill"
+                       HeightRequest="500"
+                       Source="{Binding SelectedTravel.HeroImageSource}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
+                                                CommandParameter="{Binding SelectedTravel}" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+
 
             <CollectionView x:Name="TravelsListView" 
                             ItemsSource="{Binding Travels}"
                             ItemsLayout="HorizontalList"
                             HorizontalOptions="Center"
-                            SelectedItem="{Binding SelectedTravel, Mode=TwoWay}">
+                            SelectedItem="{Binding SelectedTravel, Mode=TwoWay}"
+                            Margin="25,0">
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Orientation="Horizontal" Padding="10">
+                        <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
                             <Grid>
                                 <Image x:Name="ListHeroImage"
                                        Aspect="AspectFill"
-                                       HeightRequest="100"
+                                       HeightRequest="125"
                                        Source="{Binding HeroImageSource}">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding NavigateToBigHeroCommand}" CommandParameter="{Binding .}" />

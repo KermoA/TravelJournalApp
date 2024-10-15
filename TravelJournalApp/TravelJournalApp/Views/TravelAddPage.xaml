@@ -21,6 +21,20 @@
                 <!-- Travel Name Entry -->
                 <Label Text="Travel Name:" />
                 <Entry x:Name="TitleEntry" Placeholder="Enter title" />
+                
+                <Grid ColumnDefinitions="Auto,Auto">
+                    <Label Text="Travel Date:" 
+                           Grid.Column="0" 
+                           VerticalOptions="Center" />
+
+                    <DatePicker x:Name="DateEntry" 
+                                Grid.Column="1"
+                                Format="dd.MM.yyyy" 
+                                Date="{Binding TravelDate}"
+                                VerticalOptions="End"
+                                TranslationY="8"/>
+                </Grid>
+
 
                 <!-- Location Entry -->
                 <Label Text="Location:" />
@@ -58,10 +72,15 @@
                 <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False" />
 
                 <!-- CollectionView for Image Previews -->
-                <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding imagePreviews}">
+                <CollectionView x:Name="ImagesCollectionView" 
+                ItemsSource="{Binding imagePreviews}">
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding .}" Aspect="AspectFit"  />
+                            <StackLayout Orientation="Horizontal">
+                                <!--<RadioButton GroupName="HeroImage" IsChecked="{Binding IsSelected, Mode=TwoWay}" />-->
+                                <Image Source="{Binding .}" Aspect="AspectFill" MaximumWidthRequest="800" />
+                            </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

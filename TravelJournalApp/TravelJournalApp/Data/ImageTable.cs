@@ -9,5 +9,6 @@ namespace TravelJournalApp.Data
         public Guid TravelJournalId { get; set; } // Foreign key
         public string FilePath { get; set; }
         public int ImageIndex { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

@@ -47,6 +47,9 @@ namespace TravelJournalApp.Models
 
                 if (travels != null)
                 {
+                    // Sorteeri reisid CreatedAt omaduse alusel kahanevas järjekorras
+                    travels = travels.OrderByDescending(t => t.CreatedAt).ToList();
+
                     foreach (var travel in travels)
                     {
                         var images = await _databaseContext.GetFilteredAsync<ImageTable>(img => img.TravelJournalId == travel.Id);
@@ -59,7 +62,9 @@ namespace TravelJournalApp.Models
                             Location = travel.Location,
                             CreatedAt = travel.CreatedAt,
                             LastUpdatedAt = travel.LastUpdatedAt,
+                            TravelDate = travel.TravelDate,
                             TravelImages = new ObservableCollection<ImageTable>(images),
+                            
                         };
 
                         Travels.Add(viewModel);
