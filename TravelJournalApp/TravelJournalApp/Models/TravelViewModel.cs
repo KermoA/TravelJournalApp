@@ -126,7 +126,7 @@ namespace TravelJournalApp.Models
         //    }
         //}
 
-        public string TravelDates => $"{TravelStartDate:dd.MM.yyyy} - {TravelEndDate:dd.MM.yyyy}";
+        public string TravelDates => $"{TravelStartDate:dd.MM.yy} - {TravelEndDate:dd.MM.yy}";
 
 
         // INotifyPropertyChanged implementation
