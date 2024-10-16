@@ -12,7 +12,11 @@
 
     <ContentPage.Content>
         <Grid>
-            <ScrollView>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
                 <StackLayout>
                     <Grid ColumnDefinitions="*,Auto,Auto,Auto" RowDefinitions="Auto,*" Margin="25,10">
                         <!-- VisualStateManager is applied here, inside Grid -->
@@ -142,11 +146,17 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                    <Button Style="{StaticResource DefaultMenuButtonStyle}"
-                            Text="Add New Travel"
-                            Clicked="Add_Travel_Clicked" />
+
                 </StackLayout>
             </ScrollView>
+            <StackLayout Grid.Row="1" 
+                     Orientation="Horizontal" 
+                     Padding="15" 
+                     Spacing="5"
+                     HorizontalOptions="Center">
+                <Button Text="Add New Travel"
+                        Clicked="Add_Travel_Clicked" />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
