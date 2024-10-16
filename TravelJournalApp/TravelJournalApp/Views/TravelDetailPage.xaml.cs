@@ -1,16 +1,85 @@
+using System.Timers;
 using TravelJournalApp.Data;
 using TravelJournalApp.Models;
+using Timer = System.Timers.Timer;
 
 namespace TravelJournalApp.Views;
 
 public partial class TravelDetailPage : ContentPage
 {
+    private Timer _scrollTimer;
+    private bool _scrollingRight = true;
+    private bool _isScrollingPaused = false;
     private List<string> _imageSources;
     private int _currentImageIndex;
+
     public TravelDetailPage(TravelViewModel travelViewModel)
     {
         InitializeComponent();
         BindingContext = travelViewModel;
+        StartScrolling();
+    }
+
+    private void StartScrolling()
+    {
+        _scrollTimer = new Timer(20); // Adjust the interval as needed
+        _scrollTimer.Elapsed += OnScrollTimerElapsed;
+        _scrollTimer.Start();
+    }
+
+    private async void OnScrollTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        // Use Dispatcher to invoke the UI update on the main thread
+        this.Dispatcher.Dispatch(async () =>
+        {
+            // If scrolling is paused, do not perform any scrolling
+            if (_isScrollingPaused)
+                return;
+
+            // Get the current scroll position
+            double currentScrollX = TitleScrollable.ScrollX;
+
+            // Get the width of the content
+            double contentWidth = ((Label)TitleScrollable.Content).Width;
+
+            // Check if we need to reset the scrolling position
+            if (_scrollingRight)
+            {
+                if (currentScrollX >= contentWidth - TitleScrollable.Width)
+                {
+                    // Pause scrolling and reset to the left edge
+                    _isScrollingPaused = true;
+                    await Task.Delay(1000); // 1 second delay
+                    TitleScrollable.ScrollToAsync(0, 0, false);
+                    _isScrollingPaused = false; // Resume scrolling
+                }
+                else
+                {
+                    TitleScrollable.ScrollToAsync(currentScrollX + 1, 0, false); // Scroll right
+                }
+            }
+            else
+            {
+                if (currentScrollX <= 0)
+                {
+                    // Pause scrolling and reset to the right edge
+                    _isScrollingPaused = true;
+                    await Task.Delay(1000); // 1 second delay
+                    TitleScrollable.ScrollToAsync(contentWidth, 0, false);
+                    _isScrollingPaused = false; // Resume scrolling
+                }
+                else
+                {
+                    TitleScrollable.ScrollToAsync(currentScrollX - 1, 0, false); // Scroll left
+                }
+            }
+        });
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _scrollTimer?.Stop();
     }
 
     private void OnImageTapped(object sender, EventArgs e)
@@ -57,6 +126,7 @@ public partial class TravelDetailPage : ContentPage
             ZoomedImage.Source = _imageSources[_currentImageIndex];
         }
     }
+
     private async void OnBackButtonClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();

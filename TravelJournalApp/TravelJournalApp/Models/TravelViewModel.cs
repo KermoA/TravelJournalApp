@@ -128,6 +128,7 @@ namespace TravelJournalApp.Models
 
         public string TravelDates => $"{TravelStartDate:dd.MM.yyyy} - {TravelEndDate:dd.MM.yyyy}";
 
+
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
