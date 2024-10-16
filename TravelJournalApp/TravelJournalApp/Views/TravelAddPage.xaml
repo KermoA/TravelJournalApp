@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TravelJournalApp.Views.TravelAddPage"
@@ -12,49 +11,69 @@
         </LinearGradientBrush>
     </ContentPage.Background>
 
+    <!-- Visual State Manager for responsiveness -->
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="AdaptiveStates">
+            <!-- Mobile State -->
+            <VisualState x:Name="Mobile">
+                <VisualState.StateTriggers>
+                    <AdaptiveTrigger MinWindowWidth="0" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                    <!-- Adjust paddings and layouts for mobile -->
+                    <Setter Property="Padding" TargetName="MainStack" Value="10,10,10,20" />
+                </VisualState.Setters>
+            </VisualState>
+
+            <!-- Desktop State -->
+            <VisualState x:Name="Desktop">
+                <VisualState.StateTriggers>
+                    <AdaptiveTrigger MinWindowWidth="600" />
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                    <!-- Adjust paddings and layouts for desktop -->
+                    <Setter Property="Padding" TargetName="MainStack" Value="40,40,40,100" />
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
     <Grid RowDefinitions="Auto,*">
-        <ScrollView Grid.Row="1"
+        <ScrollView x:Name="MyScrollView" 
+                    Grid.Row="1"
                     HorizontalScrollBarVisibility="Never"
                     VerticalScrollBarVisibility="Never">
-            <VerticalStackLayout Padding="20,20,20,300">
+            <VerticalStackLayout x:Name="MainStack" Padding="20,20,20,300">
 
                 <!-- Travel Name Entry -->
                 <Label Text="Travel Name:" />
                 <Entry x:Name="TitleEntry" Placeholder="Enter title" />
-                <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
 
+                <!-- Date Grid -->
+                <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
                     <!-- Travel Start Date Section -->
-                    <Grid ColumnDefinitions="Auto,Auto" Grid.Column="0" HorizontalOptions="Start">
+                    <StackLayout HorizontalOptions="Start" Grid.Column="0">
                         <Label Text="Travel Start Date:" 
-                                   Grid.Column="0" 
-                                   VerticalOptions="Center" />
-
+                               VerticalOptions="Center" />
                         <DatePicker x:Name="DateStartEntry" 
-                                    Grid.Column="1"
                                     Format="dd.MM.yyyy" 
                                     Date="{Binding TravelStartDate}"
                                     VerticalOptions="End"
                                     TranslationY="8"/>
-                    </Grid>
+                    </StackLayout>
 
                     <!-- Travel End Date Section -->
-                    <Grid ColumnDefinitions="Auto,Auto" Grid.Column="1" HorizontalOptions="End">
+                    <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
+                                 Grid.Column="1">
                         <Label Text="Travel End Date:" 
-                               Grid.Column="0" 
                                VerticalOptions="Center" />
-
                         <DatePicker x:Name="DateEndEntry" 
-                    Grid.Column="1"
-                    Format="dd.MM.yyyy" 
-                    Date="{Binding TravelEndDate}"
-                    VerticalOptions="End"
-                    TranslationY="8"/>
-                    </Grid>
-
+                                     Format="dd.MM.yyyy" 
+                                     Date="{Binding TravelEndDate}"
+                                     VerticalOptions="End"
+                                     TranslationY="8"/>
+                    </StackLayout>
                 </Grid>
-
-
-
 
                 <!-- Location Entry -->
                 <Label Text="Location:" />
@@ -65,13 +84,11 @@
                 <Editor x:Name="DescriptionEditor" Placeholder="Enter description" />
 
                 <!-- Buttons for Back, Choose Images, and Save -->
-                <ScrollView x:Name="MyScrollView" Orientation="Vertical">
-                    <Grid ColumnDefinitions="*, *, *">
-                        <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
-                        <Button Text="Choose Images" Clicked="OnPickPhotosClicked" Grid.Column="1"/>
-                        <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
-                    </Grid>
-                </ScrollView>
+                <Grid x:Name="ButtonGrid" ColumnDefinitions="*, *, *">
+                    <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
+                    <Button Text="Choose Images" Clicked="OnPickPhotosClicked" Grid.Column="1"/>
+                    <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
+                </Grid>
 
                 <!-- Status Label for Feedback -->
                 <Label x:Name="StatusLabel"
@@ -93,13 +110,11 @@
 
                 <!-- CollectionView for Image Previews -->
                 <CollectionView x:Name="ImagesCollectionView" 
-                ItemsSource="{Binding imagePreviews}">
-
+                                ItemsSource="{Binding imagePreviews}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Orientation="Horizontal">
-                                <!--<RadioButton GroupName="HeroImage" IsChecked="{Binding IsSelected, Mode=TwoWay}" />-->
-                                <Image Source="{Binding .}" Aspect="AspectFill" MaximumWidthRequest="800" />
+                            <StackLayout Orientation="Vertical">
+                                <Image Source="{Binding .}" Aspect="AspectFill" WidthRequest="500" HeightRequest="500" />
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
