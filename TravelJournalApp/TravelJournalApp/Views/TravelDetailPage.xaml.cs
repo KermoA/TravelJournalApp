@@ -13,15 +13,10 @@ public partial class TravelDetailPage : ContentPage
     private List<string> _imageSources;
     private int _currentImageIndex;
 
-    public TravelDetailPage(TravelViewModel travel)
+    public TravelDetailPage(TravelViewModel travelViewModel)
     {
         InitializeComponent();
-        // Set the BindingContext to a new instance of ListViewModel
-        var viewModel = new ListViewModel();
-        BindingContext = viewModel;
-
-        // Set the selected travel
-        viewModel.SelectedTravel = travel;
+        BindingContext = travelViewModel;
         StartScrolling();
     }
 

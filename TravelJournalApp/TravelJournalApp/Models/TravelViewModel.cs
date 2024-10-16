@@ -95,37 +95,6 @@ namespace TravelJournalApp.Models
             }
         }
 
-
-
-
-        // This property provides the source for the HeroImage backup
-        //public string HeroImageSource
-        //{
-        //    get
-        //    {
-        //        if (TravelImages != null && TravelImages.Count > 0)
-        //        {
-        //            // Leia esimene valitud pilt
-        //            var selectedImage = TravelImages.FirstOrDefault(img => img.IsSelected);
-
-        //            if (selectedImage != null)
-        //            {
-        //                return selectedImage.FilePath;
-        //            }
-        //            else
-        //            {
-        //                // Kui ühtegi pilti pole valitud, tagasta esimene pilt
-        //                return TravelImages[0].FilePath;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            // Kui pilte pole, tagasta vaikepilt
-        //            return "default_image.png";
-        //        }
-        //    }
-        //}
-
         public string TravelDates => $"{TravelStartDate:dd.MM.yy} - {TravelEndDate:dd.MM.yy}";
 
 
