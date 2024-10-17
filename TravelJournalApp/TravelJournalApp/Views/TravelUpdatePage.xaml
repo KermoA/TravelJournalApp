@@ -79,7 +79,8 @@
                     <Button Text="Choose Images"
                             Grid.Column="1"
                             VerticalOptions="Center"
-                            HorizontalOptions="Center"/>
+                            HorizontalOptions="Center"
+                            Clicked="OnPickPhotosClicked"/>
                 </Grid>
 
                 <!-- Piltide kuvamine -->

@@ -11,6 +11,7 @@ public partial class TravelUpdatePage : ContentPage
 	private readonly DatabaseContext _databaseContext;
 	private TravelViewModel _travelViewModel;
 	public ObservableCollection<ImageViewModel> ImageViewModels { get; set; }
+	private List<string> selectedTempImagePaths = new List<string>(); 
 
 
 	public TravelUpdatePage(TravelViewModel travel)
@@ -46,6 +47,44 @@ public partial class TravelUpdatePage : ContentPage
 		ImagesCollectionView.ItemsSource = ImageViewModels;
 	}
 
+	private async void OnPickPhotosClicked(object sender, EventArgs e)
+	{
+		try
+		{
+			var pickResult = await FilePicker.PickMultipleAsync(new PickOptions
+			{
+				FileTypes = FilePickerFileType.Images,
+				PickerTitle = "Select Images"
+			});
+
+			if (pickResult != null)
+			{
+				selectedTempImagePaths.Clear(); // Kustuta eelnev valik
+
+				foreach (var image in pickResult)
+				{
+					// Säilita ajutine pildi path
+					selectedTempImagePaths.Add(image.FullPath);
+
+					// Näita eelnevaid selekteerituid pilte
+					var imageViewModel = new ImageViewModel
+					{
+						FilePath = image.FullPath,
+						ImageSource = ImageSource.FromFile(image.FullPath),
+						IsSelected = true
+					};
+					ImageViewModels.Add(imageViewModel);
+				}
+
+				// Värskenda UI-d
+				ImagesCollectionView.ItemsSource = ImageViewModels;
+			}
+		}
+		catch (Exception ex)
+		{
+			StatusLabel.Text = $"Error picking images: {ex.Message}";
+		}
+	}
 
 
 	private async void OnUpdateButtonClicked(object sender, EventArgs e)
@@ -79,6 +118,32 @@ public partial class TravelUpdatePage : ContentPage
 		bool result = await _databaseContext.UpdateItemAsync(travelJournal);
 
 		// Uuenda pildid, mis on ImageViewModeli põhjal
+		foreach (var tempImagePath in selectedTempImagePaths)
+		{
+			var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
+
+			try
+			{
+				// Kopeeri pit directory-sse
+				File.Copy(tempImagePath, newFilePath, true);
+				var imageTable = new ImageTable
+				{
+					TravelJournalId = travelJournal.Id,
+					FilePath = newFilePath,
+					ImageIndex = ImageViewModels.Count // Lisa uued pildid lõppu
+				};
+
+				// Salvesta pilt andmebaasi
+				await _databaseContext.AddItemAsync(imageTable);
+			}
+			catch (Exception ex)
+			{
+				StatusLabel.Text = $"Error copying images: {ex.Message}";
+				return;
+			}
+		}
+
+		// Uuenda olemasolevad pildid ImageVieModeli põhjal
 		foreach (var imageViewModel in ImageViewModels)
 		{
 			var imageTable = new ImageTable
@@ -89,16 +154,16 @@ public partial class TravelUpdatePage : ContentPage
 				ImageIndex = ImageViewModels.IndexOf(imageViewModel)
 			};
 
-			// Save or update the image in the database as needed
+			// Salvesta või uuenda pilt andmebaasis
 			await _databaseContext.SaveImageAsync(imageTable);
 		}
 
-		// Check the result of the update operation
+		// Kontrolli uuendatud tulemust
 		if (result)
 		{
 			StatusLabel.Text = "Travel updated successfully!";
 			StatusLabel.TextColor = Color.FromRgba("#00525e");
-			await Navigation.PopAsync(); // Navigate back to the previous page
+			await Navigation.PopAsync();
 		}
 		else
 		{
