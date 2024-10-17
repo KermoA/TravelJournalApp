@@ -94,7 +94,8 @@
                                        Aspect="AspectFill" 
                                        WidthRequest="500" 
                                        HeightRequest="500"/>
-                                <Button Text="Delete"/>
+                                <Button Text="Delete"
+                                        WidthRequest="500"/>
                                 <BoxView HeightRequest="20"/>
                             </StackLayout>
                         </DataTemplate>
