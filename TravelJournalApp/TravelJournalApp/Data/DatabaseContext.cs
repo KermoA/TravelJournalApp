@@ -95,5 +95,17 @@ namespace TravelJournalApp.Data
         //    return result; // Tagasta tulemus või null, kui tulemust ei leitud
         //}
 
+        public async Task<bool> SaveImageAsync(ImageTable imageTable)
+        {
+            if (imageTable.Id == Guid.Empty)
+            {
+                return await AddItemAsync(imageTable);
+            }
+            else
+            {
+                return await UpdateItemAsync(imageTable);
+            }
+        }
+
     }
 }
