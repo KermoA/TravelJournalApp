@@ -107,5 +107,24 @@ namespace TravelJournalApp.Data
             }
         }
 
-    }
+		public Task<TravelJournalTable> GetItemAsync(Guid id)
+		{
+			return Database.Table<TravelJournalTable>().Where(t => t.Id == id).FirstOrDefaultAsync();
+		}
+
+		public async Task<List<ImageTable>> GetImagesForTravelJournalAsync(Guid travelJournalId)
+		{
+			try
+			{
+				return await Database.Table<ImageTable>()
+									 .Where(img => img.TravelJournalId == travelJournalId)
+									 .ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Error retrieving images: {ex.Message}");
+				throw;
+			}
+		}
+	}
 }

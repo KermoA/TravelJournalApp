@@ -89,52 +89,52 @@ public partial class TravelUpdatePage : ContentPage
 
 	private async void OnUpdateButtonClicked(object sender, EventArgs e)
 	{
-		var title = TitleEntry.Text;
-		var description = DescriptionEditor.Text;
-		var location = LocationEntry.Text;
-		var startDate = DateStartEntry.Date;
-		var endDate = DateEndEntry.Date;
 
-		//Kui reisipealkiri tühi
-		if (string.IsNullOrWhiteSpace(title))
+		// Leia eksisteeriv travel journal
+		var travelJournal = await _databaseContext.GetItemAsync(_travelViewModel.Id);
+		if (travelJournal == null)
 		{
-			TitleEntry.Text = "Title is required.";
+			StatusLabel.Text = "Travel entry not found.";
 			return;
 		}
 
-		// Muuda travelJournali sissekannet
-		var travelJournal = new TravelJournalTable
-		{
-			Id = _travelViewModel.Id,
-			Title = title,
-			Description = description,
-			Location = location,
-			TravelStartDate = startDate,
-			TravelEndDate = endDate,
-			LastUpdatedAt = DateTime.Now
-		};
+		// Uuenda travel journal detailid
+		travelJournal.Title = TitleEntry.Text;
+		travelJournal.Description = DescriptionEditor.Text;
+		travelJournal.Location = LocationEntry.Text;
+		travelJournal.TravelStartDate = DateStartEntry.Date;
+		travelJournal.TravelEndDate = DateEndEntry.Date;
+		travelJournal.LastUpdatedAt = DateTime.Now;
 
-		// Uuenda travelJournali andmebaasis
+		// Uuenda travel journal sisend
 		bool result = await _databaseContext.UpdateItemAsync(travelJournal);
 
-		// Uuenda pildid, mis on ImageViewModeli põhjal
+		// Leia eksisteeriva pildid selle reisi jaoks
+		var existingImages = await _databaseContext.GetImagesForTravelJournalAsync(travelJournal.Id);
+		var existingImageFilePaths = existingImages.Select(img => img.FilePath).ToList();
+
+		// Uute piltide valimine
 		foreach (var tempImagePath in selectedTempImagePaths)
 		{
 			var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
 
 			try
 			{
-				// Kopeeri pit directory-sse
-				File.Copy(tempImagePath, newFilePath, true);
-				var imageTable = new ImageTable
+				// Ainult lisa pilt kui ei ole juba andmebaasis
+				if (!existingImageFilePaths.Contains(newFilePath))
 				{
-					TravelJournalId = travelJournal.Id,
-					FilePath = newFilePath,
-					ImageIndex = ImageViewModels.Count // Lisa uued pildid lõppu
-				};
+					File.Copy(tempImagePath, newFilePath, true);
 
-				// Salvesta pilt andmebaasi
-				await _databaseContext.AddItemAsync(imageTable);
+					var imageTable = new ImageTable
+					{
+						TravelJournalId = travelJournal.Id,
+						FilePath = newFilePath,
+						ImageIndex = existingImages.Count // Uuenda ImageIndex uute piltide jaoks
+					};
+
+					await _databaseContext.AddItemAsync(imageTable);
+					existingImageFilePaths.Add(newFilePath); // Väldib duplikaate ehk jälgib pilti
+				}
 			}
 			catch (Exception ex)
 			{
@@ -143,27 +143,23 @@ public partial class TravelUpdatePage : ContentPage
 			}
 		}
 
-		// Uuenda olemasolevad pildid ImageVieModeli põhjal
+		// Uuenda eksisteerivaid pilte andmebaasis
 		foreach (var imageViewModel in ImageViewModels)
 		{
-			var imageTable = new ImageTable
+			var existingImage = existingImages.FirstOrDefault(img => img.FilePath == imageViewModel.FilePath);
+			if (existingImage != null)
 			{
-				TravelJournalId = travelJournal.Id,
-				FilePath = imageViewModel.FilePath,
-				IsSelected = imageViewModel.IsSelected,
-				ImageIndex = ImageViewModels.IndexOf(imageViewModel)
-			};
+				existingImage.IsSelected = imageViewModel.IsSelected;
+				existingImage.ImageIndex = ImageViewModels.IndexOf(imageViewModel);
 
-			// Salvesta või uuenda pilt andmebaasis
-			await _databaseContext.SaveImageAsync(imageTable);
+				// Salvesta uuendused
+				await _databaseContext.SaveImageAsync(existingImage);
+			}
 		}
 
-		// Kontrolli uuendatud tulemust
 		if (result)
 		{
-			StatusLabel.Text = "Travel updated successfully!";
-			StatusLabel.TextColor = Color.FromRgba("#00525e");
-			await Navigation.PopAsync();
+			await Navigation.PopToRootAsync();
 		}
 		else
 		{
@@ -171,6 +167,7 @@ public partial class TravelUpdatePage : ContentPage
 			StatusLabel.TextColor = Color.FromArgb("#FF6347");
 		}
 	}
+
 
 	private async void OnBackButtonClicked(object sender, EventArgs e)
 	{
