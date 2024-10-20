@@ -18,7 +18,7 @@ namespace TravelJournalApp.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Console.WriteLine("TravelMainPage appeared - refreshing data.");
+
             Vm?.RefreshCommand.Execute(null);
 
             // Subscribe to the MessagingCenter to refresh entries when notified
@@ -26,6 +26,8 @@ namespace TravelJournalApp.Views
             {
                 Vm?.RefreshCommand.Execute(null);
             });
+            Debug.WriteLine("TravelMainPage appeared - refreshing data.");
+
         }
 
         protected override void OnDisappearing()
