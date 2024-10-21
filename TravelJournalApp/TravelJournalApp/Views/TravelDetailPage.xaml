@@ -92,27 +92,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                
-                
-                <!--<CarouselView ItemsSource="{Binding TravelImages}"
-                              HeightRequest="100" 
-                              Margin="15,15,15,0">
-                    <CarouselView.ItemTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding FilePath}" 
-                                   Aspect="AspectFill"
-                                   HeightRequest="150" 
-                                   >
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnImageTapped" 
-                                                          CommandParameter="{Binding FilePath}" />
-                                </Image.GestureRecognizers>
-                            </Image>
-                        </DataTemplate>
-                    </CarouselView.ItemTemplate>
-                </CarouselView>-->
-                
-                
+
             </StackLayout>
         </ScrollView>
         <StackLayout Grid.Row="1" 
@@ -138,7 +118,7 @@
 
         <Grid x:Name="ZoomOverlay" 
               BackgroundColor="Black" 
-              Opacity="0.8" 
+              Opacity="0.9" 
               IsVisible="False" 
               VerticalOptions="FillAndExpand" 
               HorizontalOptions="FillAndExpand">
@@ -166,9 +146,9 @@
                     TextColor="White" 
                     Clicked="OnPreviousImageClicked" 
                     WidthRequest="100" 
-                    HeightRequest="250" 
+                    HeightRequest="300" 
                     FontSize="Large" 
-                    Opacity="0.7"/>
+                    Opacity="0.4"/>
 
             <Button Text="►" 
                     HorizontalOptions="End" 
@@ -177,9 +157,9 @@
                     TextColor="White" 
                     Clicked="OnNextImageClicked" 
                     WidthRequest="100" 
-                    HeightRequest="250" 
+                    HeightRequest="300" 
                     FontSize="Large" 
-                    Opacity="0.7"/>
+                    Opacity="0.4"/>
         </Grid>
         
     </Grid>
