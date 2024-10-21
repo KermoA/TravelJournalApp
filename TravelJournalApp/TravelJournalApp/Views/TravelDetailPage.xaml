@@ -53,13 +53,9 @@
                        Grid.Row="1"
                        Grid.ColumnSpan="2" 
                        Aspect="AspectFill"
-                       HeightRequest="250"
+                       HeightRequest="200"
                        Margin="15,0"
                        Source="{Binding HeroImageSource}">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
-                                              CommandParameter="{Binding SelectedTravel}" />
-                    </Image.GestureRecognizers>
                 </Image>
 
                 <Label Text="{Binding Description}" 
@@ -72,15 +68,41 @@
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="End" />
 
-                <CarouselView ItemsSource="{Binding TravelImages}" 
+
+                <CollectionView ItemsSource="{Binding TravelImages}" 
+                                HeightRequest="150" 
+                                Margin="15,15,15,0"
+                                ItemsLayout="HorizontalList"
+                                HorizontalScrollBarVisibility="Never">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="5"
+                                   BackgroundColor="Transparent" 
+                                   HasShadow="False" 
+                                   CornerRadius="5">
+                                <Image Source="{Binding FilePath}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="150">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnImageTapped" 
+                                              CommandParameter="{Binding FilePath}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+                
+                <!--<CarouselView ItemsSource="{Binding TravelImages}"
                               HeightRequest="100" 
-                              Margin="15,20,15,0">
+                              Margin="15,15,15,0">
                     <CarouselView.ItemTemplate>
                         <DataTemplate>
                             <Image Source="{Binding FilePath}" 
-                                   Aspect="AspectFill" 
-                                   HeightRequest="100" 
-                                   Margin="10,0">
+                                   Aspect="AspectFill"
+                                   HeightRequest="150" 
+                                   >
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnImageTapped" 
                                                           CommandParameter="{Binding FilePath}" />
@@ -88,12 +110,14 @@
                             </Image>
                         </DataTemplate>
                     </CarouselView.ItemTemplate>
-                </CarouselView>
+                </CarouselView>-->
+                
+                
             </StackLayout>
         </ScrollView>
         <StackLayout Grid.Row="1" 
                      Orientation="Horizontal" 
-                     Padding="15" 
+                     Margin="15,5,15,15" 
                      Spacing="5">
             <Button Text="Back"
                     BackgroundColor="#D3D3D3"
@@ -121,34 +145,42 @@
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnOverlayTapped" />
             </Grid.GestureRecognizers>
-            <Image x:Name="ZoomedImage" 
+            <Image x:Name="ZoomedImage"
                    Aspect="AspectFill" 
                    HorizontalOptions="FillAndExpand" 
-                   VerticalOptions="Center"
-                   HeightRequest="300"
+                   VerticalOptions="FillAndExpand" 
+                   HeightRequest="300" 
                    WidthRequest="-1" />
 
-            <Button Text="◄" 
-            HorizontalOptions="Start" 
-            VerticalOptions="Center" 
-            BackgroundColor="Transparent" 
-            TextColor="White" 
-            Clicked="OnPreviousImageClicked" 
-            WidthRequest="100" 
-            HeightRequest="250" 
-            FontSize="Large" 
-            Opacity="0.7"/>
+            <Label x:Name="ImageIndexLabel" 
+                   HorizontalOptions="Start" 
+                   VerticalOptions="End" 
+                   TextColor="White"
+                   FontSize="Small" 
+                   Margin="10,0,0,10"/>
+
+            <Button Text="◄"
+                    HorizontalOptions="Start" 
+                    VerticalOptions="Center" 
+                    BackgroundColor="Transparent" 
+                    TextColor="White" 
+                    Clicked="OnPreviousImageClicked" 
+                    WidthRequest="100" 
+                    HeightRequest="250" 
+                    FontSize="Large" 
+                    Opacity="0.7"/>
 
             <Button Text="►" 
-            HorizontalOptions="End" 
-            VerticalOptions="Center" 
-            BackgroundColor="Transparent" 
-            TextColor="White" 
-            Clicked="OnNextImageClicked" 
-            WidthRequest="100" 
-            HeightRequest="250" 
-            FontSize="Large" 
-            Opacity="0.7"/>
+                    HorizontalOptions="End" 
+                    VerticalOptions="Center" 
+                    BackgroundColor="Transparent" 
+                    TextColor="White" 
+                    Clicked="OnNextImageClicked" 
+                    WidthRequest="100" 
+                    HeightRequest="250" 
+                    FontSize="Large" 
+                    Opacity="0.7"/>
         </Grid>
+        
     </Grid>
 </ContentPage>
