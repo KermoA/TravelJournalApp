@@ -31,7 +31,7 @@ public partial class TravelUpdatePage : ContentPage
 		{
 			if (File.Exists(image.FilePath)) // Check if the file exists
 			{
-				var imageViewModel = new ImageViewModel
+				var imageViewModel = new ImageViewModel(ImageViewModels, _databaseContext)
 				{
 					FilePath = image.FilePath,
 					ImageSource = ImageSource.FromFile(image.FilePath),
@@ -67,7 +67,7 @@ public partial class TravelUpdatePage : ContentPage
 					selectedTempImagePaths.Add(image.FullPath);
 
 					// Näita eelnevaid selekteerituid pilte
-					var imageViewModel = new ImageViewModel
+					var imageViewModel = new ImageViewModel(ImageViewModels, _databaseContext)
 					{
 						FilePath = image.FullPath,
 						ImageSource = ImageSource.FromFile(image.FullPath),
