@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Diagnostics;
 using TravelJournalApp.Data;
 using System.Collections.Generic;
+using System.IO;
 
 namespace TravelJournalApp.Data
 {
@@ -85,15 +86,58 @@ namespace TravelJournalApp.Data
             return await table.Where(predicate).ToListAsync();
         }
 
-        //public async Task<string> GetImagePathForTravel(Guid travelId)
-        //{
-        //    string query = "SELECT ImagePath FROM ImageDatabase WHERE TravelJournalId = ? LIMIT 1";
+		//public async Task<string> GetImagePathForTravel(Guid travelId)
+		//{
+		//    string query = "SELECT ImagePath FROM ImageDatabase WHERE TravelJournalId = ? LIMIT 1";
 
-        //    // Kasuta asünkroonset ühendust ja päringut
-        //    var result = await Database.ExecuteScalarAsync<string>(query, travelId);
+		//    // Kasuta asünkroonset ühendust ja päringut
+		//    var result = await Database.ExecuteScalarAsync<string>(query, travelId);
 
-        //    return result; // Tagasta tulemus või null, kui tulemust ei leitud
-        //}
+		//    return result; // Tagasta tulemus või null, kui tulemust ei leitud
+		//}
 
-    }
+		public async Task<ImageTable> GetImageByFilePathAsync(string filePath)
+		{
+			return await Database.Table<ImageTable>()
+								 .Where(img => img.FilePath == filePath)
+								 .FirstOrDefaultAsync();
+		}
+
+		public async Task<bool> DeleteImageAsync(ImageTable image)
+		{
+			return await DeleteItemAsync(image);
+		}
+
+		public async Task<bool> SaveImageAsync(ImageTable imageTable)
+        {
+            if (imageTable.Id == Guid.Empty)
+            {
+                return await AddItemAsync(imageTable);
+            }
+            else
+            {
+                return await UpdateItemAsync(imageTable);
+            }
+        }
+
+		public Task<TravelJournalTable> GetItemAsync(Guid id)
+		{
+			return Database.Table<TravelJournalTable>().Where(t => t.Id == id).FirstOrDefaultAsync();
+		}
+
+		public async Task<List<ImageTable>> GetImagesForTravelJournalAsync(Guid travelJournalId)
+		{
+			try
+			{
+				return await Database.Table<ImageTable>()
+									 .Where(img => img.TravelJournalId == travelJournalId)
+									 .ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Error retrieving images: {ex.Message}");
+				throw;
+			}
+		}
+	}
 }
