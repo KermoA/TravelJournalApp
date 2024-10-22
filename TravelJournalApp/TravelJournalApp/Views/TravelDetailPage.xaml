@@ -99,11 +99,9 @@
                      Margin="15,5,15,15" 
                      Spacing="5">
             <Button Text="Back"
-                    BackgroundColor="#D3D3D3"
-                    TextColor="#333333"
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnBackButtonClicked"/>
-            <Button Text="Edit"
+            <Button Text="Update"
                     BackgroundColor="#ADD8E6"
                     TextColor="#00008B"
                     HorizontalOptions="FillAndExpand" 
