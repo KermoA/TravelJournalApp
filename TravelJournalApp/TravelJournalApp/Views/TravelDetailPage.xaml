@@ -102,13 +102,11 @@
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnBackButtonClicked"/>
             <Button Text="Update"
-                    BackgroundColor="#ADD8E6"
-                    TextColor="#00008B"
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnEditButtonClicked"/>
             <Button Text="Delete" 
-                    BackgroundColor="#FF6347" 
-                    TextColor="#FFFFFF" 
+                    BackgroundColor="{StaticResource DeleteButtonBackground}" 
+                    TextColor="{StaticResource ButtonTextColor}" 
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnDeleteButtonClicked"/>
         </StackLayout>
