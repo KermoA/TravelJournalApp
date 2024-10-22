@@ -92,7 +92,7 @@
                     <!-- Piltide kuvamine -->
                     <Label Text="" HeightRequest="20"/>
                     <CollectionView x:Name="ImagesCollectionView" 
-                                ItemsSource="{Binding ImageViewModel}">
+                                ItemsSource="{Binding TravelImages}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Vertical">
