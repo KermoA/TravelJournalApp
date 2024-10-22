@@ -18,60 +18,32 @@
             </Grid.RowDefinitions>
             <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
                 <StackLayout>
-                    <Grid ColumnDefinitions="*,Auto,Auto,Auto" RowDefinitions="Auto,*" Margin="25,10">
-                        <!-- VisualStateManager is applied here, inside Grid -->
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="WindowSizeStates">
-                                <VisualState x:Name="Mobile">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="0" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter TargetName="BigHeroImage" Property="HeightRequest" Value="300" />
-                                        <!-- Moved this ItemsLayout Setter to the correct CollectionView -->
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="Desktop">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="600" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter TargetName="BigHeroImage" Property="HeightRequest" Value="500" />
-                                        <!-- Moved this ItemsLayout Setter to the correct CollectionView -->
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
+                    <Grid HorizontalOptions="Fill" Margin="25,10" RowSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                        <!-- Labels and Image definitions -->
-                        <Label Text="{Binding SelectedTravel.Title}" 
-                               Grid.Column="0"
-                               FontSize="Large" 
-                               FontAttributes="Bold" 
-                               HorizontalOptions="Start"
-                               VerticalOptions="End"/>
+                        <ScrollView x:Name="TitleScrollable" 
+                                     Orientation="Horizontal" 
+                                      
+                                     HorizontalScrollBarVisibility="Never"
+                                     Grid.ColumnSpan="2">
+                            <Label Text="{Binding SelectedTravel.Title}" 
+                                        FontSize="Medium" 
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="End"/>
+                        </ScrollView>
 
-                        <Label Text="{Binding SelectedTravel.TravelStartDate, StringFormat='{0:dd.MM.yyyy}'}" 
-                               Grid.Column="1"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="5"/>
-                        <Label Text="-"
-                               Grid.Column="2"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="4"
-                               Margin="2,0"/>
-                        <Label Text="{Binding SelectedTravel.TravelEndDate, StringFormat='{0:dd.MM.yyyy}'}" 
-                               Grid.Column="3"
-                               FontSize="Small" 
-                               HorizontalOptions="End"
-                               VerticalOptions="Center"
-                               TranslationY="5"/>
-
-
+                        <Label Text="{Binding SelectedTravel.TravelDates}" 
+                                Grid.Column="2"
+                                
+                                FontSize="14" 
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                TranslationY="5"/>
                     </Grid>
                     <Grid Margin="25,0">
                         <Image x:Name="BigHeroImage"
@@ -92,7 +64,7 @@
                                     ItemsSource="{Binding Travels}"
                                     SelectedItem="{Binding SelectedTravel, Mode=TwoWay}"
                                     ItemsLayout="HorizontalList"
-                                    Margin="25,0">
+                                    Margin="20,10">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
