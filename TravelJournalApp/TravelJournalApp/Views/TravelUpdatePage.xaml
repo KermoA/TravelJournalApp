@@ -105,9 +105,13 @@
                                                Aspect="AspectFill" 
                                                WidthRequest="200" 
                                                HeightRequest="150"/>
-                                <Button Text="Delete"
-                                            Command="{Binding DeleteImageByOneCommand}"
-                                            WidthRequest="200"/>
+                                <ImageButton Source="recycle.png"
+                                             WidthRequest="25"
+                                             HeightRequest="25"
+                                             Command="{Binding DeleteImageByOneCommand}"
+                                             BackgroundColor="Transparent"
+                                             HorizontalOptions="Center"
+                                             Margin="5"/>
                                 <BoxView HeightRequest="20"/>
                             </StackLayout>
                         </DataTemplate>
