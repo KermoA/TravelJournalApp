@@ -11,7 +11,7 @@ public partial class TravelDetailPage : ContentPage
     private bool _scrollingRight = true;
     private bool _isScrollingPaused = false;
     private List<string> _imageSources;
-    private int _currentImageIndex;
+    private int _currentImageIndex = 0;
 
     public TravelDetailPage(TravelViewModel travelViewModel)
     {
@@ -75,47 +75,56 @@ public partial class TravelDetailPage : ContentPage
         _scrollTimer?.Stop();
     }
 
-    private void OnImageTapped(object sender, EventArgs e)
-    {
-        var tappedImage = sender as Image;
-        var tapGesture = tappedImage.GestureRecognizers.OfType<TapGestureRecognizer>().FirstOrDefault();
-        var imageSource = tapGesture?.CommandParameter?.ToString();
+	private void OnImageTapped(object sender, EventArgs e)
+	{
+		var tappedImage = sender as Image;
+		var tapGesture = tappedImage.GestureRecognizers.OfType<TapGestureRecognizer>().FirstOrDefault();
+		var imageSource = tapGesture?.CommandParameter?.ToString();
 
-        if (imageSource != null)
-        {
-            _imageSources = (BindingContext as TravelViewModel)?.TravelImages.Select(img => img.FilePath).ToList();
-            _currentImageIndex = _imageSources.IndexOf(imageSource);
+		if (imageSource != null)
+		{
+			_imageSources = (BindingContext as TravelViewModel)?.TravelImages.Select(img => img.FilePath).ToList();
+			_currentImageIndex = _imageSources.IndexOf(imageSource);
 
-            ZoomedImage.Source = imageSource;
+			ZoomedImage.Source = imageSource;
 
-            ZoomOverlay.IsVisible = true;
-        }
-    }
+			UpdateImageIndexLabel();
 
-    private void OnOverlayTapped(object sender, EventArgs e)
-    {
-        ZoomOverlay.IsVisible = false;
-    }
+			ZoomOverlay.IsVisible = true;
+		}
+	}
 
-    private void OnPreviousImageClicked(object sender, EventArgs e)
-    {
-        if (_imageSources != null && _currentImageIndex > 0)
-        {
-            _currentImageIndex--;
-            ZoomedImage.Source = _imageSources[_currentImageIndex];
-        }
-    }
+	private void UpdateImageIndexLabel()
+	{
+		ImageIndexLabel.Text = $"{_currentImageIndex + 1} / {_imageSources.Count}";
+	}
 
-    private void OnNextImageClicked(object sender, EventArgs e)
-    {
-        if (_imageSources != null && _currentImageIndex < _imageSources.Count - 1)
-        {
-            _currentImageIndex++;
-            ZoomedImage.Source = _imageSources[_currentImageIndex];
-        }
-    }
+	private void OnOverlayTapped(object sender, EventArgs e)
+	{
+		ZoomOverlay.IsVisible = false;
+	}
 
-    private async void OnBackButtonClicked(object sender, EventArgs e)
+	private void OnPreviousImageClicked(object sender, EventArgs e)
+	{
+		if (_imageSources != null && _currentImageIndex > 0)
+		{
+			_currentImageIndex--;
+			ZoomedImage.Source = _imageSources[_currentImageIndex];
+			UpdateImageIndexLabel();
+		}
+	}
+
+	private void OnNextImageClicked(object sender, EventArgs e)
+	{
+		if (_imageSources != null && _currentImageIndex < _imageSources.Count - 1)
+		{
+			_currentImageIndex++;
+			ZoomedImage.Source = _imageSources[_currentImageIndex];
+			UpdateImageIndexLabel();
+		}
+	}
+
+	private async void OnBackButtonClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
     }

@@ -100,10 +100,12 @@ namespace TravelJournalApp.Models
         // Refresh command to reload travel entries
         public ICommand RefreshCommand => new Command(async () => await RefreshDataAsync());
 
-        private async Task RefreshDataAsync()
+        public async Task RefreshDataAsync()
         {
+            
             IsRefreshing = true;
             Travels.Clear();
+            SelectedTravel = null;
             await LoadTravelEntries();
             IsRefreshing = false;
         }
