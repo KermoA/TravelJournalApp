@@ -105,6 +105,7 @@
                     <Label Text="No travel entries found. Please add a new entry."
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
+                           Margin="25,0"
                            IsVisible="{Binding Travels.Count, Converter={StaticResource CountToVisibilityConverter}}" />
                 </StackLayout>
             </ScrollView>
