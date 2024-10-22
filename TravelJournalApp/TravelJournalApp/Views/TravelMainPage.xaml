@@ -87,73 +87,48 @@
                         </Image>
                     </Grid>
 
-                    <!-- Moved VisualStateManager to CollectionView for ItemsLayout handling -->
+                    <!-- CollectionView for Travels -->
                     <CollectionView x:Name="TravelsListView" 
                                     ItemsSource="{Binding Travels}"
                                     SelectedItem="{Binding SelectedTravel, Mode=TwoWay}"
                                     ItemsLayout="HorizontalList"
-                                    Margin="25,0">  
-
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="WindowSizeStates">
-                                <VisualState x:Name="Mobile">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="0" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter Property="ItemsLayout" Value="HorizontalList" />
-                                        <Setter Property="HorizontalOptions" Value="Start" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="Desktop">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="600" />
-                                    </VisualState.StateTriggers>
-                                    <VisualState.Setters>
-                                        <Setter Property="ItemsLayout" Value="HorizontalList" />
-                                        <Setter Property="HorizontalOptions" Value="Center" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
-                                        <Grid RowDefinitions="Auto,*" VerticalOptions="Center">
-
-                                            <!-- Title Label in the first column -->
-                                        <Label Text="{Binding Title}" 
-                                               FontSize="Small" 
-                                               FontAttributes="None" 
-                                               HorizontalOptions="Start"
-                                               VerticalOptions="Center"
-                                               Grid.Row="0"/>
-
-                                        <!-- Image in the second column -->
+                                    Margin="25,0">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Orientation="Horizontal" Padding="5,0,5,0">
+                                    <Grid RowDefinitions="Auto,*" VerticalOptions="Start">
                                         <Image x:Name="ListHeroImage"
                                                Aspect="AspectFill"
                                                HeightRequest="125"
                                                WidthRequest="125"
                                                Source="{Binding HeroImageSource}"
-                                               Grid.Row="1">
+                                               Grid.Row="0">
                                             <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding NavigateToBigHeroCommand}" CommandParameter="{Binding .}" />
-                                                </Image.GestureRecognizers>
-                                            </Image>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToDetailsCommand}"
+                                                  CommandParameter="{Binding .}" />
+                                            </Image.GestureRecognizers>
 
-                                        </Grid>
-                                    </StackLayout>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                                        </Image>
+                                        <Label Text="{Binding Title}" 
+                                               FontSize="Small" 
+                                               FontAttributes="None" 
+                                               HorizontalOptions="Start"
+                                               VerticalOptions="Center"
+                                               Grid.Row="1"
+                                               WidthRequest="125"/>
+                                    </Grid>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
                 </StackLayout>
             </ScrollView>
             <StackLayout Grid.Row="1" 
-                     Orientation="Horizontal" 
-                     Padding="15" 
-                     Spacing="5"
-                     HorizontalOptions="Center">
+                         Orientation="Horizontal" 
+                         Padding="15" 
+                         Spacing="5"
+                         HorizontalOptions="Center">
                 <Button Text="Add New Travel"
                         Clicked="Add_Travel_Clicked" />
             </StackLayout>
