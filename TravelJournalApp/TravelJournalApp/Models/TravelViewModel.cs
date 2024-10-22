@@ -105,5 +105,6 @@ namespace TravelJournalApp.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-    }
+
+	}
 }
