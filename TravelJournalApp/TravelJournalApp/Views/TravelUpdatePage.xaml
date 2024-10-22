@@ -66,13 +66,13 @@
 
                     <!--Reisi kirjelduse kuvamine-->
                     <Label Text="Description:"
-                       FontSize="Small"
-                       FontAttributes="Bold"/>
+                          FontSize="Small"
+                          FontAttributes="Bold"/>
                     <ScrollView>
                         <Editor x:Name="DescriptionEditor"
-                    Text="{Binding Description, Mode=TwoWay}"
-                    HeightRequest="150"
-                    AutoSize="TextChanges"/>
+                                Text="{Binding Description, Mode=TwoWay}"
+                                HeightRequest="150"
+                                AutoSize="TextChanges"/>
                     </ScrollView>
 
                     <!--Piltide lisamine-->
