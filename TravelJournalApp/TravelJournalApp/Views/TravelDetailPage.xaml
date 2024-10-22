@@ -36,8 +36,7 @@
                                FontSize="Small" 
                                FontAttributes="Bold"
                                HorizontalOptions="Start"
-                               VerticalOptions="End"
-                               />
+                               VerticalOptions="End"/>
                     </ScrollView>
 
                     <Label Text="{Binding TravelDates}" 
@@ -116,7 +115,7 @@
                     Clicked="OnDeleteButtonClicked"/>
         </StackLayout>
 
-        <Grid x:Name="ZoomOverlay" 
+        <!--<Grid x:Name="ZoomOverlay" 
               BackgroundColor="Black" 
               Opacity="0.9" 
               IsVisible="False" 
@@ -160,7 +159,55 @@
                     HeightRequest="300" 
                     FontSize="Large" 
                     Opacity="0.4"/>
+        </Grid>-->
+        <Grid x:Name="ZoomOverlay"  
+             IsVisible="False" 
+             VerticalOptions="FillAndExpand" 
+             HorizontalOptions="FillAndExpand">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnOverlayTapped" />
+            </Grid.GestureRecognizers>
+
+            <BoxView BackgroundColor="Black"
+            Opacity="0.61"
+            VerticalOptions="FillAndExpand" 
+            HorizontalOptions="FillAndExpand"/>
+
+            <Image x:Name="ZoomedImage"
+                  Aspect="AspectFill" 
+                  HorizontalOptions="FillAndExpand" 
+                  VerticalOptions="FillAndExpand" 
+                  HeightRequest="300" 
+                  WidthRequest="-1" />
+
+            <Label x:Name="ImageIndexLabel" 
+                  HorizontalOptions="Start" 
+                  VerticalOptions="End" 
+                  TextColor="White"
+                  FontSize="Small" 
+                  Margin="10,0,0,10"/>
+
+            <Button Text="◄"
+                   HorizontalOptions="Start" 
+                   VerticalOptions="Center" 
+                   BackgroundColor="Transparent" 
+                   TextColor="White" 
+                   Clicked="OnPreviousImageClicked" 
+                   WidthRequest="100" 
+                   HeightRequest="250" 
+                   FontSize="Large" 
+                   Opacity="0.7"/>
+
+            <Button Text="►" 
+                   HorizontalOptions="End" 
+                   VerticalOptions="Center" 
+                   BackgroundColor="Transparent" 
+                   TextColor="White" 
+                   Clicked="OnNextImageClicked" 
+                   WidthRequest="100" 
+                   HeightRequest="250" 
+                   FontSize="Large" 
+                   Opacity="0.7"/>
         </Grid>
-        
     </Grid>
 </ContentPage>
