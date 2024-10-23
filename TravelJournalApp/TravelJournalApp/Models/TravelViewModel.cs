@@ -112,7 +112,7 @@ namespace TravelJournalApp.Models
 
                 // Try to retrieve the hero image from the database if not already set
                 UpdateHeroImageSourceAsync(); // Fire and forget
-                return "Default.png"; // Default if still null
+                return "hero.png"; // Default if still null
             }
 
         }
@@ -130,11 +130,11 @@ namespace TravelJournalApp.Models
             }
             else if (TravelImages != null && TravelImages.Count > 0 && SelectedImageIndex >= 0 && SelectedImageIndex < TravelImages.Count)
             {
-                _heroImageSource = TravelImages[SelectedImageIndex].FilePath; // Use the selected image's file path
+                _heroImageSource = TravelImages[0].FilePath; // Use the selected image's file path
             }
             else
             {
-                _heroImageSource = "Default.png"; // Default image path
+                _heroImageSource = "hero.png"; // Default image path
             }
 
             // Notify property changed
