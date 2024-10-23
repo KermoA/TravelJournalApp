@@ -19,13 +19,27 @@ namespace TravelJournalApp.Models
         public DateTime TravelStartDate { get; set; }
         public DateTime TravelEndDate { get; set; }
         public ObservableCollection<ImageTable> TravelImages { get; set; } = new ObservableCollection<ImageTable>();
+        private ObservableCollection<ImageViewModel> _imageViewModels;
+        public ObservableCollection<ImageViewModel> ImageViewModels
+        {
+            get
+     => _imageViewModels;
+            set
+            {
+                if (_imageViewModels != value)
+                {
+                    _imageViewModels = value;
+                    OnPropertyChanged(nameof(ImageViewModels));
+                }
+            }
+        }
+        private readonly DatabaseContext _databaseContext; // Add this line
 
-            private readonly DatabaseContext _databaseContext; // Add this line
-
-    public TravelViewModel(DatabaseContext databaseContext) // Modify the constructor
+        public TravelViewModel(DatabaseContext databaseContext) // Modify the constructor
     {
         _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
-    }
+
+        }
 
         private int _selectedImageIndex;
         private TravelViewModel _selectedTravel;
@@ -60,6 +74,8 @@ namespace TravelJournalApp.Models
                 }
             }
         }
+
+
 
         public ICommand NavigateToBigHeroCommand => new Command(() =>
         {

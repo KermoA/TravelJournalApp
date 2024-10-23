@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Timers;
 using TravelJournalApp.Data;
 using TravelJournalApp.Models;
@@ -37,18 +38,23 @@ public partial class TravelDetailPage : ContentPage
             double currentScrollX = TitleScrollable.ScrollX;
             double contentWidth = ((Label)TitleScrollable.Content).Width;
 
+            // Define how much you want to scroll on each timer tick
+            double scrollIncrement = 0.8; // Smaller increments for slower scrolling
+            int delayBetweenScrolls = 100; // Increase the delay for slower movement
+
             if (_scrollingRight)
             {
                 if (currentScrollX >= contentWidth - TitleScrollable.Width)
                 {
                     _isScrollingPaused = true;
-                    await Task.Delay(1000);
-                    TitleScrollable.ScrollToAsync(0, 0, false);
+                    await Task.Delay(1000); // Optional pause when reaching the end
+                    TitleScrollable.ScrollToAsync(0, 0, false); // Reset scroll to the beginning
                     _isScrollingPaused = false;
                 }
                 else
                 {
-                    TitleScrollable.ScrollToAsync(currentScrollX + 1, 0, false);
+                    TitleScrollable.ScrollToAsync(currentScrollX + scrollIncrement, 0, false);
+                    await Task.Delay(delayBetweenScrolls); // Slow down the scrolling
                 }
             }
             else
@@ -56,14 +62,15 @@ public partial class TravelDetailPage : ContentPage
                 if (currentScrollX <= 0)
                 {
                     _isScrollingPaused = true;
-                    await Task.Delay(1000);
-                    TitleScrollable.ScrollToAsync(contentWidth, 0, false);
+                    await Task.Delay(1000); // Optional pause when reaching the start
+                    TitleScrollable.ScrollToAsync(contentWidth, 0, false); // Scroll to the end
                     _isScrollingPaused = false;
                 }
                 else
                 {
                     await Task.Delay(1000);
-                    TitleScrollable.ScrollToAsync(currentScrollX - 1, 0, false);
+                    TitleScrollable.ScrollToAsync(currentScrollX - scrollIncrement, 0, false);
+                    await Task.Delay(delayBetweenScrolls); // Slow down the scrolling
                 }
             }
         });

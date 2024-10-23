@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Timers;
 using TravelJournalApp.Models;
-using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace TravelJournalApp.Views
@@ -16,7 +15,6 @@ namespace TravelJournalApp.Views
         public TravelMainPage()
         {
             InitializeComponent();
-
             // Set the BindingContext to the ListViewModel
             BindingContext = new ListViewModel();
             StartScrolling();
@@ -26,7 +24,7 @@ namespace TravelJournalApp.Views
         {
             _scrollTimer = new Timer(20);
             _scrollTimer.Elapsed += OnScrollTimerElapsed;
-            _scrollTimer.Start();
+
         }
 
         private async void OnScrollTimerElapsed(object sender, ElapsedEventArgs e)
@@ -39,6 +37,10 @@ namespace TravelJournalApp.Views
                 double currentScrollX = TitleScrollable.ScrollX;
                 double contentWidth = ((Label)TitleScrollable.Content).Width;
 
+                // Define how much you want to scroll on each timer tick
+                double scrollIncrement = 0.8; // Smaller increments for slower scrolling
+                int delayBetweenScrolls = 100; // Increase the delay for slower movement
+
                 if (_scrollingRight)
                 {
                     if (currentScrollX >= contentWidth - TitleScrollable.Width)
@@ -50,7 +52,8 @@ namespace TravelJournalApp.Views
                     }
                     else
                     {
-                        TitleScrollable.ScrollToAsync(currentScrollX + 1, 0, false);
+                        TitleScrollable.ScrollToAsync(currentScrollX + scrollIncrement, 0, false);
+                        await Task.Delay(delayBetweenScrolls); // Slow down the scrolling
                     }
                 }
                 else
@@ -65,7 +68,8 @@ namespace TravelJournalApp.Views
                     else
                     {
                         await Task.Delay(1000);
-                        TitleScrollable.ScrollToAsync(currentScrollX - 1, 0, false);
+                        TitleScrollable.ScrollToAsync(currentScrollX - scrollIncrement, 0, false);
+                        await Task.Delay(delayBetweenScrolls); // Slow down the scrolling
                     }
                 }
             });
@@ -82,6 +86,8 @@ namespace TravelJournalApp.Views
             {
                 Vm?.RefreshCommand.Execute(null);
             });
+
+            _scrollTimer.Start();
             Debug.WriteLine("TravelMainPage appeared - refreshing data.");
 
         }
@@ -89,8 +95,10 @@ namespace TravelJournalApp.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            _scrollTimer?.Stop();
             // Unsubscribe from the MessagingCenter to avoid memory leaks
-            MessagingCenter.Unsubscribe<TravelDeletePage>(this, "RefreshTravelEntries");
+            //MessagingCenter.Unsubscribe<TravelDeletePage>(this, "RefreshTravelEntries");
+            
         }
 
         private async void Add_Travel_Clicked(object sender, EventArgs e)

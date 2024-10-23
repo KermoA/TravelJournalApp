@@ -14,8 +14,7 @@ namespace TravelJournalApp.Views
 		private TravelViewModel _travelViewModel;
 		public ObservableCollection<ImageViewModel> ImageViewModels { get; set; }
 		private List<string> selectedTempImagePaths = new List<string>();
-        // Change the ObservableCollection to hold ImageOption objects
-        public ObservableCollection<ImageOption> ImageOptionsUpdate { get; set; } = new ObservableCollection<ImageOption>();
+       
         private string _heroImageFile; // Property to store the hero image file path
 
 
@@ -31,13 +30,15 @@ namespace TravelJournalApp.Views
 
 		private void LoadImagePreviews()
 		{
+            //ImageViewModels.Clear(); // Tühjendage kollektsioon enne uute piltide lisamist
 			ImageViewModels = new ObservableCollection<ImageViewModel>();
-            ImageOptionsUpdate.Clear(); // Tühjendage kollektsioon enne uute piltide lisamist
+
             foreach (var image in _travelViewModel.TravelImages)
 			{
 				if (File.Exists(image.FilePath)) // Check if the file exists
 				{
-					var imageViewModel = new ImageViewModel(ImageViewModels, _databaseContext)
+					var heroo = _travelViewModel.HeroImageFile;
+                    var imageViewModel = new ImageViewModel(ImageViewModels, _databaseContext)
 					{
 						FilePath = image.FilePath,
 						ImageSource = ImageSource.FromFile(image.FilePath),

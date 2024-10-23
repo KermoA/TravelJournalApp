@@ -36,6 +36,7 @@ namespace TravelJournalApp.Models
         public ListViewModel()
         {
             _databaseContext = new DatabaseContext();
+
             Travels = new ObservableCollection<TravelViewModel>();
             //LoadTravelEntries();
         }

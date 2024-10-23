@@ -44,7 +44,7 @@ namespace TravelJournalApp.Models
         public ImageSource ImageSource { get; set; }
         //public string ImageSource { get; set; } // This property holds the image source path
 
-        public string ButtonLabel => _isHeroImage ? "Added!" : "Add as Hero Image";
+        public string ButtonLabel => _isHeroImage ? "Hero Image" : "Add as Hero Image";
         public Color ButtonBackgroundColor => _isHeroImage
             ? Color.FromArgb("#012f36")
             : Color.FromArgb("#00525e");
