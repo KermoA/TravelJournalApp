@@ -56,7 +56,7 @@
                 <Editor x:Name="DescriptionEditor" Placeholder="Enter description" Margin="0,0,0,15"/>
 
                 <!-- CollectionView for Image Previews -->
-                <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding imagePreviews}">
+                <CollectionView x:Name="ImagesCollectionView">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">

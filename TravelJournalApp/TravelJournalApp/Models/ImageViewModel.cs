@@ -11,7 +11,6 @@ namespace TravelJournalApp.Models
 {
     public class ImageViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private bool _isSelected;
         public bool IsSelected
@@ -27,11 +26,31 @@ namespace TravelJournalApp.Models
             }
         }
 
+        private bool _isHeroImage;
+        public bool IsHeroImage
+        {
+            get => _isHeroImage;
+            set
+            {
+                if (_isHeroImage != value)
+                {
+                    _isHeroImage = value;
+                    OnPropertyChanged(nameof(IsHeroImage));
+                    OnPropertyChanged(nameof(ButtonLabel));
+                }
+            }
+        }
         public string FilePath { get; set; } // Lisasin FilePath omaduse
         public ImageSource ImageSource { get; set; }
+        //public string ImageSource { get; set; } // This property holds the image source path
+
+        public string ButtonLabel => _isHeroImage ? "Added!" : "Add as Hero Image";
+        public Color ButtonBackgroundColor => _isHeroImage
+            ? Color.FromArgb("#012f36")
+            : Color.FromArgb("#00525e");
 
 
-		public ICommand DeleteImageByOneCommand { get; }
+        public ICommand DeleteImageByOneCommand { get; }
 
 		private ObservableCollection<ImageViewModel> _imageViewModels;
 		private DatabaseContext _databaseContext;
@@ -62,7 +81,8 @@ namespace TravelJournalApp.Models
 			}
 		}
 
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public event PropertyChangedEventHandler PropertyChanged;
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
