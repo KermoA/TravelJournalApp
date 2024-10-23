@@ -11,36 +11,10 @@
         </LinearGradientBrush>
     </ContentPage.Background>
 
-    <!-- Visual State Manager for responsiveness -->
-    <VisualStateManager.VisualStateGroups>
-        <VisualStateGroup x:Name="AdaptiveStates">
-            <!-- Mobile State -->
-            <VisualState x:Name="Mobile">
-                <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="0" />
-                </VisualState.StateTriggers>
-                <VisualState.Setters>
-                    <!-- Adjust paddings and layouts for mobile -->
-                    <Setter Property="Padding" TargetName="MainStack" Value="10,10,10,20" />
-                </VisualState.Setters>
-            </VisualState>
-
-            <!-- Desktop State -->
-            <VisualState x:Name="Desktop">
-                <VisualState.StateTriggers>
-                    <AdaptiveTrigger MinWindowWidth="600" />
-                </VisualState.StateTriggers>
-                <VisualState.Setters>
-                    <!-- Adjust paddings and layouts for desktop -->
-                    <Setter Property="Padding" TargetName="MainStack" Value="40,40,40,100" />
-                </VisualState.Setters>
-            </VisualState>
-        </VisualStateGroup>
-    </VisualStateManager.VisualStateGroups>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -55,26 +29,20 @@
 
                 <!-- Date Grid -->
                 <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
-                    <!-- Travel Start Date Section -->
                     <StackLayout HorizontalOptions="Start" Grid.Column="0">
-                        <Label Text="Travel Start Date:" 
-                               VerticalOptions="Center" />
+                        <Label Text="Travel Start Date:" VerticalOptions="Center" />
                         <DatePicker x:Name="DateStartEntry" 
                                     Format="dd.MM.yyyy" 
-                                    Date="{Binding TravelStartDate}"
+                                    Date="{Binding TravelStartDate}" 
                                     VerticalOptions="End"
                                     TranslationY="8"/>
                     </StackLayout>
-
-                    <!-- Travel End Date Section -->
-                    <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
-                                 Grid.Column="1">
-                        <Label Text="Travel End Date:" 
-                               VerticalOptions="Center" />
+                    <StackLayout HorizontalOptions="Start" Margin="20,0,0,0" Grid.Column="1">
+                        <Label Text="Travel End Date:" VerticalOptions="Center" />
                         <DatePicker x:Name="DateEndEntry" 
                                      Format="dd.MM.yyyy" 
-                                     Date="{Binding TravelEndDate}"
-                                     VerticalOptions="End"
+                                     Date="{Binding TravelEndDate}" 
+                                     VerticalOptions="End" 
                                      TranslationY="8"/>
                     </StackLayout>
                 </Grid>
@@ -87,38 +55,35 @@
                 <Label Text="Description:" />
                 <Editor x:Name="DescriptionEditor" Placeholder="Enter description" Margin="0,0,0,15"/>
 
-
-
-
-
-
                 <!-- CollectionView for Image Previews -->
-                <CollectionView x:Name="ImagesCollectionView" 
-                                ItemsSource="{Binding imagePreviews}">
+                <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding imagePreviews}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Orientation="Vertical">
-                                <Image Source="{Binding .}" Aspect="AspectFill" WidthRequest="500" HeightRequest="500" />
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+                                <Image Source="{Binding ImageSource}"
+                                       Aspect="AspectFill" 
+                                       WidthRequest="500" 
+                                       HeightRequest="500"/>
+                                <Button Text="{Binding ButtonLabel}" 
+                                        BackgroundColor="{Binding ButtonBackgroundColor}"
+                                        Command="{Binding SelectImageCommand}"  
+                                        HorizontalOptions="Center" 
+                                        VerticalOptions="Center"
+                                        Clicked="OnButtonClicked"
+                                        Margin="0,-15"
+                                        TranslationY="-50"/>
+                                
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </VerticalStackLayout>
         </ScrollView>
-        <StackLayout Grid.Row="1" 
-                     Orientation="Horizontal" 
-                     Padding="15" 
-                     Spacing="5"
-                     HorizontalOptions="Center">
+
+        <StackLayout Grid.Row="1" Orientation="Horizontal" Padding="15" Spacing="5" HorizontalOptions="Center">
             <Grid RowDefinitions="*,Auto">
                 <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-                    <!-- Status Label for Feedback -->
-                    <Label x:Name="StatusLabel"
-                                    HorizontalOptions="Center"
-                                    FontSize="Medium"
-                                    Margin="0,0,0,0"
-                           Grid.Column="0">
+                    <Label x:Name="StatusLabel" HorizontalOptions="Center" FontSize="Medium" Grid.Column="0">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference StatusLabel}, Path=Text}" Value="Travel saved successfully!">
                                 <Setter Property="TextColor" Value="Green" />
@@ -128,16 +93,23 @@
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
-                    <!-- Activity Indicator -->
                     <ActivityIndicator x:Name="activityIndicator" IsRunning="False" IsVisible="False" Grid.Column="1"/>
                 </Grid>
-                <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
-                    <!--Buttons for Back, Choose Images, and Save-->
-                    <Button Text="Back" Clicked="OnBackButtonClicked" Grid.Column="0"/>
-                    <Button Text="Choose Images" Clicked="OnPickPhotosClicked" Grid.Column="1"/>
-                    <Button Text="Save Travel" Clicked="SaveTravelClicked" Grid.Column="2"/>
-                </Grid>
             </Grid>
+        </StackLayout>
+        <StackLayout Grid.Row="2" 
+                     Orientation="Horizontal" 
+                     Margin="15,5,15,15" 
+                     Spacing="5">
+            <Button Text="Back"
+                    HorizontalOptions="FillAndExpand" 
+                    Clicked="OnBackButtonClicked"/>
+            <Button Text="Add Images"
+                    HorizontalOptions="FillAndExpand" 
+                    Clicked="OnPickPhotosClicked"/>
+            <Button Text="Save"  
+                    HorizontalOptions="FillAndExpand" 
+                    Clicked="SaveTravelClicked"/>
         </StackLayout>
     </Grid>
 </ContentPage>

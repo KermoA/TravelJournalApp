@@ -59,8 +59,10 @@
             </StackLayout>
         </ScrollView>
 
-        <StackLayout Grid.Row="2" Orientation="Horizontal" Spacing="5" Margin="15,5">
-        
+        <StackLayout Grid.Row="2" Orientation="Horizontal"                      
+                     Margin="15,5,15,15" 
+                     Spacing="5">
+
 
             <Button Text="Back" 
                     BackgroundColor="{StaticResource ButtonBackground}"

@@ -1,16 +1,57 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using TravelJournalApp.Data;
+using Microsoft.Maui.Graphics;
 
 namespace TravelJournalApp.Views
 {
+    public class ImageOption : INotifyPropertyChanged
+    {
+        private bool _isHeroImage;
+
+        public string ImageSourcePath { get; set; }
+
+        public ImageSource ImageSource => ImageSource.FromFile(ImageSourcePath);
+
+        public bool IsHeroImage
+        {
+            get => _isHeroImage;
+            set
+            {
+                if (_isHeroImage != value)
+                {
+                    _isHeroImage = value;
+                    OnPropertyChanged(nameof(IsHeroImage));
+                    OnPropertyChanged(nameof(ButtonLabel)); // Notify that the button label has changed
+                }
+            }
+        }
+
+        public string ButtonLabel => _isHeroImage ? "Added!" : "Add as Hero Image";
+        public Color ButtonBackgroundColor => _isHeroImage
+            ? Color.FromArgb("#012f36") 
+            : Color.FromArgb("#00525e"); 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
     public partial class TravelAddPage : ContentPage
     {
         private readonly DatabaseContext _databaseContext;
         private TravelJournalTable travelJournal;
-        private ImageTable travelJournalImage;
-        private List<string> selectedTempImagePaths = new List<string>(); // Initialize the temporary images path list
+        private List<string> selectedTempImagePaths = new List<string>(); // Temporary images path list
         private List<string> selectedImagePaths = new List<string>(); // To store selected image paths
-        public ObservableCollection<ImageSource> imagePreviews {  get; set; }
+
+        // Change the ObservableCollection to hold ImageOption objects
+        public ObservableCollection<ImageOption> ImageOptions { get; set; } = new ObservableCollection<ImageOption>();
+        private string _heroImageFile; // Property to store the hero image file path
 
         public TravelAddPage()
         {
@@ -18,8 +59,6 @@ namespace TravelJournalApp.Views
             BindingContext = this;
             _databaseContext = new DatabaseContext();
             travelJournal = new TravelJournalTable();
-            travelJournalImage = new ImageTable();
-            imagePreviews = new ObservableCollection<ImageSource>();
         }
 
         private async void OnPickPhotosClicked(object sender, EventArgs e)
@@ -34,8 +73,8 @@ namespace TravelJournalApp.Views
 
                 if (pickResult != null)
                 {
-                    imagePreviews.Clear();
-                    selectedImagePaths.Clear(); // Clear previous selections
+                    ImageOptions.Clear(); // Clear previous selections
+                    selectedImagePaths.Clear(); // Clear previous image paths
                     selectedTempImagePaths.Clear(); // Clear previous temp selections
 
                     foreach (var image in pickResult)
@@ -43,11 +82,16 @@ namespace TravelJournalApp.Views
                         // Store the temporary image path
                         selectedTempImagePaths.Add(image.FullPath);
 
-                        // Display previews of the selected images (using CollectionView or ListView bound to `imagePreviews`)
-                        imagePreviews.Add(ImageSource.FromFile(image.FullPath));
+                        // Create an ImageOption for each image
+                        ImageOptions.Add(new ImageOption
+                        {
+                            ImageSourcePath = image.FullPath,
+                            IsHeroImage = false // Default to not selected as hero image
+                        });
                     }
-                    // Update UI (BindingContext or ItemSource in your UI for previews)
-                    ImagesCollectionView.ItemsSource = imagePreviews;
+
+                    // Update the UI with the new ImageOptions
+                    ImagesCollectionView.ItemsSource = ImageOptions;
                 }
             }
             catch (Exception ex)
@@ -58,12 +102,11 @@ namespace TravelJournalApp.Views
 
         private async void SaveTravelClicked(object sender, EventArgs e)
         {
-            int indexImages = 0;
-            var title = TitleEntry.Text;
-            var description = DescriptionEditor.Text;
-            var location = LocationEntry.Text;
-            var StartDate = DateStartEntry.Date;
-            var EndDate = DateEndEntry.Date;
+            var title = TitleEntry.Text?.Trim();
+            var description = DescriptionEditor.Text?.Trim();
+            var location = LocationEntry.Text?.Trim();
+            var startDate = DateStartEntry.Date;
+            var endDate = DateEndEntry.Date;
 
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -71,8 +114,19 @@ namespace TravelJournalApp.Views
                 return;
             }
 
+            int heroImageIndex = -1; // Initialize with an invalid index
+            foreach (var option in ImageOptions)
+            {
+                if (option.IsHeroImage)
+                {
+                    heroImageIndex = ImageOptions.IndexOf(option);
+                    _heroImageFile = option.ImageSourcePath; // Save hero image path
+                    break;
+                }
+            }
+
             // Check if temporary image paths are available
-            if (selectedTempImagePaths.Any())
+            if (selectedTempImagePaths.Count > 0)
             {
                 foreach (var tempImagePath in selectedTempImagePaths)
                 {
@@ -80,7 +134,6 @@ namespace TravelJournalApp.Views
 
                     try
                     {
-                        // Copy the image to the target directory
                         File.Copy(tempImagePath, newFilePath, true);
                         selectedImagePaths.Add(newFilePath);
                     }
@@ -90,11 +143,9 @@ namespace TravelJournalApp.Views
                         return;
                     }
                 }
-
-                // Assign the first copied image to the travel journal image
-                travelJournalImage.FilePath = selectedImagePaths.FirstOrDefault();
             }
 
+            // Create travel journal entry
             travelJournal = new TravelJournalTable
             {
                 Id = Guid.NewGuid(),
@@ -103,64 +154,83 @@ namespace TravelJournalApp.Views
                 CreatedAt = DateTime.Now,
                 LastUpdatedAt = DateTime.Now,
                 Location = location,
-                TravelStartDate = StartDate,
-                TravelEndDate = EndDate,
+                TravelStartDate = startDate,
+                TravelEndDate = endDate,
+                //HeroImageFile = heroImageIndex, // Set HeroIndex here
+                HeroImageFile = _heroImageFile // Save hero image file path
             };
 
-            bool result = await _databaseContext.AddItemAsync(travelJournal);
-            bool result2 = true;
+            // Save journal entry and images
+            bool journalSaved = await _databaseContext.AddItemAsync(travelJournal);
+            bool imagesSaved = true;
 
-            foreach (var tempImagePath in selectedTempImagePaths)
+            // Save images related to the travel journal
+            for (int indexImages = 0; indexImages < selectedTempImagePaths.Count; indexImages++)
             {
-                // Move this inside the loop:
+                var tempImagePath = selectedTempImagePaths[indexImages];
                 var newFilePath = Path.Combine(FileSystem.AppDataDirectory, Path.GetFileName(tempImagePath));
 
                 var travelJournalImage = new ImageTable
                 {
                     Id = Guid.NewGuid(),
-                    TravelJournalId = travelJournal.Id, // No need for .Value, travelJournal.Id is not nullable
-                    FilePath = newFilePath,// Make sure to use the newFilePath after copying
-                    ImageIndex = indexImages++
+                    TravelJournalId = travelJournal.Id,
+                    FilePath = newFilePath,
+                    ImageIndex = indexImages
                 };
 
-                result2 = result2 && await _databaseContext.AddItemAsync(travelJournalImage);
+                imagesSaved &= await _databaseContext.AddItemAsync(travelJournalImage);
             }
 
-            if (result && result2)
+            // Update UI based on save result
+            if (journalSaved && imagesSaved)
             {
                 StatusLabel.Text = "Travel saved successfully!";
                 StatusLabel.TextColor = Color.FromArgb("#00FF00");
-                TitleEntry.Text = string.Empty;
-                DescriptionEditor.Text = string.Empty;
-                LocationEntry.Text = string.Empty;
-                selectedTempImagePaths.Clear();
-                selectedImagePaths.Clear();
-                imagePreviews.Clear(); // Clear the previews
-
-                activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
-
+                ClearInputs();
                 await Task.Delay(2000);
-
-                activityIndicator.IsRunning = false;
-                activityIndicator.IsVisible = false;
-
                 await Navigation.PopAsync();
             }
             else
             {
                 StatusLabel.Text = "Failed to save travel.";
                 StatusLabel.TextColor = Color.FromArgb("#FF0000");
-
-                activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
-
                 await Task.Delay(2000);
-
-                activityIndicator.IsRunning = false;
-                activityIndicator.IsVisible = false;
             }
         }
+
+        private void ClearInputs()
+        {
+            TitleEntry.Text = string.Empty;
+            DescriptionEditor.Text = string.Empty;
+            LocationEntry.Text = string.Empty;
+            StatusLabel.Text = string.Empty; // Clear status label
+            selectedTempImagePaths.Clear();
+            selectedImagePaths.Clear();
+            ImageOptions.Clear();
+        }
+
+        private bool _isUpdating = false; // Temporary flag to avoid recursion
+
+        private void OnButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is ImageOption selectedOption)
+            {
+                selectedOption.IsHeroImage = !selectedOption.IsHeroImage;
+
+                foreach (var option in ImageOptions)
+                {
+                    if (option != selectedOption)
+                    {
+                        option.IsHeroImage = false;
+                    }
+                    // Värskenda ka teiste nuppude värvi:
+                    option.OnPropertyChanged(nameof(option.ButtonBackgroundColor));
+                }
+
+                OnPropertyChanged(nameof(ImageOptions));
+            }
+        }
+
 
         private async void DescriptionEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -172,4 +242,5 @@ namespace TravelJournalApp.Views
             await Navigation.PopAsync();
         }
     }
+
 }

@@ -20,9 +20,34 @@ namespace TravelJournalApp.Models
         public DateTime TravelEndDate { get; set; }
         public ObservableCollection<ImageTable> TravelImages { get; set; } = new ObservableCollection<ImageTable>();
 
+            private readonly DatabaseContext _databaseContext; // Add this line
+
+    public TravelViewModel(DatabaseContext databaseContext) // Modify the constructor
+    {
+        _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
+    }
+
         private int _selectedImageIndex;
         private TravelViewModel _selectedTravel;
+
+        private string _heroImageFile; // Property to store the hero image file path
+
+        public string HeroImageFile
+        {
+            get => _heroImageFile;
+            set
+            {
+                if (_heroImageFile != value)
+                {
+                    _heroImageFile = value;
+                    OnPropertyChanged(nameof(HeroImageFile));
+                }
+            }
+        }
+
+
         private bool _isSelected;
+
         public bool IsSelected
         {
             get => _isSelected;
@@ -32,23 +57,17 @@ namespace TravelJournalApp.Models
                 {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
-
                 }
             }
         }
+
         public ICommand NavigateToBigHeroCommand => new Command(() =>
         {
-            // Leia TravelPage objekt
             var travelPage = (TravelMainPage)Application.Current.MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is TravelMainPage);
-
-            // Leia ListViewModel objekt
             var listViewModel = (ListViewModel)travelPage.BindingContext;
-
-            // Uuenda SelectedTravel omadust
             listViewModel.SelectedTravel = this;
             listViewModel.OnPropertyChanged(nameof(listViewModel.SelectedTravel));
         });
-
 
         public TravelViewModel SelectedTravel
         {
@@ -62,6 +81,7 @@ namespace TravelJournalApp.Models
                 }
             }
         }
+
         public int SelectedImageIndex
         {
             get => _selectedImageIndex;
@@ -70,33 +90,61 @@ namespace TravelJournalApp.Models
                 if (_selectedImageIndex != value)
                 {
                     _selectedImageIndex = value;
-                    OnPropertyChanged(nameof(SelectedTravel));
                     OnPropertyChanged(nameof(SelectedImageIndex));
                     OnPropertyChanged(nameof(HeroImageSource));
+                    OnPropertyChanged(nameof(HeroImageFile)); // Notify change for HeroImageFile
                 }
             }
         }
 
-        // This property provides the source for the HeroImage
+        // Property for the hero image source
+        private string _heroImageSource;
+
         public string HeroImageSource
         {
             get
             {
-                if (TravelImages != null && TravelImages.Count > 0 && SelectedImageIndex >= 0 && SelectedImageIndex < TravelImages.Count)
+                // Return the cached hero image source if it exists
+                if (!string.IsNullOrEmpty(_heroImageSource))
                 {
-                    OnPropertyChanged(nameof(SelectedTravel));
-                    return TravelImages[SelectedImageIndex].FilePath;
+                    return _heroImageSource;
                 }
-                else
-                {
-                    // Return a default image or placeholder if no images are available
-                    return TravelImages[0].FilePath; ;
-                }
+
+                // Try to retrieve the hero image from the database if not already set
+                UpdateHeroImageSourceAsync(); // Fire and forget
+                return "Default.png"; // Default if still null
             }
+
         }
 
-        public string TravelDates => $"{TravelStartDate:dd.MM.yy} - {TravelEndDate:dd.MM.yy}";
+        // Async method to update the hero image source
+        private async void UpdateHeroImageSourceAsync()
+        {
+            // Retrieve the hero image from the database using the current travel journal Id
+            var heroImageFromDb = await _databaseContext.GetHeroImageFromDatabaseAsync(Id);
 
+            // Check if HeroImageFile has a valid path from the database
+            if (!string.IsNullOrEmpty(heroImageFromDb) && File.Exists(heroImageFromDb))
+            {
+                _heroImageSource = heroImageFromDb; // Set the hero image file path if it exists
+            }
+            else if (TravelImages != null && TravelImages.Count > 0 && SelectedImageIndex >= 0 && SelectedImageIndex < TravelImages.Count)
+            {
+                _heroImageSource = TravelImages[SelectedImageIndex].FilePath; // Use the selected image's file path
+            }
+            else
+            {
+                _heroImageSource = "Default.png"; // Default image path
+            }
+
+            // Notify property changed
+            OnPropertyChanged(nameof(HeroImageSource));
+        }
+
+        // Example method to retrieve HeroImageFile from the database
+
+
+        public string TravelDates => $"{TravelStartDate:dd.MM.yy} - {TravelEndDate:dd.MM.yy}";
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
@@ -104,7 +152,5 @@ namespace TravelJournalApp.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-	}
+    }
 }
