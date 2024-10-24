@@ -82,7 +82,7 @@
                        FontAttributes="Bold"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"/>
-                        <Button Text="Choose Images"
+                        <Button Text="Images"
                             Grid.Column="1"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"

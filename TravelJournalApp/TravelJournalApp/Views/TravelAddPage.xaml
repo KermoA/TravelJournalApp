@@ -103,10 +103,10 @@
             <Button Text="Back"
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnBackButtonClicked"/>
-            <Button Text="Add Images"
+            <Button Text="Images"
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnPickPhotosClicked"/>
-            <Button Text="Save"  
+            <Button Text="Add"  
                     HorizontalOptions="FillAndExpand" 
                     Clicked="SaveTravelClicked"/>
         </StackLayout>

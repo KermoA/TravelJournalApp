@@ -133,8 +133,8 @@ namespace TravelJournalApp.Views
         private async Task<bool> ConfirmNoSaveAsync()
         {
             return await Application.Current.MainPage.DisplayAlert(
-                "Back",
-                "Are you sure you want to no save this travel entry?",
+                "Unsaved Changes",
+                "Are you sure you want to discard this travel entry without saving?",
                 "Yes",
                 "No"
             );
@@ -142,7 +142,7 @@ namespace TravelJournalApp.Views
         private async Task<bool> ConfirmSaveAsync()
         {
             return await Application.Current.MainPage.DisplayAlert(
-                "Save Travel",
+                "Save Travel Entry",
                 "Are you sure you want to save this travel entry?",
                 "Yes",
                 "No"
