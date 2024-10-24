@@ -11,6 +11,20 @@ namespace TravelJournalApp.Models
 {
     public class ImageViewModel : INotifyPropertyChanged
     {
+        public string FilePath { get; set; }
+        public ImageSource ImageSource { get; set; }
+        //public string ImageSource { get; set; } // This property holds the image source path
+		private ObservableCollection<ImageViewModel> _imageViewModels;
+		private DatabaseContext _databaseContext;
+
+        public ICommand DeleteImageByOneCommand { get; }
+
+		public ImageViewModel(ObservableCollection<ImageViewModel> imageViewModels, DatabaseContext databaseContext)
+		{
+			_imageViewModels = imageViewModels;
+			_databaseContext = databaseContext;
+			DeleteImageByOneCommand = new Command(async () => await TempDeleteImages());
+		}
 
         private bool _isSelected;
         public bool IsSelected
@@ -36,50 +50,103 @@ namespace TravelJournalApp.Models
                 {
                     _isHeroImage = value;
                     OnPropertyChanged(nameof(IsHeroImage));
-                    OnPropertyChanged(nameof(ButtonLabel));
+                    OnPropertyChanged(nameof(ButtonLabelHero));
+                    OnPropertyChanged(nameof(ButtonBackgroundColorHero));
                 }
             }
         }
-        public string FilePath { get; set; } // Lisasin FilePath omaduse
-        public ImageSource ImageSource { get; set; }
-        //public string ImageSource { get; set; } // This property holds the image source path
 
-        public string ButtonLabel => _isHeroImage ? "Hero Image" : "Add as Hero Image";
-        public Color ButtonBackgroundColor => _isHeroImage
+        private bool _isMarkedForDeletion;
+        public bool IsMarkedForDeletion
+        {
+            get => _isMarkedForDeletion;
+            set
+            {
+                _isMarkedForDeletion = value;
+                OnPropertyChanged(nameof(IsMarkedForDeletion));
+                OnPropertyChanged(nameof(ButtonLabelDelete));
+                OnPropertyChanged(nameof(ButtonBackgroundColorDelete));
+                // Sa võid siia lisada logi, et teavitada, et olek on muutunud
+            }
+        }
+
+        public string ButtonLabelHero => _isHeroImage ? "Hero Image" : "Add as Hero Image";
+        public Color ButtonBackgroundColorHero => _isHeroImage
             ? Color.FromArgb("#012f36")
             : Color.FromArgb("#00525e");
 
+        public string ButtonLabelDelete => _isMarkedForDeletion ? "Removed" : "Remove?";
+        public Color ButtonBackgroundColorDelete => _isMarkedForDeletion
+            ? Color.FromArgb("#ed331f")
+            : Color.FromArgb("#a12315");
 
-        public ICommand DeleteImageByOneCommand { get; }
 
-		private ObservableCollection<ImageViewModel> _imageViewModels;
-		private DatabaseContext _databaseContext;
+        // Funktsioon, mis ajutiselt eemaldab pildi ja liigutab selle eraldi kausta
+        private async Task TempDeleteImages()
+        {
+            string tempDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TempDeletedImages");
 
-		public ImageViewModel(ObservableCollection<ImageViewModel> imageViewModels, DatabaseContext databaseContext)
-		{
-			_imageViewModels = imageViewModels;
-			_databaseContext = databaseContext;
-			DeleteImageByOneCommand = new Command(async () => await DeleteImage());
-		}
+            // Kui kaust ei eksisteeri, loo see.
+            if (!Directory.Exists(tempDirectory))
+            {
+                Directory.CreateDirectory(tempDirectory);
+            }
 
-		private async Task DeleteImage()
-		{
-			// Remove from the database
-			var image = await _databaseContext.GetImageByFilePathAsync(FilePath);
-			if (image != null)
-			{
-				await _databaseContext.DeleteImageAsync(image);
-			}
+            // Määra ajutine failitee, kuhu pilt ajutiselt salvestatakse.
+            string tempFilePath = Path.Combine(tempDirectory, Path.GetFileName(FilePath));
 
-			// Remove from the collection
-			_imageViewModels.Remove(this);
+            // Liiguta fail ajutisse kausta.
+            if (File.Exists(FilePath))
+            {
+                File.Move(FilePath, tempFilePath);
+            }
 
-			// Optionally, delete the image file from the file system
-			if (File.Exists(FilePath))
-			{
-				File.Delete(FilePath);
-			}
-		}
+            // Eemalda pilt kollektsioonist
+            _imageViewModels.Remove(this);
+
+            // Teavita kollektsiooni muutumisest
+            OnPropertyChanged(nameof(_imageViewModels));
+
+            // Salvestada vajalikud andmed (võib-olla ajutine failitee) andmebaasi, kui vaja.
+        }
+
+        // Kinnita kustutamine ja eemalda ajutised failid jäädavalt
+        public void ConfirmDeleteImages()
+        {
+            string tempDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TempDeletedImages");
+
+            if (Directory.Exists(tempDirectory))
+            {
+                var tempFiles = Directory.GetFiles(tempDirectory);
+
+                // Kustuta kõik failid ajutisest kaustast
+                foreach (var tempFile in tempFiles)
+                {
+                    File.Delete(tempFile);
+                }
+            }
+        }
+
+        // Taasta ajutiselt kustutatud failid algsesse asukohta
+        public void RestoreDeletedImages()
+        {
+            string tempDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TempDeletedImages");
+
+            if (Directory.Exists(tempDirectory))
+            {
+                var tempFiles = Directory.GetFiles(tempDirectory);
+
+                // Taasta failid algsesse asukohta
+                foreach (var tempFile in tempFiles)
+                {
+                    string originalFilePath = Path.Combine("original/path", Path.GetFileName(tempFile)); // Lisa õige algne tee
+                    File.Move(tempFile, originalFilePath);
+                }
+            }
+            IsMarkedForDeletion = false; // Taasta olek
+            OnPropertyChanged(nameof(IsMarkedForDeletion)); // Teata, et olek on muutunud
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

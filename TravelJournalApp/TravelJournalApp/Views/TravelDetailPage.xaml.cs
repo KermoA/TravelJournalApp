@@ -1,4 +1,6 @@
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Timers;
 using TravelJournalApp.Data;
 using TravelJournalApp.Models;
@@ -26,6 +28,15 @@ public partial class TravelDetailPage : ContentPage
         _scrollTimer = new Timer(20);
         _scrollTimer.Elapsed += OnScrollTimerElapsed;
         _scrollTimer.Start();
+    }
+
+    private void TravelImages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        // Refresh the image sources when the collection changes
+        _imageSources = (BindingContext as TravelViewModel)?.TravelImages.Select(img => img.FilePath).ToList();
+        // Optionally reset the current image index
+        _currentImageIndex = 0;
+        UpdateImageIndexLabel();
     }
 
     private async void OnScrollTimerElapsed(object sender, ElapsedEventArgs e)
@@ -144,5 +155,12 @@ public partial class TravelDetailPage : ContentPage
     {
         var travel = (TravelViewModel)BindingContext;
         await Navigation.PushAsync(new TravelDeletePage(travel));
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

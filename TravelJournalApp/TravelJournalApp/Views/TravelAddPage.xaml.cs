@@ -187,7 +187,7 @@ namespace TravelJournalApp.Views
 
         private bool _isUpdating = false; // Temporary flag to avoid recursion
 
-        private void OnButtonClicked(object sender, EventArgs e)
+        private void OnButtonClickedHero(object sender, EventArgs e)
         {
             if (sender is Button button && button.BindingContext is ImageViewModel selectedImage)
             {
@@ -200,7 +200,7 @@ namespace TravelJournalApp.Views
                         image.IsHeroImage = false;
                     }
                     // Värskenda ka teiste nuppude värvi:
-                    image.OnPropertyChanged(nameof(image.ButtonBackgroundColor));
+                    image.OnPropertyChanged(nameof(image.ButtonBackgroundColorHero));
                 }
 
                 OnPropertyChanged(nameof(ImageOptions));

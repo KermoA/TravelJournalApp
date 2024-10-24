@@ -64,11 +64,11 @@
                                        Aspect="AspectFill" 
                                        WidthRequest="500" 
                                        HeightRequest="500"/>
-                                <Button Text="{Binding ButtonLabel}" 
-                                        BackgroundColor="{Binding ButtonBackgroundColor}"
+                                <Button Text="{Binding ButtonLabelHero}" 
+                                        BackgroundColor="{Binding ButtonBackgroundColorHero}"
                                         HorizontalOptions="Center" 
                                         VerticalOptions="Center"
-                                        Clicked="OnButtonClicked"
+                                        Clicked="OnButtonClickedHero"
                                         Margin="0,-15"
                                         TranslationY="-50"/>
                                 

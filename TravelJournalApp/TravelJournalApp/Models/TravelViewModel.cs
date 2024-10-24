@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TravelJournalApp.Data;
@@ -22,8 +23,7 @@ namespace TravelJournalApp.Models
         private ObservableCollection<ImageViewModel> _imageViewModels;
         public ObservableCollection<ImageViewModel> ImageViewModels
         {
-            get
-     => _imageViewModels;
+            get => _imageViewModels;
             set
             {
                 if (_imageViewModels != value)
@@ -36,15 +36,57 @@ namespace TravelJournalApp.Models
         private readonly DatabaseContext _databaseContext; // Add this line
 
         public TravelViewModel(DatabaseContext databaseContext) // Modify the constructor
-    {
-        _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
-
+        {
+            _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
+            ConfirmDeleteImagesCommand = new Command(ConfirmDeleteImages);
+            RestoreDeletedImagesCommand = new Command(RestoreDeletedImages);
         }
 
         private int _selectedImageIndex;
         private TravelViewModel _selectedTravel;
 
         private string _heroImageFile; // Property to store the hero image file path
+
+        public ICommand ConfirmDeleteImagesCommand { get; }
+        public ICommand RestoreDeletedImagesCommand { get; }
+
+        private void ConfirmDeleteImages()
+        {
+            // Kontrolli, kas ImageViewModels on null
+            if (ImageViewModels == null)
+            {
+                Debug.WriteLine("ImageViewModels is null in ConfirmDeleteImages method.");
+                return; // Välju meetodist, kui see on null
+            }
+
+            foreach (var image in ImageViewModels)
+            {
+                // Kontrolli, et image ei ole null enne meetodi kutsumist
+                if (image != null)
+                {
+                    image.ConfirmDeleteImages();
+                }
+                else
+                {
+                    Debug.WriteLine("Found a null image in ImageViewModels.");
+                }
+            }
+        }
+
+        private void RestoreDeletedImages()
+        {
+            if (ImageViewModels == null)
+            {
+                Debug.WriteLine("ImageViewModels is null, cannot restore deleted images.");
+                return; // Välja minek, kui kollektsioon on null
+            }
+
+            foreach (var image in ImageViewModels)
+            {
+                image.RestoreDeletedImages(); // Veendu, et see meetod eksisteerib
+            }
+        }
+
 
         public string HeroImageFile
         {
@@ -58,7 +100,6 @@ namespace TravelJournalApp.Models
                 }
             }
         }
-
 
         private bool _isSelected;
 
