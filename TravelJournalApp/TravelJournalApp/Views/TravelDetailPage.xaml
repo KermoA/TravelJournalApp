@@ -5,6 +5,7 @@
              x:Class="TravelJournalApp.Views.TravelDetailPage"
              Title="{Binding Location}">
 
+    <!--Page Background-->
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource BlueBG}" Offset="0.1" />
@@ -27,6 +28,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <!--Scrollable Title-->
                     <ScrollView x:Name="TitleScrollable" 
                                 Orientation="Horizontal" 
                                 Margin="15,5,5,5" 
@@ -39,6 +41,7 @@
                                VerticalOptions="End"/>
                     </ScrollView>
 
+                    <!--Travel Dates-->
                     <Label Text="{Binding TravelDates}" 
                            Grid.Column="2"
                            Margin="10,5,15,5"
@@ -48,6 +51,7 @@
                            TranslationY="5"/>
                 </Grid>
 
+                <!--Hero Image-->
                 <Image x:Name="BigHeroImage"
                        Grid.Row="1"
                        Grid.ColumnSpan="2" 
@@ -55,8 +59,14 @@
                        HeightRequest="200"
                        Margin="15,0"
                        Source="{Binding HeroImageSource}">
+
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHeroImageTapped" 
+                                              CommandParameter="{Binding HeroImageSource}" />
+                    </Image.GestureRecognizers>
                 </Image>
 
+                <!--Description-->
                 <Label Text="{Binding Description}" 
                        Grid.Column="0"
                        Margin="15,0"
@@ -67,7 +77,7 @@
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="End" />
 
-
+                <!--Images Collection View-->
                 <CollectionView ItemsSource="{Binding TravelImages}" 
                                 HeightRequest="150" 
                                 Margin="15,15,15,0"
@@ -79,31 +89,42 @@
                                    BackgroundColor="Transparent" 
                                    HasShadow="False" 
                                    CornerRadius="5">
+                                
+                                <!--Image in Collection View-->
                                 <Image Source="{Binding FilePath}"
                                        Aspect="AspectFill"
                                        HeightRequest="150">
+                                    
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="OnImageTapped" 
                                               CommandParameter="{Binding FilePath}" />
                                     </Image.GestureRecognizers>
+                                    
                                 </Image>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </StackLayout>
         </ScrollView>
+        
+        <!--Buttons-->
         <StackLayout Grid.Row="1" 
                      Orientation="Horizontal" 
                      Margin="15,5,15,15" 
                      Spacing="5">
+            
+            <!--Back Button-->
             <Button Text="Back"
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnBackButtonClicked"/>
+            
+            <!--Update Button-->
             <Button Text="Update"
                     HorizontalOptions="FillAndExpand" 
                     Clicked="OnEditButtonClicked"/>
+            
+            <!--Delete Button-->
             <Button Text="Delete" 
                     BackgroundColor="{StaticResource DeleteButtonBackground}" 
                     TextColor="{StaticResource ButtonTextColor}" 
@@ -111,15 +132,23 @@
                     Clicked="OnDeleteButtonClicked"/>
         </StackLayout>
 
-        <!--<Grid x:Name="ZoomOverlay" 
-              BackgroundColor="Black" 
-              Opacity="0.9" 
+        <!--Zoom Overlay for Images-->
+        <Grid x:Name="ZoomOverlay"
               IsVisible="False" 
               VerticalOptions="FillAndExpand" 
               HorizontalOptions="FillAndExpand">
+
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnOverlayTapped" />
             </Grid.GestureRecognizers>
+
+            <!--Zoomed Image Background opacity-->
+            <BoxView BackgroundColor="Black"
+                     Opacity="0.61"
+                     VerticalOptions="FillAndExpand" 
+                     HorizontalOptions="FillAndExpand"/>
+
+            <!--Zoomed Image-->
             <Image x:Name="ZoomedImage"
                    Aspect="AspectFill" 
                    HorizontalOptions="FillAndExpand" 
@@ -127,6 +156,7 @@
                    HeightRequest="300" 
                    WidthRequest="-1" />
 
+            <!--Image Index-->
             <Label x:Name="ImageIndexLabel" 
                    HorizontalOptions="Start" 
                    VerticalOptions="End" 
@@ -134,55 +164,7 @@
                    FontSize="Small" 
                    Margin="10,0,0,10"/>
 
-            <Button Text="◄"
-                    HorizontalOptions="Start" 
-                    VerticalOptions="Center" 
-                    BackgroundColor="Transparent" 
-                    TextColor="White" 
-                    Clicked="OnPreviousImageClicked" 
-                    WidthRequest="100" 
-                    HeightRequest="300" 
-                    FontSize="Large" 
-                    Opacity="0.4"/>
-
-            <Button Text="►" 
-                    HorizontalOptions="End" 
-                    VerticalOptions="Center" 
-                    BackgroundColor="Transparent" 
-                    TextColor="White" 
-                    Clicked="OnNextImageClicked" 
-                    WidthRequest="100" 
-                    HeightRequest="300" 
-                    FontSize="Large" 
-                    Opacity="0.4"/>
-        </Grid>-->
-        <Grid x:Name="ZoomOverlay"  
-             IsVisible="False" 
-             VerticalOptions="FillAndExpand" 
-             HorizontalOptions="FillAndExpand">
-            <Grid.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnOverlayTapped" />
-            </Grid.GestureRecognizers>
-
-            <BoxView BackgroundColor="Black"
-            Opacity="0.61"
-            VerticalOptions="FillAndExpand" 
-            HorizontalOptions="FillAndExpand"/>
-
-            <Image x:Name="ZoomedImage"
-                  Aspect="AspectFill" 
-                  HorizontalOptions="FillAndExpand" 
-                  VerticalOptions="FillAndExpand" 
-                  HeightRequest="300" 
-                  WidthRequest="-1" />
-
-            <Label x:Name="ImageIndexLabel" 
-                  HorizontalOptions="Start" 
-                  VerticalOptions="End" 
-                  TextColor="White"
-                  FontSize="Small" 
-                  Margin="10,0,0,10"/>
-
+            <!--Previous Button on Zoomed Image-->
             <Button Text="◄"
                    HorizontalOptions="Start" 
                    VerticalOptions="Center" 
@@ -190,10 +172,11 @@
                    TextColor="White" 
                    Clicked="OnPreviousImageClicked" 
                    WidthRequest="100" 
-                   HeightRequest="250" 
+                   HeightRequest="300" 
                    FontSize="Large" 
                    Opacity="0.7"/>
 
+            <!--Next Button on Zoomed Image-->
             <Button Text="►" 
                    HorizontalOptions="End" 
                    VerticalOptions="Center" 
@@ -201,9 +184,34 @@
                    TextColor="White" 
                    Clicked="OnNextImageClicked" 
                    WidthRequest="100" 
-                   HeightRequest="250" 
+                   HeightRequest="300" 
                    FontSize="Large" 
                    Opacity="0.7"/>
+        </Grid>
+
+        <!-- Zoom Overlay for Hero Image -->
+        <Grid x:Name="ZoomHeroImageOverlay"
+              IsVisible="False" 
+              VerticalOptions="FillAndExpand" 
+              HorizontalOptions="FillAndExpand">
+
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnHeroImageOverlayTapped" />
+            </Grid.GestureRecognizers>
+
+            <!--Zoomed Image Background opacity-->
+            <BoxView BackgroundColor="Black"
+                     Opacity="0.61"
+                     VerticalOptions="FillAndExpand" 
+                     HorizontalOptions="FillAndExpand"/>
+
+            <!--Zoomed Hero Image-->
+            <Image x:Name="ZoomedHeroImage"
+                   Aspect="AspectFill" 
+                   HorizontalOptions="FillAndExpand" 
+                   VerticalOptions="FillAndExpand" 
+                   HeightRequest="300" 
+                   WidthRequest="-1" />
         </Grid>
     </Grid>
 </ContentPage>
