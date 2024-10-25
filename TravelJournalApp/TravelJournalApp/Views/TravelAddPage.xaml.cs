@@ -189,7 +189,7 @@ namespace TravelJournalApp.Views
 
         private void OnButtonClickedHero(object sender, EventArgs e)
         {
-            if (sender is Button button && button.BindingContext is ImageViewModel selectedImage)
+            if (sender is ImageButton button && button.BindingContext is ImageViewModel selectedImage)
             {
                 selectedImage.IsHeroImage = !selectedImage.IsHeroImage;
 

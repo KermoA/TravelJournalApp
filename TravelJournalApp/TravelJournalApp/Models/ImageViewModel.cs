@@ -50,7 +50,7 @@ namespace TravelJournalApp.Models
                 {
                     _isHeroImage = value;
                     OnPropertyChanged(nameof(IsHeroImage));
-                    OnPropertyChanged(nameof(ButtonLabelHero));
+                    //OnPropertyChanged(nameof(ButtonLabelHero));
                     OnPropertyChanged(nameof(ButtonBackgroundColorHero));
                 }
             }
@@ -64,21 +64,29 @@ namespace TravelJournalApp.Models
             {
                 _isMarkedForDeletion = value;
                 OnPropertyChanged(nameof(IsMarkedForDeletion));
-                OnPropertyChanged(nameof(ButtonLabelDelete));
+                //OnPropertyChanged(nameof(ButtonLabelDelete));
                 OnPropertyChanged(nameof(ButtonBackgroundColorDelete));
                 // Sa võid siia lisada logi, et teavitada, et olek on muutunud
             }
         }
 
-        public string ButtonLabelHero => _isHeroImage ? "Hero Image" : "Add as Hero Image";
-        public Color ButtonBackgroundColorHero => _isHeroImage
-            ? Color.FromArgb("#012f36")
-            : Color.FromArgb("#00525e");
+        //public string ButtonLabelHero => _isHeroImage ? "Hero Image" : "Add as Hero Image";
+        //public Color ButtonBackgroundColorHero => _isHeroImage
+        //    ? Color.FromArgb("#012f36")
+        //    : Color.FromArgb("#00525e");
 
-        public string ButtonLabelDelete => _isMarkedForDeletion ? "Removed" : "Remove?";
+        //public string ButtonLabelDelete => _isMarkedForDeletion ? "Removed" : "Remove?";
+        //public Color ButtonBackgroundColorDelete => _isMarkedForDeletion
+        //    ? Color.FromArgb("#ed331f")
+        //    : Color.FromArgb("#a12315");
+
+        public Color ButtonBackgroundColorHero => _isHeroImage
+            ? Color.FromArgb("#30d1b4")
+            : Color.FromRgba(0, 0, 0, 0);
+
         public Color ButtonBackgroundColorDelete => _isMarkedForDeletion
-            ? Color.FromArgb("#ed331f")
-            : Color.FromArgb("#a12315");
+            ? Color.FromArgb("#d13035")
+            : Color.FromRgba(0, 0, 0, 0);
 
 
         // Funktsioon, mis ajutiselt eemaldab pildi ja liigutab selle eraldi kausta

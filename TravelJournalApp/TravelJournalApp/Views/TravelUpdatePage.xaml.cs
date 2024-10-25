@@ -98,7 +98,7 @@ namespace TravelJournalApp.Views
 
         private void OnButtonClickedUpdateHero(object sender, EventArgs e)
         {
-            if (sender is Button button && button.BindingContext is ImageViewModel selectedImage)
+            if (sender is ImageButton button && button.BindingContext is ImageViewModel selectedImage)
             {
                 selectedImage.IsHeroImage = !selectedImage.IsHeroImage;
 
@@ -117,7 +117,7 @@ namespace TravelJournalApp.Views
 
         private void OnButtonClickedUpdateDelete(object sender, EventArgs e)
         {
-            if (sender is Button button && button.BindingContext is ImageViewModel selectedImage)
+            if (sender is ImageButton button && button.BindingContext is ImageViewModel selectedImage)
             {
                 // Märgi pilt kustutamiseks
                 selectedImage.IsMarkedForDeletion = !selectedImage.IsMarkedForDeletion;
