@@ -139,21 +139,11 @@ namespace TravelJournalApp.Views
                 "No"
             );
         }
-        private async Task<bool> ConfirmSaveAsync()
-        {
-            return await Application.Current.MainPage.DisplayAlert(
-                "Save Travel Entry",
-                "Are you sure you want to save this travel entry?",
-                "Yes",
-                "No"
-            );
-        }
 
 
 
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
 		{
-            if (!await ConfirmSaveAsync()) return;
 			ConfirmDeleteImages();
 
             // Leia eksisteeriv travel journal
@@ -214,7 +204,6 @@ namespace TravelJournalApp.Views
 			}
 
             // Uuenda eksisteerivaid pilte andmebaasis
-            // Kasuta List<ImageViewModel> selle asemel, et iteratsiooni ajal muudatusi teha
             var imagesToUpdate = ImageViewModels.ToList(); // Looge koopia
 
             foreach (var imageViewModel in imagesToUpdate)
@@ -230,8 +219,6 @@ namespace TravelJournalApp.Views
                 }
             }
 
-
-
             if (result)
 			{
 				await Navigation.PopToRootAsync();
@@ -245,7 +232,6 @@ namespace TravelJournalApp.Views
 
         private async void BackTravelButton_Clicked(object sender, EventArgs e)
 		{
-			if (!await ConfirmNoSaveAsync()) return;
 			RestoreDeletedImages();
             await Navigation.PopAsync();
 		}
@@ -288,7 +274,6 @@ namespace TravelJournalApp.Views
             ImagesCollectionView.ItemsSource = ImageViewModels;
         }
 
-
         private void RestoreDeletedImages()
         {
             // Kontrolli, kas on olemas ajutiselt eemaldatud pildid
@@ -320,11 +305,6 @@ namespace TravelJournalApp.Views
                 StatusLabel.IsVisible = true;
             }
         }
-
-        //          private async void OnBackButtonClicked(object sender, EventArgs e)
-        //{
-        //	await Navigation.PopAsync();
-        //}
     }
 
 }

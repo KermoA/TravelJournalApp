@@ -101,7 +101,6 @@
                         <DataTemplate>
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center">
 
-
                                 <!-- Ensure image is displayed correctly -->
                                 <Image Source="{Binding ImageSource}"
                                        Aspect="AspectFill" 
@@ -118,16 +117,7 @@
                                                 Clicked="OnButtonClickedUpdateHero"
                                                 BackgroundColor="{Binding ButtonBackgroundColorHero}"
                                                 Padding="5,5"
-                                                HorizontalOptions="Center"
-                                                />
-                                    <!--<ImageButton Source="recycle.png"
-                                             WidthRequest="30"
-                                             HeightRequest="30"
-                                             Clicked="OnButtonClickedUpdateDelete"
-                                             BackgroundColor="{Binding ButtonBackgroundColorDelete}"
-                                             Padding="5,5"
-                                             HorizontalOptions="Center"
-                                             />-->
+                                                HorizontalOptions="Center"/>
                                 </HorizontalStackLayout>
 
                                 <ImageButton Source="recycle.png"
@@ -140,8 +130,7 @@
                                              HorizontalOptions="Center"
                                              />
 
-
-                                <BoxView HeightRequest="20"/>
+                                    <BoxView HeightRequest="20"/>
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
