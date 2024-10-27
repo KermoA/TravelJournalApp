@@ -31,7 +31,6 @@ namespace TravelJournalApp.Views
             travelJournal = new TravelJournalTable();
         }
 
-        // Event handler for selecting photos
         private async void OnPickPhotosClicked(object sender, EventArgs e)
         {
             try

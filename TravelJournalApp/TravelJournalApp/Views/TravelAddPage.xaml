@@ -91,10 +91,10 @@
                                              Clicked="OnButtonClickedHero"
                                              BackgroundColor="{Binding ButtonBackgroundColorHero}"
                                              Padding="5,5"
-                                             HorizontalOptions="Center"
+                                        HorizontalOptions="Center" 
                                              />
                                 </HorizontalStackLayout>
-
+                                
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

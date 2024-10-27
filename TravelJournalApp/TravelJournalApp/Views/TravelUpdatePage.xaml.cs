@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Presentation;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -13,8 +12,8 @@ namespace TravelJournalApp.Views
 	{
 		private readonly DatabaseContext _databaseContext;
 		private TravelViewModel _travelViewModel;
-		public ObservableCollection<ImageViewModel> ImageViewModels { get; set; } = new ObservableCollection<ImageViewModel>();
-        private List<string> selectedTempImagePaths = new List<string>();
+		public ObservableCollection<ImageViewModel> ImageViewModels { get; set; }
+		private List<string> selectedTempImagePaths = new List<string>();
        
         private string _heroImageFile; // Property to store the hero image file path
 
@@ -96,7 +95,7 @@ namespace TravelJournalApp.Views
 			}
 		}
 
-        private void OnButtonClickedUpdateHero(object sender, EventArgs e)
+        private void OnButtonClickedUpdate(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is ImageViewModel selectedImage)
             {
@@ -115,59 +114,32 @@ namespace TravelJournalApp.Views
             }
         }
 
-        private void OnButtonClickedUpdateDelete(object sender, EventArgs e)
-        {
-            if (sender is ImageButton button && button.BindingContext is ImageViewModel selectedImage)
-            {
-                // Märgi pilt kustutamiseks
-                selectedImage.IsMarkedForDeletion = !selectedImage.IsMarkedForDeletion;
-
-                // Teavitame, et omadused on muutunud
-                //OnPropertyChanged(nameof(ButtonLabelDelete));
-                //OnPropertyChanged(nameof(ButtonBackgroundColorDelete));
-                OnPropertyChanged(nameof(ImageViewModels));
-            }
-        }
-
-
-        private async Task<bool> ConfirmNoSaveAsync()
-        {
-            return await Application.Current.MainPage.DisplayAlert(
-                "Unsaved Changes",
-                "Are you sure you want to discard this travel entry without saving?",
-                "Yes",
-                "No"
-            );
-        }
-
-
 
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
 		{
-			ConfirmDeleteImages();
 
-            // Leia eksisteeriv travel journal
-            var travelJournal = await _databaseContext.GetItemAsync(_travelViewModel.Id);
+			// Leia eksisteeriv travel journal
+			var travelJournal = await _databaseContext.GetItemAsync(_travelViewModel.Id);
 			if (travelJournal == null)
 			{
 				StatusLabel.Text = "Travel entry not found.";
 				return;
 			}
 
-			// Leia kangelaspilt
-			var heroImage = ImageViewModels.FirstOrDefault(image => image.IsHeroImage);
+            // Leia kangelaspilt
+            var heroImage = ImageViewModels.FirstOrDefault(image => image.IsHeroImage);
 
-			// Uuenda travel journal detailid
-			travelJournal.Title = TitleEntry.Text;
+            // Uuenda travel journal detailid
+            travelJournal.Title = TitleEntry.Text;
 			travelJournal.Description = DescriptionEditor.Text;
 			travelJournal.Location = LocationEntry.Text;
 			travelJournal.TravelStartDate = DateStartEntry.Date;
 			travelJournal.TravelEndDate = DateEndEntry.Date;
 			travelJournal.LastUpdatedAt = DateTime.Now;
-			travelJournal.HeroImageFile = heroImage?.FilePath; // Salvesta kangelaspildi faili tee
+            travelJournal.HeroImageFile = heroImage?.FilePath; // Salvesta kangelaspildi faili tee
 
-			// Uuenda travel journal sisend
-			bool result = await _databaseContext.UpdateItemAsync(travelJournal);
+            // Uuenda travel journal sisend
+            bool result = await _databaseContext.UpdateItemAsync(travelJournal);
 
 			// Leia eksisteeriva pildid selle reisi jaoks
 			var existingImages = await _databaseContext.GetImagesForTravelJournalAsync(travelJournal.Id);
@@ -203,23 +175,21 @@ namespace TravelJournalApp.Views
 				}
 			}
 
-            // Uuenda eksisteerivaid pilte andmebaasis
-            var imagesToUpdate = ImageViewModels.ToList(); // Looge koopia
+			// Uuenda eksisteerivaid pilte andmebaasis
+			foreach (var imageViewModel in ImageViewModels)
+			{
+				var existingImage = existingImages.FirstOrDefault(img => img.FilePath == imageViewModel.FilePath);
+				if (existingImage != null)
+				{
+					existingImage.IsSelected = imageViewModel.IsSelected;
+					existingImage.ImageIndex = ImageViewModels.IndexOf(imageViewModel);
 
-            foreach (var imageViewModel in imagesToUpdate)
-            {
-                var existingImage = existingImages.FirstOrDefault(img => img.FilePath == imageViewModel.FilePath);
-                if (existingImage != null)
-                {
-                    existingImage.IsSelected = imageViewModel.IsSelected;
-                    existingImage.ImageIndex = imagesToUpdate.IndexOf(imageViewModel); // Kasutage imagesToUpdate, mitte ImageViewModels
+					// Salvesta uuendused
+					await _databaseContext.SaveImageAsync(existingImage);
+				}
+			}
 
-                    // Salvesta uuendused
-                    await _databaseContext.SaveImageAsync(existingImage);
-                }
-            }
-
-            if (result)
+			if (result)
 			{
 				await Navigation.PopToRootAsync();
 			}
@@ -230,81 +200,11 @@ namespace TravelJournalApp.Views
 			}
 		}
 
-        private async void BackTravelButton_Clicked(object sender, EventArgs e)
+
+		private async void OnBackButtonClicked(object sender, EventArgs e)
 		{
-			RestoreDeletedImages();
-            await Navigation.PopAsync();
+			await Navigation.PopAsync();
 		}
-
-        private async void ConfirmDeleteImages()
-        {
-            // Kui on olemas ajutiselt kustutatud pildid, kustuta need lõplikult
-            foreach (var imageViewModel in ImageViewModels.ToList()) // Kasutame ToList(), et vältida modifitseerimist samal ajal kui kollektsioonis itereerime
-            {
-                if (imageViewModel.IsMarkedForDeletion) // Eeldades, et teil on mingi lipp, mis märgib pildid kustutamiseks
-                {
-                    try
-                    {
-                        // Kustuta pilt andmebaasist
-                        var imageRecord = await _databaseContext.GetImageByFilePathAsync(imageViewModel.FilePath);
-                        if (imageRecord != null)
-                        {
-                            await _databaseContext.DeleteItemAsync(imageRecord);
-                        }
-
-                        // Kustuta pilt failisüsteemist
-                        if (File.Exists(imageViewModel.FilePath))
-                        {
-                            File.Delete(imageViewModel.FilePath);
-                        }
-
-                        // Eemalda pilt UI-st
-                        ImageViewModels.Remove(imageViewModel);
-                    }
-                    catch (Exception ex)
-                    {
-                        StatusLabel.Text = $"Error deleting image {imageViewModel.FilePath}: {ex.Message}";
-                        StatusLabel.TextColor = Color.FromArgb("#b01d0c");
-                        StatusLabel.IsVisible = true;
-                    }
-                }
-            }
-
-            // Värskenda UI-d peale kustutamist
-            ImagesCollectionView.ItemsSource = ImageViewModels;
-        }
-
-        private void RestoreDeletedImages()
-        {
-            // Kontrolli, kas on olemas ajutiselt eemaldatud pildid
-            if (selectedTempImagePaths != null && selectedTempImagePaths.Count > 0)
-            {
-                foreach (var imagePath in selectedTempImagePaths)
-                {
-                    // Taasta ajutiselt kustutatud pildid uuesti ImageViewModel kollektsiooni
-                    var imageViewModel = new ImageViewModel(ImageViewModels, _databaseContext)
-                    {
-                        FilePath = imagePath,
-                        ImageSource = ImageSource.FromFile(imagePath),
-                        IsSelected = true // Taasta valitud olek
-                    };
-                    ImageViewModels.Add(imageViewModel);
-                }
-
-                // Puhasta ajutine nimekiri, kuna pildid on taastatud
-                selectedTempImagePaths.Clear();
-
-                // Uuenda UI
-                ImagesCollectionView.ItemsSource = ImageViewModels;
-            }
-            else
-            {
-                // Kui ei ole ajutiselt eemaldatud pilte, anna kasutajale tagasisidet (valikuline)
-                StatusLabel.Text = "No images to restore.";
-				StatusLabel.TextColor = Color.FromArgb("#b0aa0c");
-                StatusLabel.IsVisible = true;
-            }
-        }
-    }
+	}
 
 }

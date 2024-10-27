@@ -1,7 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TravelJournalApp.Data;
@@ -60,13 +59,10 @@ namespace TravelJournalApp.Models
 
         // Constructor that initializes the TravelViewModel with a database context and sets up commands
         public TravelViewModel(DatabaseContext databaseContext) // Modify the constructor
-        {
+    {
             // Ensure that the database context is not null
-            _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
+        _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
 
-            // Initialize commands for deleting and restoring images
-            ConfirmDeleteImagesCommand = new Command(ConfirmDeleteImages);
-            RestoreDeletedImagesCommand = new Command(RestoreDeletedImages);
         }
 
         // Property to track the index of the currently selected image
@@ -78,55 +74,6 @@ namespace TravelJournalApp.Models
         // Private field to store the hero image file path
         private string _heroImageFile; // Property to store the hero image file path
 
-        // Command to confirm deletion of selected images
-        public ICommand ConfirmDeleteImagesCommand { get; }
-
-        // Command to restore deleted images to the collection
-        public ICommand RestoreDeletedImagesCommand { get; }
-
-        // Method to confirm deletion of images, looping through ImageViewModels collection
-        private void ConfirmDeleteImages()
-        {
-            // Check if ImageViewModels is null and log an error if so
-            if (ImageViewModels == null)
-            {
-                Debug.WriteLine("ImageViewModels is null in ConfirmDeleteImages method.");
-                return; // Välju meetodist, kui see on null
-            }
-
-            // Loop through each image in ImageViewModels
-            foreach (var image in ImageViewModels)
-            {
-                // Confirm deletion for non-null images only
-                if (image != null)
-                {
-                    image.ConfirmDeleteImages();
-                }
-                else
-                {
-                    Debug.WriteLine("Found a null image in ImageViewModels.");
-                }
-            }
-        }
-
-        // Method to restore deleted images in ImageViewModels collection
-        private void RestoreDeletedImages()
-        {
-            // Check if ImageViewModels is null and log an error if so
-            if (ImageViewModels == null)
-            {
-                Debug.WriteLine("ImageViewModels is null, cannot restore deleted images.");
-                return; // Välja minek, kui kollektsioon on null
-            }
-
-            // Loop through each image in ImageViewModels and call RestoreDeletedImages method
-            foreach (var image in ImageViewModels)
-            {
-                image.RestoreDeletedImages(); // Veendu, et see meetod eksisteerib
-            }
-        }
-
-        // Property to store and track the path of the hero image file
         public string HeroImageFile
         {
             get => _heroImageFile;
@@ -220,33 +167,33 @@ namespace TravelJournalApp.Models
 
         }
 
-        // Async method to retrieve and update the hero image source
+        // Async method to update the hero image source
         private async void UpdateHeroImageSourceAsync()
         {
             try
             {
                 // Retrieve the hero image path from the database
-                var heroImageFromDb = await _databaseContext.GetHeroImageFromDatabaseAsync(Id);
+            var heroImageFromDb = await _databaseContext.GetHeroImageFromDatabaseAsync(Id);
 
                 // Validate and set the hero image path if it exists
-                if (!string.IsNullOrEmpty(heroImageFromDb) && File.Exists(heroImageFromDb))
-                {
-                    _heroImageSource = heroImageFromDb;
-                }
+            if (!string.IsNullOrEmpty(heroImageFromDb) && File.Exists(heroImageFromDb))
+            {
+                _heroImageSource = heroImageFromDb; // Set the hero image file path if it exists
+            }
                 // Fallback to the first image in TravelImages collection if hero image is unavailable
-                else if (TravelImages != null && TravelImages.Count > 0 && SelectedImageIndex >= 0 && SelectedImageIndex < TravelImages.Count)
-                {
-                    _heroImageSource = TravelImages[0].FilePath;
-                }
-                else
-                {
+            else if (TravelImages != null && TravelImages.Count > 0 && SelectedImageIndex >= 0 && SelectedImageIndex < TravelImages.Count)
+            {
+                _heroImageSource = TravelImages[0].FilePath; // Use the selected image's file path
+            }
+            else
+            {
                     // Use default image if no hero image or fallback is available
                     _heroImageSource = "hero.png";
-                }
+            }
 
                 // Notify property changed for HeroImageSource
-                OnPropertyChanged(nameof(HeroImageSource));
-            }
+            OnPropertyChanged(nameof(HeroImageSource));
+        }
             catch (Exception ex)
             {
                 // Log any exception that occurs

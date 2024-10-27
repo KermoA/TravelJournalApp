@@ -82,7 +82,7 @@
                        FontAttributes="Bold"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"/>
-                        <Button Text="Images"
+                        <Button Text="Choose Images"
                             Grid.Column="1"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
@@ -121,15 +121,13 @@
                                 </HorizontalStackLayout>
 
                                 <ImageButton Source="recycle.png"
-                                             Margin="0,20"
-                                             WidthRequest="30"
-                                             HeightRequest="30"
-                                             Clicked="OnButtonClickedUpdateDelete"
-                                             BackgroundColor="{Binding ButtonBackgroundColorDelete}"
-                                             Padding="5,5"
+                                             WidthRequest="25"
+                                             HeightRequest="25"
+                                             Command="{Binding DeleteImageByOneCommand}"
+                                             BackgroundColor="Transparent"
                                              HorizontalOptions="Center"
-                                             />
-
+                                             Margin="5"/>
+                                
                                     <BoxView HeightRequest="20"/>
                             </StackLayout>
                         </DataTemplate>
@@ -152,18 +150,14 @@
             <Button Text="Back"
                     BackgroundColor="{StaticResource ButtonBackground}"
                     TextColor="{StaticResource ButtonTextColor}"
-                    Clicked="BackTravelButton_Clicked"
-                    HorizontalOptions="FillAndExpand"
-                    Command="{Binding RestoreDeletedImagesCommand}"/>
-            <!--RestoreDeletedImagesCommand asub ImageViewModelis, aga binding asub TravelViewModelis-->
+                    Clicked="OnBackButtonClicked"
+                    HorizontalOptions="FillAndExpand"/>
 
             <Button Text="Update"
                     BackgroundColor="{StaticResource ButtonBackground}"
                     TextColor="{StaticResource ButtonTextColor}"
                     Clicked="OnUpdateButtonClicked"
-                    HorizontalOptions="FillAndExpand"
-                    Command="{Binding ConfirmDeleteImagesCommand}"/>
-            <!--ConfirmDeleteImagesCommand asub ImageViewModelis, aga binding asub TravelViewModelis-->
+                    HorizontalOptions="FillAndExpand"/>
         </StackLayout>
     </Grid>
 </ContentPage>
