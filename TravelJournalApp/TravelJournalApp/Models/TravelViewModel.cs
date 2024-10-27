@@ -215,7 +215,7 @@ namespace TravelJournalApp.Models
 
                 // Return the cached hero image source if it exists
                 UpdateHeroImageSourceAsync(); // Fire and forget
-                return "hero.png"; // Default if still null
+                return null; // Default if still null
             }
 
         }
