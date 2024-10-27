@@ -95,7 +95,7 @@ namespace TravelJournalApp.Views
 			}
 		}
 
-        private void OnButtonClickedUpdate(object sender, EventArgs e)
+        private void OnButtonClickedUpdateHero(object sender, EventArgs e)
         {
             if (sender is ImageButton button && button.BindingContext is ImageViewModel selectedImage)
             {

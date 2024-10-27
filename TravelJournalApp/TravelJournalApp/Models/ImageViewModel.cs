@@ -36,7 +36,6 @@ namespace TravelJournalApp.Models
                 {
                     _isHeroImage = value;
                     OnPropertyChanged(nameof(IsHeroImage));
-                    OnPropertyChanged(nameof(ButtonLabelHero));
                     OnPropertyChanged(nameof(ButtonBackgroundColorHero));
                 }
             }
@@ -45,9 +44,8 @@ namespace TravelJournalApp.Models
         public ImageSource ImageSource { get; set; }
         //public string ImageSource { get; set; } // This property holds the image source path
 
-        public string ButtonLabelHero => _isHeroImage ? "Hero Image" : "Add as Hero Image";
         public Color ButtonBackgroundColorHero => _isHeroImage
-            ? Color.FromArgb("#012f36")
+            ? Color.FromArgb("#30d1b4")
             : Color.FromRgba(0, 0, 0, 0);
 
 
