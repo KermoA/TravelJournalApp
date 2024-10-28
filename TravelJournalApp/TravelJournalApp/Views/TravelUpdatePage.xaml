@@ -89,47 +89,46 @@
                                 HorizontalOptions="Start"
                                 HeightRequest="30"
                                 Margin="15,0,0,0"
-                                Clicked="OnPickPhotosClicked"/>
+                                Clicked="OnPickPhotosClicked"
+                                BackgroundColor="Transparent"/>
                 </Grid>
 
                 <!-- Piltide kuvamine -->
                     <Label Text="" HeightRequest="20"/>
                 <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding ImageViewModels}">
+                        <!-- 2 pilti rea kohata -->
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
-                        <!-- 2 items per row -->
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center" Margin="5">
                                 <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                                    <!-- Ensure image is displayed correctly -->
+                                    <!-- Piltide mõõtmed õigesti määratletud -->
                                     <Image Source="{Binding ImageSource}"
                                            Aspect="AspectFill" 
                                            HorizontalOptions="FillAndExpand"
                                            VerticalOptions="FillAndExpand"
                                            Margin="5"/>
-                                    <!-- Overlayed buttons at the bottom of the image -->
-                                    <StackLayout Orientation="Horizontal" 
-                                                 HorizontalOptions="Center"
-                                                 VerticalOptions="End"
-                                                 Margin="0,0,0,5"
-                                                 BackgroundColor="#BFFFFFFF"
-                                                 Padding="-1,-1,-1,-1"
-                                                 HeightRequest="30"
-                                                 >
-                                        <ImageButton Source="herobutton.png"
-                                                     ScaleY="1.3"
-                                                     HeightRequest="25"
-                                                     WidthRequest="75"
-                                                     Clicked="OnButtonClickedUpdateHero"
-                                                     BackgroundColor="{Binding ButtonBackgroundColorHero}"
-                                                     HorizontalOptions="Center"
-                                                     Padding="10,0,10,0"/>
-                                    </StackLayout>
+                                    <!-- Cover Picture button joonuds pildi alla -->
+                                    <Frame CornerRadius="12"
+                                           Padding="0"
+                                           BackgroundColor="{Binding ButtonBackgroundColorHero}"
+                                           WidthRequest="75"
+                                           HeightRequest="25"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="End"
+                                           Margin="0,0,0,5"
+                                           HasShadow="False"
+                                           TranslationY="-5">
+                                           <ImageButton Source="coverpic.png"
+                                                        Clicked="OnButtonClickedUpdateHero"
+                                                        HorizontalOptions="Fill"
+                                                        VerticalOptions="Fill"
+                                                        BackgroundColor="#80FFFFFF"/>
+                                    </Frame>
                                 </Grid>
-
 
                                 <ImageButton Source="recycle.png"
                                              WidthRequest="25"
@@ -150,7 +149,7 @@
                      Orientation="Horizontal"
                      Margin="15,5,15,15"
                      Spacing="5">
-            <!-- Status Label for Feedback -->
+            <!-- Status Label tagasiside jaoks -->
             <Label x:Name="StatusLabel"
                    HorizontalOptions="Center"
                    FontSize="Small"
