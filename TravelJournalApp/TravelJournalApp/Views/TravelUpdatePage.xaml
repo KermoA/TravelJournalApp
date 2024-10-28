@@ -23,7 +23,7 @@
                 <StackLayout>
 
                     <!--Pealkirja kuvamine-->
-                    <Label Text="Travel Name:"
+                    <Label Text="Title:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"
@@ -35,7 +35,7 @@
                     <!--Reisi alguskuupäeva valimine-->
                     <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
                         <StackLayout HorizontalOptions="Start" Grid.Column="0">
-                            <Label Text="Travel Start Date:" 
+                            <Label Text="Start Date:" 
                                VerticalOptions="Center" />
                             <DatePicker x:Name="DateStartEntry" 
                                     Format="dd.MM.yyyy" 
@@ -47,7 +47,7 @@
                         <!-- Reisi lõppkuupäeva valimine-->
                         <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
                                  Grid.Column="1">
-                            <Label Text="Travel End Date:" 
+                            <Label Text="End Date:" 
                                VerticalOptions="Center" />
                             <DatePicker x:Name="DateEndEntry" 
                                     Format="dd.MM.yyyy" 
@@ -72,62 +72,63 @@
                         <Editor x:Name="DescriptionEditor"
                                 Text="{Binding Description, Mode=TwoWay}"
                                 HeightRequest="150"
-                                AutoSize="TextChanges"/>
+                                AutoSize="TextChanges"
+                                FontSize="12"/>
                     </ScrollView>
 
                     <!--Piltide lisamine-->
-                    <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
-                        <Label Text="Pictures:"
+                <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
+                    <Label Text="Pictures:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"/>
-                        <Button Text="Choose Images"
-                            Grid.Column="1"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Center"
-                            Clicked="OnPickPhotosClicked"/>
-                    </Grid>
+                    <ImageButton Source="photoscolor.png"
+                                Grid.Column="1"
+                                VerticalOptions="End"
+                                HorizontalOptions="Start"
+                                HeightRequest="30"
+                                Margin="15,0,0,0"
+                                Clicked="OnPickPhotosClicked"
+                                BackgroundColor="Transparent"/>
+                </Grid>
 
-                    <!-- Piltide kuvamine -->
+                <!-- Piltide kuvamine -->
                     <Label Text="" HeightRequest="20"/>
                 <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding ImageViewModels}">
+                        <!-- 2 pilti rea kohata -->
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="2" />
-                        <!-- 2 items per row -->
+                        <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Orientation="Vertical" HorizontalOptions="Center">
-                                <Grid WidthRequest="200" HeightRequest="150">
-                                    <!-- Ensure image is displayed correctly -->
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Center" Margin="5">
+                                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                    <!-- Piltide mõõtmed õigesti määratletud -->
                                     <Image Source="{Binding ImageSource}"
                                            Aspect="AspectFill" 
-                                           WidthRequest="200" 
-                                           HeightRequest="150" />
-                                    <!-- Overlayed buttons at the bottom of the image -->
-                                    <StackLayout Orientation="Horizontal" 
-                                                 HorizontalOptions="Center"
-                                                 VerticalOptions="End"
-                                                 Margin="0,0,0,5"
-                                                 BackgroundColor="#BFFFFFFF"
-                                                 Padding="-1,-1,-1,-1"
-                                                 HeightRequest="30"
-                                                 >
-                                        <ImageButton Source="herobutton.png"
-                                                     ScaleY="1.3"
-                                                     HeightRequest="25"
-                                                     WidthRequest="75"
-                                                     Clicked="OnButtonClickedUpdateHero"
-                                                     BackgroundColor="{Binding ButtonBackgroundColorHero}"
-                                                     HorizontalOptions="Center"
-                                                     Padding="10,0,10,0"/>
-                                    </StackLayout>
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="FillAndExpand"
+                                           Margin="5"/>
+                                    <!-- Cover Picture button joonuds pildi alla -->
+                                    <Frame CornerRadius="12"
+                                           Padding="0"
+                                           BackgroundColor="{Binding ButtonBackgroundColorHero}"
+                                           WidthRequest="75"
+                                           HeightRequest="25"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="End"
+                                           Margin="0,0,0,5"
+                                           HasShadow="False"
+                                           TranslationY="-5">
+                                           <ImageButton Source="coverpic.png"
+                                                        Clicked="OnButtonClickedUpdateHero"
+                                                        HorizontalOptions="Fill"
+                                                        VerticalOptions="Fill"
+                                                        BackgroundColor="#80FFFFFF"/>
+                                    </Frame>
                                 </Grid>
-
-
-
 
                                 <ImageButton Source="recycle.png"
                                              WidthRequest="25"
@@ -148,7 +149,7 @@
                      Orientation="Horizontal"
                      Margin="15,5,15,15"
                      Spacing="5">
-            <!-- Status Label for Feedback -->
+            <!-- Status Label tagasiside jaoks -->
             <Label x:Name="StatusLabel"
                    HorizontalOptions="Center"
                    FontSize="Small"
