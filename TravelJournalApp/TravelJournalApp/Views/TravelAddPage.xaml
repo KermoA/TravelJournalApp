@@ -82,22 +82,22 @@
                                            Aspect="AspectFill" 
                                            WidthRequest="500" 
                                            HeightRequest="500"/>
-                                    <StackLayout Orientation="Horizontal" 
-                                                 HorizontalOptions="Center"
-                                                 VerticalOptions="End"
-                                                 Padding="-1,-1,-1,-1"
-                                                 Margin="0,0,0,5"
-                                                BackgroundColor="#BFFFFFFF">
-                                        <ImageButton Source="herobutton.png"
-                                                 ScaleY="1.3"
-                                                 HeightRequest="25"
-                                                 WidthRequest="75"
-                                                 Clicked="OnButtonClickedHero"
-                                                 BackgroundColor="{Binding ButtonBackgroundColorHero}"
-                                                 Padding="5,5"
-                                                 HorizontalOptions="Center"
-                                                 />
-                                    </StackLayout>
+                                    <Frame CornerRadius="12"
+                                           Padding="0"
+                                           BackgroundColor="{Binding ButtonBackgroundColorHero}"
+                                           WidthRequest="75"
+                                           HeightRequest="25"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="End"
+                                           Margin="0,0,0,5"
+                                           HasShadow="False"
+                                           TranslationY="-5">
+                                        <ImageButton Source="coverpic.png"
+                                                        Clicked="OnButtonClickedHero"
+                                                        HorizontalOptions="Fill"
+                                                        VerticalOptions="Fill"
+                                                        BackgroundColor="#80FFFFFF"/>
+                                    </Frame>
                                 </Grid>
                                 
                             </StackLayout>
