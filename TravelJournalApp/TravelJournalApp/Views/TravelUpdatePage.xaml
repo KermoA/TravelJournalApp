@@ -23,7 +23,7 @@
                 <StackLayout>
 
                     <!--Pealkirja kuvamine-->
-                    <Label Text="Travel Name:"
+                    <Label Text="Title:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"
@@ -35,7 +35,7 @@
                     <!--Reisi alguskuupäeva valimine-->
                     <Grid x:Name="DateGrid" ColumnDefinitions="Auto,Auto" HorizontalOptions="Start">
                         <StackLayout HorizontalOptions="Start" Grid.Column="0">
-                            <Label Text="Travel Start Date:" 
+                            <Label Text="Start Date:" 
                                VerticalOptions="Center" />
                             <DatePicker x:Name="DateStartEntry" 
                                     Format="dd.MM.yyyy" 
@@ -47,7 +47,7 @@
                         <!-- Reisi lõppkuupäeva valimine-->
                         <StackLayout HorizontalOptions="Start" Margin="20,0,0,0"
                                  Grid.Column="1">
-                            <Label Text="Travel End Date:" 
+                            <Label Text="End Date:" 
                                VerticalOptions="Center" />
                             <DatePicker x:Name="DateEndEntry" 
                                     Format="dd.MM.yyyy" 
@@ -72,40 +72,44 @@
                         <Editor x:Name="DescriptionEditor"
                                 Text="{Binding Description, Mode=TwoWay}"
                                 HeightRequest="150"
-                                AutoSize="TextChanges"/>
+                                AutoSize="TextChanges"
+                                FontSize="12"/>
                     </ScrollView>
 
                     <!--Piltide lisamine-->
-                    <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
-                        <Label Text="Pictures:"
+                <Grid x:Name="PictureGrid" ColumnDefinitions="Auto,*">
+                    <Label Text="Pictures:"
                        FontSize="Small"
                        FontAttributes="Bold"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"/>
-                        <Button Text="Choose Images"
-                            Grid.Column="1"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Center"
-                            Clicked="OnPickPhotosClicked"/>
-                    </Grid>
+                    <ImageButton Source="photoscolor.png"
+                                Grid.Column="1"
+                                VerticalOptions="End"
+                                HorizontalOptions="Start"
+                                HeightRequest="30"
+                                Margin="15,0,0,0"
+                                Clicked="OnPickPhotosClicked"/>
+                </Grid>
 
-                    <!-- Piltide kuvamine -->
+                <!-- Piltide kuvamine -->
                     <Label Text="" HeightRequest="20"/>
                 <CollectionView x:Name="ImagesCollectionView" ItemsSource="{Binding ImageViewModels}">
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="2" />
+                        <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
                         <!-- 2 items per row -->
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Orientation="Vertical" HorizontalOptions="Center">
-                                <Grid WidthRequest="200" HeightRequest="150">
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Center" Margin="5">
+                                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                                     <!-- Ensure image is displayed correctly -->
                                     <Image Source="{Binding ImageSource}"
                                            Aspect="AspectFill" 
-                                           WidthRequest="200" 
-                                           HeightRequest="150" />
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="FillAndExpand"
+                                           Margin="5"/>
                                     <!-- Overlayed buttons at the bottom of the image -->
                                     <StackLayout Orientation="Horizontal" 
                                                  HorizontalOptions="Center"
@@ -125,8 +129,6 @@
                                                      Padding="10,0,10,0"/>
                                     </StackLayout>
                                 </Grid>
-
-
 
 
                                 <ImageButton Source="recycle.png"
