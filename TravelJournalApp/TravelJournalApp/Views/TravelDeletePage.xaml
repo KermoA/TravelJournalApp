@@ -30,12 +30,12 @@
         <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never">
             <StackLayout>
                 <Label Text="{Binding Title}" 
-                       FontSize="24" 
+                       FontSize="Small" 
                        FontAttributes="Bold" 
                        HorizontalOptions="Center" 
                        Margin="15" />
                 <Label Text="{Binding Description}" 
-                       FontSize="14" 
+                       FontSize="12" 
                        HorizontalOptions="Center" 
                        Margin="15" />
 
