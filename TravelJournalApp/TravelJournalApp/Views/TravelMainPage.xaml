@@ -59,7 +59,7 @@
                                Grid.Row="1"
                                Grid.ColumnSpan="2" 
                                Aspect="AspectFill"
-                               HeightRequest="500"
+                               HeightRequest="300"
                                Source="{Binding SelectedTravel.HeroImageSource}">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" 
