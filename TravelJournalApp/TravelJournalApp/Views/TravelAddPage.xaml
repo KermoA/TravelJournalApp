@@ -64,6 +64,7 @@
                        VerticalOptions="Center"
                        HorizontalOptions="Start"/>
                     <ImageButton Source="photoscolor.png"
+                            BackgroundColor="Transparent"
                             Grid.Column="1"
                             VerticalOptions="End"
                             HorizontalOptions="Start"
